@@ -1,6 +1,6 @@
 import VideoCard from "@/components/VideoCard";
 import GlowButton from "@/components/GlowButton";
-import { fetchLatestVideos } from "@/lib/youtube";
+import { fetchLatestVideos, fetchPlaylists, fetchPlaylistVideos } from "@/lib/youtube";
 
 export const revalidate = 3600;
 export const metadata = { title: "Videos" };
@@ -13,11 +13,54 @@ const TABS = [
 export default async function VideosPage({
   searchParams,
 }: {
-  searchParams?: { tab?: string };
+  searchParams?: { tab?: string; playlist?: string };
 }) {
   const tab = searchParams?.tab === "members" ? "members" : "all";
-  const videos = await fetchLatestVideos(12);
+  const playlistFilter = searchParams?.playlist;
 
+  if (tab === "members") {
+    return (
+      <PageShell tab={tab}>
+        <MembersOnlyGrid />
+      </PageShell>
+    );
+  }
+
+  const playlists = await fetchPlaylists();
+  const videos = playlistFilter
+    ? await fetchPlaylistVideos(playlistFilter)
+    : await fetchLatestVideos(12);
+
+  return (
+    <PageShell tab={tab} playlists={playlists} activePlaylist={playlistFilter}>
+      {videos.length === 0 ? (
+        <EmptyState>
+          {playlistFilter
+            ? "no videos in this playlist yet."
+            : "YouTube key not set yet — add YOUTUBE_API_KEY to .env.local."}
+        </EmptyState>
+      ) : (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+          {videos.map((v) => (
+            <VideoCard key={v.id} video={v} />
+          ))}
+        </div>
+      )}
+    </PageShell>
+  );
+}
+
+function PageShell({
+  tab,
+  playlists,
+  activePlaylist,
+  children,
+}: {
+  tab: "all" | "members";
+  playlists?: { id: string; title: string }[];
+  activePlaylist?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="bg-starfield noise-overlay relative">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-24">
@@ -43,35 +86,67 @@ export default async function VideosPage({
           })}
         </div>
 
-        {tab === "all" ? (
-          videos.length === 0 ? (
-            <EmptyState>
-              YouTube key not set yet — add YOUTUBE_API_KEY to .env.local.
-            </EmptyState>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-              {videos.map((v) => (
-                <VideoCard key={v.id} video={v} />
-              ))}
-            </div>
-          )
-        ) : (
-          <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <VaultTile key={i} />
-              ))}
-            </div>
-            <div className="text-center mt-12 max-w-2xl mx-auto">
-              <p className="text-text-muted mb-6">
-                members get exclusive videos, behind-the-scenes, and the chaos that doesn't make YouTube. unlocked at the Boatswain tier and above.
-              </p>
-              <GlowButton variant="gold" size="lg" href="/members">JOIN TO WATCH →</GlowButton>
-            </div>
-          </>
+        {tab === "all" && playlists && playlists.length > 0 && (
+          <PlaylistFilters playlists={playlists} activeId={activePlaylist} />
         )}
+
+        {children}
       </div>
     </div>
+  );
+}
+
+function PlaylistFilters({
+  playlists,
+  activeId,
+}: {
+  playlists: { id: string; title: string }[];
+  activeId?: string;
+}) {
+  return (
+    <div className="mt-6 flex flex-wrap gap-2">
+      <FilterPill href="/videos?tab=all" label="All" active={!activeId} />
+      {playlists.map((p) => (
+        <FilterPill
+          key={p.id}
+          href={`/videos?tab=all&playlist=${encodeURIComponent(p.id)}`}
+          label={p.title}
+          active={activeId === p.id}
+        />
+      ))}
+    </div>
+  );
+}
+
+function FilterPill({ href, label, active }: { href: string; label: string; active: boolean }) {
+  const base =
+    "px-4 py-2 rounded-full font-bebas tracking-wider text-sm border-2 transition-all";
+  const styles = active
+    ? "bg-gold text-bg-primary border-gold shadow-glow-gold"
+    : "bg-transparent text-text-primary/85 border-purple-core/40 hover:border-electric-blue hover:text-white";
+  return (
+    <a href={href} className={`${base} ${styles}`}>
+      {label}
+    </a>
+  );
+}
+
+function MembersOnlyGrid() {
+  return (
+    <>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <VaultTile key={i} />
+        ))}
+      </div>
+      <div className="text-center mt-12 max-w-2xl mx-auto">
+        <p className="text-text-muted mb-6">
+          members get exclusive videos, behind-the-scenes, and the chaos that doesn't make YouTube.
+          unlocked at the Boatswain tier and above.
+        </p>
+        <GlowButton variant="gold" size="lg" href="/members">JOIN TO WATCH →</GlowButton>
+      </div>
+    </>
   );
 }
 

@@ -71,6 +71,47 @@ export async function fetchLatestVideos(max = 6): Promise<VideoData[]> {
   }));
 }
 
+export type Playlist = {
+  id: string;
+  title: string;
+  itemCount: number;
+};
+
+export async function fetchPlaylists(max = 25): Promise<Playlist[]> {
+  if (!KEY) return [];
+  const id = await resolveChannelId();
+  if (!id) return [];
+  const res = await fetch(
+    `https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&channelId=${id}&maxResults=${max}&key=${KEY}`,
+    { next: { revalidate: 3600 } }
+  );
+  if (!res.ok) return [];
+  const data = await res.json();
+  const items = data.items ?? [];
+  return items.map((it: any): Playlist => ({
+    id: it.id,
+    title: it.snippet.title,
+    itemCount: it.contentDetails?.itemCount ?? 0,
+  }));
+}
+
+export async function fetchPlaylistVideos(playlistId: string, max = 24): Promise<VideoData[]> {
+  if (!KEY) return [];
+  const res = await fetch(
+    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${playlistId}&maxResults=${max}&key=${KEY}`,
+    { next: { revalidate: 3600 } }
+  );
+  if (!res.ok) return [];
+  const data = await res.json();
+  const items = data.items ?? [];
+  return items.map((it: any): VideoData => ({
+    id: it.contentDetails.videoId,
+    title: it.snippet.title,
+    thumbnail: it.snippet.thumbnails?.high?.url || it.snippet.thumbnails?.medium?.url,
+    publishedAt: new Date(it.contentDetails.videoPublishedAt || it.snippet.publishedAt).toLocaleDateString(),
+  }));
+}
+
 export function formatCount(n: string | number | undefined): string {
   if (n == null) return "—";
   const x = typeof n === "string" ? parseInt(n, 10) : n;

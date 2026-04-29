@@ -65,7 +65,7 @@ export const TIERS = [
 ] as const;
 
 export const YOUTUBE_MEMBERSHIP_URL =
-  "https://www.youtube.com/channel/officiallyskelly/join";
+  "https://www.youtube.com/@officiallyskelly/join";
 
 export const FOURTHWALL_SHOP_URL =
   process.env.NEXT_PUBLIC_FOURTHWALL_SHOP_URL || "";

@@ -23,7 +23,16 @@ export default function Footer() {
         <div>
           <h4 className="heading text-2xl text-white mb-4">SUPPORT</h4>
           <ul className="space-y-2 text-text-primary/85">
-            <li><Link href="/shop" className="hover:text-electric-blue transition-colors">Shipping &amp; Returns</Link></li>
+            <li>
+              <a
+                href={`${(process.env.NEXT_PUBLIC_FOURTHWALL_SHOP_URL || "").replace(/\/$/, "")}/pages/shipping-returns`}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-electric-blue transition-colors"
+              >
+                Shipping &amp; Returns
+              </a>
+            </li>
             <li><Link href="/about" className="hover:text-electric-blue transition-colors">FAQ</Link></li>
             <li><a href="https://discord.gg/zpWv2cXxB9" target="_blank" rel="noreferrer" className="hover:text-electric-blue transition-colors">Contact (Discord)</a></li>
             <li><Link href="/privacy" className="hover:text-electric-blue transition-colors">Privacy Policy</Link></li>

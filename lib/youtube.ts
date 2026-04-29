@@ -124,9 +124,8 @@ export async function fetchUploadsCategorized(max = 500): Promise<CategorizedVid
       };
       const wasLive = !!v.liveStreamingDetails?.actualStartTime;
       const titleHasShortsTag = /#shorts?\b/i.test(v.snippet?.title ?? "");
-      // Skelly's convention: #shorts in title is the canonical signal.
-      // Falls back to <= 60s for legacy untagged shorts. 60-180s without tag stays in Videos.
-      const isShort = titleHasShortsTag || (seconds > 0 && seconds <= 60);
+      // Skelly's rule: anything <= 3 minutes is a Short. #shorts tag in title also forces it.
+      const isShort = titleHasShortsTag || (seconds > 0 && seconds <= 180);
 
       if (wasLive) out.lives.push(item);
       else if (isShort) out.shorts.push(item);

@@ -22,8 +22,8 @@ const config: Config = {
         },
         lightning: "#E8D5FF",
         gold: {
-          DEFAULT: "#D4A017",
-          light: "#F0C040",
+          DEFAULT: "#00D4FF",
+          light: "#5EE0FF",
         },
         text: {
           primary: "#F0E8FF",
@@ -41,8 +41,8 @@ const config: Config = {
         "glow-purple-lg": "0 0 48px rgba(155,95,192,0.55)",
         "glow-blue": "0 0 24px rgba(79,195,247,0.55)",
         "glow-pink": "0 0 24px rgba(255,79,203,0.55)",
-        "glow-gold": "0 0 24px rgba(212,160,23,0.55)",
-        "glow-gold-lg": "0 0 48px rgba(212,160,23,0.65)",
+        "glow-gold": "0 0 24px rgba(0,212,255,0.55)",
+        "glow-gold-lg": "0 0 48px rgba(0,212,255,0.7)",
         "outline-white": "0 0 0 2px #FFFFFF",
       },
       keyframes: {
@@ -51,8 +51,8 @@ const config: Config = {
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         "glow-pulse": {
-          "0%, 100%": { boxShadow: "0 0 20px rgba(212,160,23,0.45)" },
-          "50%": { boxShadow: "0 0 36px rgba(212,160,23,0.85)" },
+          "0%, 100%": { boxShadow: "0 0 20px rgba(0,212,255,0.45)" },
+          "50%": { boxShadow: "0 0 40px rgba(0,212,255,0.85)" },
         },
         "drift": {
           "0%": { transform: "translateY(0px)" },

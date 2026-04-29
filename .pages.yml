@@ -56,6 +56,25 @@ content:
           - { name: start, label: Start time (e.g. "8:00 PM"), type: string, required: true }
           - { name: end,   label: End time (e.g. "12:00 AM"), type: string, required: true }
 
+  - name: fanart
+    label: Fan Art
+    type: collection
+    path: content/fanart
+    filename: "{primary}.md"
+    view:
+      fields: [artist, date]
+      primary: artist
+      sort: [date, artist]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - { name: artist, label: Artist name / handle, type: string, required: true }
+      - { name: social_url, label: Link to artist's social (optional), type: string }
+      - { name: image, label: Artwork (image upload), type: image, required: true }
+      - { name: date, label: Date added, type: date, required: true, options: { format: "yyyy-MM-dd" } }
+      - { name: caption, label: Caption (optional), type: string }
+
   - name: tiers
     label: Membership Tiers
     type: file

@@ -2,10 +2,34 @@ import StreamScheduleBlock from "@/components/StreamScheduleBlock";
 import GlowButton from "@/components/GlowButton";
 import SectionDivider from "@/components/SectionDivider";
 import FanArtForm from "@/components/FanArtForm";
+import Image from "next/image";
 import DiscordWidget from "@/components/DiscordWidget";
-import { getSchedule } from "@/lib/content";
+import { getFanArt, getSchedule } from "@/lib/content";
 
 export const metadata = { title: "The Skellywag Clubhouse" };
+
+function FanArtTile({ art }: { art: import("@/lib/content").FanArt }) {
+  return (
+    <a
+      href={art.social_url || "#"}
+      target={art.social_url ? "_blank" : undefined}
+      rel="noreferrer"
+      className="group relative aspect-square bg-bg-card border-2 border-purple-core/40 rounded-xl overflow-hidden lift hover:border-electric-pink hover:shadow-glow-pink"
+    >
+      <Image
+        src={art.image}
+        alt={art.caption || `art by ${art.artist}`}
+        fill
+        sizes="(max-width: 768px) 50vw, 25vw"
+        className="object-cover group-hover:scale-105 transition-transform duration-500"
+      />
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-bg-primary/95 via-bg-primary/70 to-transparent px-3 py-3">
+        <p className="font-bebas text-lg text-white tracking-wide">{art.artist}</p>
+        {art.caption && <p className="text-text-muted text-xs line-clamp-1">{art.caption}</p>}
+      </div>
+    </a>
+  );
+}
 
 const MERCH_STEPS = [
   { n: "01", text: "Watch Skelly live on Twitch." },
@@ -16,6 +40,7 @@ const MERCH_STEPS = [
 
 export default function CommunityPage() {
   const schedule = getSchedule();
+  const fanart = getFanArt();
   return (
     <>
       <section className="relative bg-starfield-dense noise-overlay">
@@ -63,24 +88,39 @@ export default function CommunityPage() {
       {/* Fan art wall */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
         <h2 className="heading text-4xl md:text-5xl text-white text-center">FAN ART WALL</h2>
-        <p className="text-text-muted text-center mt-2">submissions are reviewed by skelly before they post.</p>
+        <p className="text-text-muted text-center mt-2">curated chaos. drop your art in discord — skelly might post it here.</p>
         <SectionDivider />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div
-              key={i}
-              className="aspect-square bg-bg-card border border-purple-core/30 rounded-xl flex items-center justify-center"
-            >
-              <svg viewBox="0 0 64 64" className="w-12 h-12 text-purple-core opacity-40">
-                <circle cx="32" cy="28" r="20" fill="currentColor" />
-                <circle cx="24" cy="26" r="3" fill="#0D0814" />
-                <circle cx="40" cy="26" r="3" fill="#0D0814" />
-              </svg>
-            </div>
-          ))}
-        </div>
+
+        {fanart.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-12">
+            {fanart.map((art) => (
+              <FanArtTile key={art.slug} art={art} />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div
+                key={i}
+                className="aspect-square bg-bg-card border border-purple-core/30 rounded-xl flex items-center justify-center"
+              >
+                <svg viewBox="0 0 64 64" className="w-12 h-12 text-purple-core opacity-40">
+                  <circle cx="32" cy="28" r="20" fill="currentColor" />
+                  <circle cx="24" cy="26" r="3" fill="#0D0814" />
+                  <circle cx="40" cy="26" r="3" fill="#0D0814" />
+                </svg>
+              </div>
+            ))}
+          </div>
+        )}
+
         <div className="bg-bg-card border border-purple-core/30 rounded-xl p-8 max-w-2xl mx-auto">
           <h3 className="heading text-2xl text-white">SUBMIT YOUR CHAOS</h3>
+          <p className="text-text-muted text-sm mt-2">
+            drop your art in <a href="https://discord.gg/zpWv2cXxB9" className="text-electric-blue hover:text-electric-pink underline">#fan-art on Discord</a>{" "}
+            or tag <a href="https://twitter.com/itsmeskelly" className="text-electric-blue hover:text-electric-pink underline">@itsmeskelly</a>.
+            skelly picks favorites and posts them here.
+          </p>
           <FanArtForm />
         </div>
       </section>

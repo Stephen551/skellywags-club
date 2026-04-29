@@ -21,6 +21,15 @@ export type Schedule = { timezone_label: string; blocks: ScheduleBlock[] };
 
 export type AboutContent = { title: string; html: string };
 
+export type FanArt = {
+  slug: string;
+  artist: string;
+  social_url?: string;
+  image: string;
+  date: string;
+  caption?: string;
+};
+
 export function getTiers(): Tier[] {
   const raw = JSON.parse(fs.readFileSync(path.join(ROOT, "tiers.json"), "utf8"));
   return raw.tiers as Tier[];
@@ -35,4 +44,26 @@ export function getAbout(): AboutContent {
   const { data, content } = matter(raw);
   const html = remark().use(remarkHtml).processSync(content).toString();
   return { title: data.title ?? "WHO IS SKELLY?", html };
+}
+
+export function getFanArt(): FanArt[] {
+  const dir = path.join(ROOT, "fanart");
+  if (!fs.existsSync(dir)) return [];
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".md"));
+  const items: FanArt[] = files
+    .map((f) => {
+      const raw = fs.readFileSync(path.join(dir, f), "utf8");
+      const { data } = matter(raw);
+      if (!data.image || !data.artist) return null;
+      return {
+        slug: f.replace(/\.md$/, ""),
+        artist: data.artist,
+        social_url: data.social_url,
+        image: data.image,
+        date: data.date ?? "",
+        caption: data.caption,
+      } as FanArt;
+    })
+    .filter((x): x is FanArt => x !== null);
+  return items.sort((a, b) => (a.date < b.date ? 1 : -1));
 }

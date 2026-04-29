@@ -63,10 +63,10 @@ export default async function HomePage() {
                 <Image
                   src="/avatar.png"
                   alt="Skelly"
-                  width={520}
-                  height={520}
+                  width={620}
+                  height={620}
                   priority
-                  className="relative drop-shadow-[0_0_40px_rgba(155,95,192,0.7)]"
+                  className="relative drop-shadow-[0_0_50px_rgba(155,95,192,0.8)]"
                 />
               </div>
             </div>

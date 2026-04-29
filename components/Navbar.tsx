@@ -18,10 +18,10 @@ export default function Navbar() {
           <Image
             src="/skellyword.png"
             alt="SKELLY"
-            width={120}
-            height={48}
+            width={180}
+            height={72}
             priority
-            className="h-9 w-auto drop-shadow-[0_0_10px_rgba(155,95,192,0.6)]"
+            className="h-14 w-auto drop-shadow-[0_0_14px_rgba(155,95,192,0.7)]"
           />
         </Link>
 

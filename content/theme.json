@@ -3,7 +3,7 @@
   "highlight_color": "#FF4FCB",
   "avatar_url": "/avatar.png",
   "heading_font": "Comico",
-  "body_font": "nunito",
-  "accent_font": "bangers",
+  "body_font": "Comico",
+  "accent_font": "Comico",
   "custom_font_css": "@font-face { font-family: 'Comico'; src: url('/fonts/Comico-Regular.woff2') format('woff2'), url('/fonts/Comico-Regular.woff') format('woff'); font-weight: 400; font-style: normal; font-display: swap; }"
 }

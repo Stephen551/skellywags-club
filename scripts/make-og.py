@@ -105,39 +105,39 @@ def main():
 
         canvas.alpha_composite(avatar, (ax, ay))
 
-    # Wordmark on right
+    draw = ImageDraw.Draw(canvas)
+    text_x = 600
+
+    # Channel handle (top)
+    handle_font = find_font(["bahnschrift.ttf", "impact.ttf", "ariblk.ttf", "arial.ttf"], 26)
+    draw.text((text_x + 4, 70), "@OFFICIALLYSKELLY", font=handle_font, fill=ELECTRIC_PINK)
+
+    # Wordmark on right (sized to NOT overlap tagline)
     word_path = os.path.join(PUBLIC, "skellyword.png")
-    text_x = 580
     if os.path.exists(word_path):
         word = Image.open(word_path).convert("RGBA")
-        target_w = 540
+        target_w = 380
         ratio = target_w / word.width
         word = word.resize((target_w, int(word.height * ratio)), Image.LANCZOS)
-        wy = 90
+        wy = 120
         canvas.alpha_composite(word, (text_x, wy))
 
-    draw = ImageDraw.Draw(canvas)
+    # Tagline (positioned BELOW wordmark, never overlaps)
+    tagline_font = find_font(["seguisbi.ttf", "georgiai.ttf", "ariali.ttf", "arial.ttf"], 32)
+    draw.text((text_x + 4, 430), "chaos, bad decisions,", font=tagline_font, fill=TEXT_PRIMARY)
+    draw.text((text_x + 4, 470), "and surviving barely.", font=tagline_font, fill=TEXT_PRIMARY)
 
-    # Channel handle
-    handle_font = find_font(["bahnschrift.ttf", "impact.ttf", "ariblk.ttf", "arial.ttf"], 28)
-    draw.text((text_x + 4, 60), "@OFFICIALLYSKELLY", font=handle_font, fill=ELECTRIC_PINK)
-
-    # Tagline
-    tagline_font = find_font(["seguisbi.ttf", "georgiai.ttf", "ariali.ttf", "arial.ttf"], 36)
-    draw.text((text_x + 4, 380), "chaos, bad decisions,", font=tagline_font, fill=TEXT_PRIMARY)
-    draw.text((text_x + 4, 425), "and surviving barely.", font=tagline_font, fill=TEXT_PRIMARY)
-
-    # URL pill (gold accent)
-    url_font = find_font(["bahnschrift.ttf", "impact.ttf", "arialbd.ttf", "arial.ttf"], 32)
+    # URL pill (gold, bottom)
+    url_font = find_font(["bahnschrift.ttf", "impact.ttf", "arialbd.ttf", "arial.ttf"], 28)
     url_text = "SKELLYWAGS.CLUB"
     bbox = draw.textbbox((0, 0), url_text, font=url_font)
     tw = bbox[2] - bbox[0]
     th = bbox[3] - bbox[1]
-    pill_x, pill_y = text_x + 4, 510
-    pad_x, pad_y = 22, 14
+    pill_x, pill_y = text_x + 4, 552
+    pad_x, pad_y = 20, 12
     draw.rounded_rectangle(
         (pill_x - pad_x, pill_y - pad_y, pill_x + tw + pad_x, pill_y + th + pad_y),
-        radius=14,
+        radius=12,
         fill=GOLD,
     )
     draw.text((pill_x, pill_y - 4), url_text, font=url_font, fill=BG_PRIMARY)

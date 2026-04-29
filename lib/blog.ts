@@ -10,6 +10,7 @@ export type Post = {
   date: string;
   category: string;
   excerpt?: string;
+  seoDescription?: string;
   html: string;
 };
 
@@ -36,6 +37,7 @@ export function readPost(slug: string): Post | null {
     date: toDateString(data.date),
     category: data.category ?? "Just Vibes",
     excerpt: data.excerpt,
+    seoDescription: data.seo_description,
     html,
   };
 }

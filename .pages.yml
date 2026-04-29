@@ -2,9 +2,20 @@ media:
   input: public/uploads
   output: /uploads
 
+# ────────────────────────────────────────────────────────────────────────────
+# Skelly's CMS — sections are ordered by how often you'll edit them.
+# Top of list = daily/weekly. Bottom = set-and-forget.
+# Every save commits to GitHub and the live site rebuilds in ~60 seconds.
+# ────────────────────────────────────────────────────────────────────────────
+
 content:
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  #   FREQUENT EDITS  (you'll touch these weekly or more)
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
   - name: blog
-    label: Blog Posts
+    label: "📝 Blog Posts"
     type: collection
     path: content/blog
     filename: "{primary}.md"
@@ -16,193 +27,21 @@ content:
         sort: date
         order: desc
     fields:
-      - { name: title, label: Title, type: string, required: true }
-      - { name: date, label: Date, type: date, required: true, options: { format: "yyyy-MM-dd" } }
+      - { name: title, label: "Title — keep it short, all-caps if you want it to feel chaotic", type: string, required: true }
+      - { name: date, label: "Date posted (auto-fills today)", type: date, required: true, options: { format: "yyyy-MM-dd" } }
       - name: category
-        label: Category
+        label: "Category"
         type: select
         options:
-          values: [Update, Drop, Event, Just Vibes]
+          values: [Update, Drop, Event, "Just Vibes"]
           default: Update
         required: true
-      - { name: excerpt, label: Excerpt (1-line teaser shown on the index card), type: text }
-      - { name: body, label: Post body, type: rich-text }
-
-  - name: about
-    label: About Page
-    type: file
-    path: content/about.md
-    fields:
-      - { name: title, label: Page Heading (e.g. "WHO IS SKELLY?"), type: string, required: true }
-      - { name: body, label: About Copy (origin story etc.), type: rich-text, required: true }
-
-  - name: theme
-    label: Theme (Colors & Avatar)
-    type: file
-    path: content/theme.json
-    fields:
-      - { name: cta_color, label: "Primary CTA color (hex, e.g. #00D4FF). Used on GET THE DRIP, JOIN buttons, featured tier border, stats numbers.", type: string, required: true, pattern: "^#?[0-9a-fA-F]{6}$" }
-      - { name: highlight_color, label: "Highlight / chaos accent color (hex, e.g. #FF4FCB). Used on @handle, drop banner, hover states, stat pulse.", type: string, required: true, pattern: "^#?[0-9a-fA-F]{6}$" }
-      - { name: avatar_url, label: "Avatar image (used on home/about/members hero). Upload a transparent PNG, or leave default to use /avatar.png.", type: image }
-
-  - name: site
-    label: Site Identity & Copy
-    type: file
-    path: content/site.json
-    fields:
-      - { name: handle, label: "Handle (e.g. @OFFICIALLYSKELLY)", type: string, required: true }
-      - { name: channel_name, label: "Channel name (e.g. OFFICIALLYSKELLY) — split into 2 lines on hero", type: string, required: true }
-      - { name: tagline, label: "Hero tagline (italic line)", type: text, required: true }
-      - { name: hero_cta_primary_label, label: "Hero primary button label (gold)", type: string, required: true }
-      - { name: hero_cta_primary_href, label: "Hero primary button link", type: string, required: true, default: "/shop" }
-      - { name: hero_cta_secondary_label, label: "Hero secondary button label (purple)", type: string, required: true }
-      - { name: hero_cta_secondary_href, label: "Hero secondary button link", type: string, required: true, default: "/members" }
-      - { name: drop_banner_enabled, label: "Show drop banner on home?", type: boolean, default: true }
-      - { name: drop_banner_title, label: "Drop banner title (e.g. ⚠ NEW DROP INCOMING ⚠)", type: string }
-      - { name: drop_banner_subtitle, label: "Drop banner subtitle", type: text }
-      - { name: fresh_content_heading, label: "Recent videos section heading", type: string, default: "FRESH CONTENT FROM THE VOID" }
-      - { name: fresh_content_subtitle, label: "Recent videos section subtitle", type: string }
-      - { name: club_pitch_heading, label: "Skellywags Club pitch heading", type: string, default: "THINK YOU CAN HANDLE IT?" }
-      - { name: club_pitch_body, label: "Skellywags Club pitch body", type: text }
-      - { name: club_pitch_cta_label, label: "Skellywags Club CTA label", type: string, default: "BECOME A SKELLYWAG →" }
-      - { name: live_strip_heading, label: "Stream schedule strip heading", type: string, default: "CATCH SKELLY LIVE" }
-      - { name: merch_train_callout, label: "Merch train callout (homepage banner)", type: string }
-      - { name: merch_train_link_label, label: "Merch train link label", type: string, default: "HOW IT WORKS →" }
-      - { name: members_hero_heading, label: "/members hero heading", type: string }
-      - { name: members_hero_subtitle, label: "/members hero subtitle", type: text }
-      - { name: twitch_callout_heading, label: "Twitch sub callout heading on /members", type: string }
-      - { name: twitch_callout_body, label: "Twitch sub callout body on /members", type: text }
-      - { name: twitch_callout_cta_label, label: "Twitch sub callout button label", type: string }
-      - { name: twitch_callout_cta_href, label: "Twitch sub callout button link", type: string, default: "/shop" }
-      - { name: stats_heading, label: "/about stats section heading", type: string, default: "THE NUMBERS DON'T LIE" }
-      - { name: youtube_membership_url, label: "YouTube membership join URL (where Members tier buttons go)", type: string }
-      - { name: twitch_url, label: "Twitch channel URL", type: string }
-      - { name: discord_invite_url, label: "Discord invite URL", type: string }
-
-  - name: social
-    label: Social Links (nav + footer + about)
-    type: file
-    path: content/social.json
-    fields:
-      - name: links
-        label: Platforms (in order they appear)
-        type: object
-        list: true
-        fields:
-          - name: key
-            label: Icon (must be one of these to render the right SVG)
-            type: select
-            options:
-              values: [youtube, twitch, discord, instagram, x, tiktok]
-            required: true
-          - { name: label, label: "Display label (e.g. YouTube)", type: string, required: true }
-          - { name: handle, label: "Handle shown next to icon (e.g. @officiallyskelly)", type: string, required: true }
-          - { name: url, label: "Profile URL", type: string, required: true }
-
-  - name: merch_train
-    label: Merch Train Explainer (/community)
-    type: file
-    path: content/merch-train.json
-    fields:
-      - { name: heading, label: Section heading, type: string, required: true }
-      - { name: intro, label: "Optional intro paragraph (above the steps)", type: text }
-      - name: steps
-        label: Steps
-        type: object
-        list: true
-        fields:
-          - { name: n, label: "Step number (e.g. 01, 02)", type: string, required: true }
-          - { name: text, label: "Step description", type: text, required: true }
-      - { name: cta_label, label: "Bottom CTA button label", type: string, required: true }
-
-  - name: perks_table
-    label: Membership Perks Table (/members)
-    type: file
-    path: content/perks-table.json
-    fields:
-      - { name: heading, label: Table heading, type: string, default: "PERKS BY TIER" }
-      - name: rows
-        label: Perk rows (each row is one feature row in the table)
-        type: object
-        list: true
-        fields:
-          - { name: perk, label: "Perk description", type: string, required: true }
-          - { name: matey, label: "Mateys tier has this?", type: boolean, default: false }
-          - { name: boatswain, label: "Boatswain tier has this?", type: boolean, default: false }
-          - { name: first, label: "First Mate tier has this?", type: boolean, default: true }
-      - { name: cta_label, label: "Bottom CTA button label", type: string, default: "JOIN ON YOUTUBE →" }
-
-  - name: faq
-    label: FAQ
-    type: file
-    path: content/faq.json
-    fields:
-      - { name: intro, label: "Intro line under FAQ heading (e.g. 'got questions? skelly's got mostly-useful answers.')", type: string }
-      - name: items
-        label: FAQ entries (each is a question + answer)
-        type: object
-        list: true
-        fields:
-          - { name: question, label: Question, type: string, required: true }
-          - { name: answer, label: Answer, type: text, required: true }
-
-  - name: shipping_returns
-    label: Shipping & Returns
-    type: file
-    path: content/shipping-returns.md
-    fields:
-      - { name: title, label: Page heading, type: string, required: true }
-      - { name: last_updated, label: Last updated date, type: date, options: { format: "yyyy-MM-dd" } }
-      - { name: body, label: Shipping & returns body, type: rich-text, required: true }
-
-  - name: privacy
-    label: Privacy Policy
-    type: file
-    path: content/privacy.md
-    fields:
-      - { name: title, label: Page heading (e.g. "PRIVACY POLICY"), type: string, required: true }
-      - { name: last_updated, label: Last updated date, type: date, options: { format: "yyyy-MM-dd" } }
-      - { name: body, label: Privacy policy body, type: rich-text, required: true }
-
-  - name: terms
-    label: Terms
-    type: file
-    path: content/terms.md
-    fields:
-      - { name: title, label: Page heading (e.g. "TERMS"), type: string, required: true }
-      - { name: last_updated, label: Last updated date, type: date, options: { format: "yyyy-MM-dd" } }
-      - { name: body, label: Terms body, type: rich-text, required: true }
-
-  - name: stats
-    label: About-page Stats
-    type: file
-    path: content/stats.json
-    fields:
-      - { name: skellywags_count, label: "Skellywags (YouTube channel members count — type from your YouTube creator dashboard, e.g. 142)", type: string }
-      - { name: streams_survived, label: "Streams Survived (any number you want, e.g. 412 or ∞)", type: string }
-
-  - name: schedule
-    label: Stream Schedule
-    type: file
-    path: content/schedule.json
-    fields:
-      - { name: timezone_label, label: Timezone label (e.g. "EST"), type: string, required: true, default: "EST" }
-      - name: blocks
-        label: Scheduled streams
-        type: object
-        list: true
-        fields:
-          - name: day
-            label: Day
-            type: select
-            options:
-              values: [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY]
-            required: true
-          - { name: start, label: Start time (e.g. "8:00 PM"), type: string, required: true }
-          - { name: end,   label: End time (e.g. "12:00 AM"), type: string, required: true }
+      - { name: excerpt, label: "Excerpt — 1 line teaser shown on the index card. Keep punchy.", type: text }
+      - { name: seo_description, label: "SEO description (optional, used for search engine + social previews if set)", type: text }
+      - { name: body, label: "Post body — markdown supported, use ## for section breaks", type: rich-text }
 
   - name: fanart
-    label: Fan Art
+    label: "🎨 Fan Art Wall"
     type: collection
     path: content/fanart
     filename: "{primary}.md"
@@ -214,36 +53,217 @@ content:
         sort: date
         order: desc
     fields:
-      - { name: artist, label: Artist name / handle, type: string, required: true }
-      - { name: social_url, label: Link to artist's social (optional), type: string }
-      - { name: image, label: Artwork (image upload), type: image, required: true }
-      - { name: date, label: Date added, type: date, required: true, options: { format: "yyyy-MM-dd" } }
-      - { name: caption, label: Caption (optional), type: string }
+      - { name: artist, label: "Artist name or @handle", type: string, required: true }
+      - { name: social_url, label: "Link to artist's social (so the tile credits them — optional)", type: string }
+      - { name: image, label: "Artwork (drag-drop or click to upload)", type: image, required: true }
+      - { name: date, label: "Date added", type: date, required: true, options: { format: "yyyy-MM-dd" } }
+      - { name: caption, label: "Caption (optional)", type: string }
+
+  - name: theme
+    label: "🎨 Theme — Colors & Avatar"
+    type: file
+    path: content/theme.json
+    fields:
+      - { name: cta_color, label: "Primary CTA color (hex). Drives every gold/cyan button, featured tier border, glow pulse.", type: string, required: true, pattern: "^#?[0-9a-fA-F]{6}$" }
+      - { name: highlight_color, label: "Highlight / chaos accent (hex). Drives @handle text, drop banner, hover states, stat pulse.", type: string, required: true, pattern: "^#?[0-9a-fA-F]{6}$" }
+      - { name: avatar_url, label: "Avatar PNG (transparent bg recommended). Upload here or leave default.", type: image }
+
+  - name: site
+    label: "🛠 Site Identity & Hero Copy"
+    type: file
+    path: content/site.json
+    fields:
+      - { name: handle, label: "Channel handle (e.g. @OFFICIALLYSKELLY)", type: string, required: true }
+      - { name: channel_name, label: "Channel name displayed on hero (e.g. OFFICIALLYSKELLY) — auto-splits into 2 lines", type: string, required: true }
+      - { name: tagline, label: "Hero tagline (the italic line under the title)", type: text, required: true }
+      - { name: hero_cta_primary_label, label: "Hero primary button label (gold/cyan)", type: string, required: true }
+      - { name: hero_cta_primary_href, label: "Hero primary button link (e.g. /shop)", type: string, required: true, default: "/shop" }
+      - { name: hero_cta_secondary_label, label: "Hero secondary button label (purple)", type: string, required: true }
+      - { name: hero_cta_secondary_href, label: "Hero secondary button link (e.g. /members)", type: string, required: true, default: "/members" }
+      - { name: drop_banner_enabled, label: "Show the drop banner on home? (toggle off if no merch drop is incoming)", type: boolean, default: true }
+      - { name: drop_banner_title, label: "Drop banner title — flip this to 'X DROP IS LIVE NOW' when merch goes up", type: string }
+      - { name: drop_banner_subtitle, label: "Drop banner subtitle (under the title)", type: text }
+      - { name: fresh_content_heading, label: "'Recent videos' section heading on home", type: string, default: "FRESH CONTENT FROM THE VOID" }
+      - { name: fresh_content_subtitle, label: "'Recent videos' section subtitle", type: string }
+      - { name: club_pitch_heading, label: "Skellywags Club pitch heading on home", type: string, default: "THINK YOU CAN HANDLE IT?" }
+      - { name: club_pitch_body, label: "Skellywags Club pitch body", type: text }
+      - { name: club_pitch_cta_label, label: "Skellywags Club CTA button label", type: string, default: "BECOME A SKELLYWAG →" }
+      - { name: live_strip_heading, label: "Stream-schedule strip heading on home", type: string, default: "CATCH SKELLY LIVE" }
+      - { name: merch_train_callout, label: "Merch-train callout banner on home", type: string }
+      - { name: merch_train_link_label, label: "Merch-train link label", type: string, default: "HOW IT WORKS →" }
+      - { name: members_hero_heading, label: "/members hero heading", type: string }
+      - { name: members_hero_subtitle, label: "/members hero subtitle", type: text }
+      - { name: twitch_callout_heading, label: "Twitch-sub callout heading on /members", type: string }
+      - { name: twitch_callout_body, label: "Twitch-sub callout body on /members", type: text }
+      - { name: twitch_callout_cta_label, label: "Twitch-sub callout button label", type: string }
+      - { name: twitch_callout_cta_href, label: "Twitch-sub callout button link", type: string, default: "/shop" }
+      - { name: stats_heading, label: "/about stats section heading", type: string, default: "THE NUMBERS DON'T LIE" }
+      - { name: youtube_membership_url, label: "YouTube channel-membership join URL", type: string }
+      - { name: twitch_url, label: "Twitch channel URL", type: string }
+      - { name: discord_invite_url, label: "Discord invite URL", type: string }
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  #   MONTHLY EDITS  (numbers + schedule + tier tweaks)
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  - name: stats
+    label: "📊 About-page Stats"
+    type: file
+    path: content/stats.json
+    fields:
+      - { name: skellywags_count, label: "Skellywags count (YouTube channel members — copy from your YouTube creator dashboard)", type: string }
+      - { name: streams_survived, label: "Streams Survived (any number you want — 412, ∞, MAX, whatever)", type: string }
+
+  - name: schedule
+    label: "📅 Stream Schedule"
+    type: file
+    path: content/schedule.json
+    fields:
+      - { name: timezone_label, label: "Timezone label (e.g. EST)", type: string, required: true, default: "EST" }
+      - name: blocks
+        label: "Stream blocks (drag to reorder)"
+        type: object
+        list: true
+        fields:
+          - name: day
+            label: "Day"
+            type: select
+            options:
+              values: [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY]
+            required: true
+          - { name: start, label: "Start time (e.g. 8:00 PM)", type: string, required: true }
+          - { name: end,   label: "End time (e.g. 12:00 AM)", type: string, required: true }
 
   - name: tiers
-    label: Membership Tiers
+    label: "💀 Membership Tiers"
     type: file
     path: content/tiers.json
     fields:
       - name: tiers
-        label: Tiers
+        label: "Tiers (drag to reorder, leftmost = cheapest)"
         type: object
         list:
           min: 1
           max: 5
         fields:
-          - { name: key, label: Key (no spaces, used internally), type: string, required: true }
-          - { name: name, label: Tier name (e.g. "Skellywag Mateys"), type: string, required: true }
-          - { name: price, label: Price (e.g. "$1.99"), type: string, required: true }
+          - { name: key, label: "Tier key (no spaces, internal — e.g. matey)", type: string, required: true }
+          - { name: name, label: "Tier name (e.g. Skellywag Mateys)", type: string, required: true }
+          - { name: price, label: "Price (e.g. $1.99)", type: string, required: true }
           - name: perks
-            label: Perks
+            label: "Perks (one per line)"
             type: string
             list: true
           - name: variant
-            label: Button style
+            label: "Button style"
             type: select
             options:
               values: [ghost, purple, gold]
               default: purple
-          - { name: cta, label: Button text (e.g. "JOIN FOR $1.99"), type: string, required: true }
-          - { name: featured, label: Featured tier (gold border)?, type: boolean, default: false }
+          - { name: cta, label: "Button text (e.g. JOIN FOR $1.99)", type: string, required: true }
+          - { name: featured, label: "Featured tier? (gold border + 'MOST CHAOS' badge)", type: boolean, default: false }
+
+  - name: perks_table
+    label: "📋 Membership Perks Table"
+    type: file
+    path: content/perks-table.json
+    fields:
+      - { name: heading, label: "Table heading", type: string, default: "PERKS BY TIER" }
+      - name: rows
+        label: "Perk rows (each row = one feature, drag to reorder)"
+        type: object
+        list: true
+        fields:
+          - { name: perk, label: "Perk description", type: string, required: true }
+          - { name: matey, label: "Mateys tier has this?", type: boolean, default: false }
+          - { name: boatswain, label: "Boatswain tier has this?", type: boolean, default: false }
+          - { name: first, label: "First Mate tier has this?", type: boolean, default: true }
+      - { name: cta_label, label: "Bottom CTA button label", type: string, default: "JOIN ON YOUTUBE →" }
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  #   SET-AND-FORGET  (rarely changes — but available when needed)
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  - name: about
+    label: "👤 About Page"
+    type: file
+    path: content/about.md
+    fields:
+      - { name: title, label: "Page heading (e.g. WHO IS SKELLY?)", type: string, required: true }
+      - { name: body, label: "About copy / origin story", type: rich-text, required: true }
+
+  - name: faq
+    label: "❓ FAQ Page"
+    type: file
+    path: content/faq.json
+    fields:
+      - { name: intro, label: "Intro line under FAQ heading", type: string }
+      - name: items
+        label: "FAQ entries (drag to reorder)"
+        type: object
+        list: true
+        fields:
+          - { name: question, label: "Question", type: string, required: true }
+          - { name: answer, label: "Answer", type: text, required: true }
+
+  - name: shipping_returns
+    label: "📦 Shipping & Returns Page"
+    type: file
+    path: content/shipping-returns.md
+    fields:
+      - { name: title, label: "Page heading", type: string, required: true }
+      - { name: last_updated, label: "Last updated date", type: date, options: { format: "yyyy-MM-dd" } }
+      - { name: body, label: "Shipping & returns body (markdown)", type: rich-text, required: true }
+
+  - name: privacy
+    label: "🔒 Privacy Policy"
+    type: file
+    path: content/privacy.md
+    fields:
+      - { name: title, label: "Page heading", type: string, required: true }
+      - { name: last_updated, label: "Last updated date", type: date, options: { format: "yyyy-MM-dd" } }
+      - { name: body, label: "Privacy policy body (markdown)", type: rich-text, required: true }
+
+  - name: terms
+    label: "📜 Terms of Service"
+    type: file
+    path: content/terms.md
+    fields:
+      - { name: title, label: "Page heading", type: string, required: true }
+      - { name: last_updated, label: "Last updated date", type: date, options: { format: "yyyy-MM-dd" } }
+      - { name: body, label: "Terms body (markdown)", type: rich-text, required: true }
+
+  - name: social
+    label: "🔗 Social Links (nav + footer + about)"
+    type: file
+    path: content/social.json
+    fields:
+      - name: links
+        label: "Platforms (drag to reorder — top row first)"
+        type: object
+        list: true
+        fields:
+          - name: key
+            label: "Icon (must match — picks the right SVG)"
+            type: select
+            options:
+              values: [youtube, twitch, discord, instagram, x, tiktok]
+            required: true
+          - { name: label, label: "Display label (e.g. YouTube)", type: string, required: true }
+          - { name: handle, label: "Handle shown next to icon (e.g. @officiallyskelly)", type: string, required: true }
+          - { name: url, label: "Profile URL", type: string, required: true }
+
+  - name: merch_train
+    label: "🚂 Merch Train Explainer"
+    type: file
+    path: content/merch-train.json
+    fields:
+      - { name: heading, label: "Section heading", type: string, required: true }
+      - { name: intro, label: "Optional intro paragraph (above the steps)", type: text }
+      - name: steps
+        label: "Steps (drag to reorder)"
+        type: object
+        list: true
+        fields:
+          - { name: n, label: "Step number (e.g. 01, 02)", type: string, required: true }
+          - { name: text, label: "Step description", type: text, required: true }
+      - { name: cta_label, label: "Bottom CTA button label", type: string, required: true }

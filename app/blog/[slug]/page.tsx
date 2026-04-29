@@ -8,7 +8,14 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { slug: string } }) {
   const post = readPost(params.slug);
-  return { title: post?.title ?? "Post" };
+  if (!post) return { title: "Post" };
+  const description = post.seoDescription || post.excerpt;
+  return {
+    title: post.title,
+    description,
+    openGraph: { title: post.title, description, type: "article" },
+    twitter: { card: "summary_large_image", title: post.title, description },
+  };
 }
 
 export default function BlogPost({ params }: { params: { slug: string } }) {

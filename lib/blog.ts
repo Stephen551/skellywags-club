@@ -33,9 +33,17 @@ export function readPost(slug: string): Post | null {
   return {
     slug,
     title: data.title ?? slug,
-    date: data.date ?? "",
+    date: toDateString(data.date),
     category: data.category ?? "Just Vibes",
     excerpt: data.excerpt,
     html,
   };
+}
+
+function toDateString(v: unknown): string {
+  if (!v) return "";
+  if (v instanceof Date) {
+    return Number.isNaN(v.getTime()) ? "" : v.toISOString().slice(0, 10);
+  }
+  return String(v);
 }

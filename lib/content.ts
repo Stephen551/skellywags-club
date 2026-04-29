@@ -6,6 +6,14 @@ import remarkHtml from "remark-html";
 
 const ROOT = path.join(process.cwd(), "content");
 
+function toDateString(v: unknown): string {
+  if (!v) return "";
+  if (v instanceof Date) {
+    return Number.isNaN(v.getTime()) ? "" : v.toISOString().slice(0, 10);
+  }
+  return String(v);
+}
+
 export type Tier = {
   key: string;
   name: string;
@@ -66,7 +74,7 @@ function loadLegal(filename: string, fallbackTitle: string): LegalContent {
   const html = remark().use(remarkHtml).processSync(content).toString();
   return {
     title: data.title ?? fallbackTitle,
-    lastUpdated: data.last_updated ?? "",
+    lastUpdated: toDateString(data.last_updated),
     html,
   };
 }
@@ -114,7 +122,7 @@ export function getFanArt(): FanArt[] {
         artist: data.artist,
         social_url: data.social_url,
         image: data.image,
-        date: data.date ?? "",
+        date: toDateString(data.date),
         caption: data.caption,
       } as FanArt;
     })

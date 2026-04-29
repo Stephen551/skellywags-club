@@ -21,6 +21,11 @@ export type Schedule = { timezone_label: string; blocks: ScheduleBlock[] };
 
 export type AboutContent = { title: string; html: string };
 
+export type Stats = {
+  skellywags_count: string;
+  streams_survived: string;
+};
+
 export type FanArt = {
   slug: string;
   artist: string;
@@ -44,6 +49,14 @@ export function getAbout(): AboutContent {
   const { data, content } = matter(raw);
   const html = remark().use(remarkHtml).processSync(content).toString();
   return { title: data.title ?? "WHO IS SKELLY?", html };
+}
+
+export function getStats(): Stats {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(ROOT, "stats.json"), "utf8"));
+  } catch {
+    return { skellywags_count: "", streams_survived: "" };
+  }
 }
 
 export function getFanArt(): FanArt[] {

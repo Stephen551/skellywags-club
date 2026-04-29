@@ -3,7 +3,7 @@ import { SOCIAL_LINKS } from "@/lib/constants";
 import SocialIcon from "@/components/SocialIcon";
 import SectionDivider from "@/components/SectionDivider";
 import { fetchChannelStats, formatCount } from "@/lib/youtube";
-import { getAbout } from "@/lib/content";
+import { getAbout, getStats } from "@/lib/content";
 
 export const revalidate = 3600;
 export const metadata = { title: "The Lore" };
@@ -11,6 +11,7 @@ export const metadata = { title: "The Lore" };
 export default async function AboutPage() {
   const stats = await fetchChannelStats();
   const about = getAbout();
+  const cms = getStats();
 
   return (
     <>
@@ -66,8 +67,12 @@ export default async function AboutPage() {
           <h2 className="heading text-5xl text-white text-center">THE NUMBERS DON'T LIE</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
             <Stat label="SUBSCRIBERS" value={formatCount(stats?.subscriberCount)} />
-            <Stat label="SKELLYWAGS" value="—" hint="(soon)" />
-            <Stat label="STREAMS SURVIVED" value="∞" />
+            <Stat
+              label="SKELLYWAGS"
+              value={cms.skellywags_count || "—"}
+              hint={cms.skellywags_count ? "channel members" : "(soon)"}
+            />
+            <Stat label="STREAMS SURVIVED" value={cms.streams_survived || "∞"} />
             <Stat label="CHAOS LEVEL" value="MAX" bar />
           </div>
         </div>

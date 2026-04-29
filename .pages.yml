@@ -36,6 +36,14 @@ content:
       - { name: title, label: Page Heading (e.g. "WHO IS SKELLY?"), type: string, required: true }
       - { name: body, label: About Copy (origin story etc.), type: rich-text, required: true }
 
+  - name: stats
+    label: About-page Stats
+    type: file
+    path: content/stats.json
+    fields:
+      - { name: skellywags_count, label: "Skellywags (YouTube channel members count — type from your YouTube creator dashboard, e.g. 142)", type: string }
+      - { name: streams_survived, label: "Streams Survived (any number you want, e.g. 412 or ∞)", type: string }
+
   - name: schedule
     label: Stream Schedule
     type: file

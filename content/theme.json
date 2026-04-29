@@ -1,5 +1,9 @@
 {
   "cta_color": "#7DF9FF",
   "highlight_color": "#FF4FCB",
-  "avatar_url": "/avatar.png"
+  "avatar_url": "/avatar.png",
+  "heading_font": "bebas-neue",
+  "body_font": "nunito",
+  "accent_font": "bangers",
+  "custom_font_css": "@font-face { font-family: 'Comico'; src: url('/fonts/Comico-Regular.woff2') format('woff2'), url('/fonts/Comico-Regular.woff') format('woff'); font-weight: 400; font-style: normal; font-display: swap; }"
 }

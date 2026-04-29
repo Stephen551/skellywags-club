@@ -4,10 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { NAV_LINKS, SOCIAL_LINKS } from "@/lib/constants";
+import { NAV_LINKS } from "@/lib/constants";
+import type { SocialLink } from "@/lib/content";
 import SocialIcon from "./SocialIcon";
 
-export default function Navbar() {
+export default function Navbar({ social }: { social: SocialLink[] }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -48,7 +49,7 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3 text-text-primary/85">
-          {SOCIAL_LINKS.map((s) => (
+          {social.map((s) => (
             <a
               key={s.key}
               href={s.url}
@@ -94,7 +95,7 @@ export default function Navbar() {
             ))}
           </nav>
           <div className="mt-8 flex items-center gap-5">
-            {SOCIAL_LINKS.map((s) => (
+            {social.map((s) => (
               <a key={s.key} href={s.url} target="_blank" rel="noreferrer" aria-label={s.label}>
                 <SocialIcon k={s.key as any} className="w-6 h-6 text-text-primary" />
               </a>

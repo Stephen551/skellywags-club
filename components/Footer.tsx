@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { NAV_LINKS, SOCIAL_LINKS } from "@/lib/constants";
+import { NAV_LINKS } from "@/lib/constants";
+import type { SocialLink } from "@/lib/content";
 import SocialIcon from "./SocialIcon";
 import EmailCapture from "./EmailCapture";
 
-export default function Footer() {
+export default function Footer({ social }: { social: SocialLink[] }) {
   return (
     <footer className="mt-24 border-t border-purple-core/25 bg-bg-secondary">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14 grid gap-12 md:grid-cols-3">
@@ -41,7 +42,7 @@ export default function Footer() {
       <div className="border-t border-purple-core/20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-sm text-text-muted">
           <div className="flex items-center gap-4">
-            {SOCIAL_LINKS.map((s) => (
+            {social.map((s) => (
               <a key={s.key} href={s.url} target="_blank" rel="noreferrer" aria-label={s.label} className="hover:text-electric-blue transition-colors">
                 <SocialIcon k={s.key as any} className="w-5 h-5" />
               </a>

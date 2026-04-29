@@ -1,0 +1,10 @@
+{
+  "links": [
+    { "key": "youtube",   "label": "YouTube",   "handle": "@officiallyskelly", "url": "https://www.youtube.com/@officiallyskelly" },
+    { "key": "twitch",    "label": "Twitch",    "handle": "officiallyskelly",  "url": "https://twitch.tv/officiallyskelly" },
+    { "key": "discord",   "label": "Discord",   "handle": "skellywags",        "url": "https://discord.gg/zpWv2cXxB9" },
+    { "key": "instagram", "label": "Instagram", "handle": "@officiallyskelly", "url": "https://instagram.com/officiallyskelly" },
+    { "key": "x",         "label": "X",         "handle": "@itsmeskelly",      "url": "https://twitter.com/itsmeskelly" },
+    { "key": "tiktok",    "label": "TikTok",    "handle": "@officiallyskelly", "url": "https://tiktok.com/@officiallyskelly" }
+  ]
+}

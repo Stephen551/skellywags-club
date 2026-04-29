@@ -1,0 +1,13 @@
+{
+  "heading": "PERKS BY TIER",
+  "rows": [
+    { "perk": "Loyalty badges + custom emoji",         "matey": true,  "boatswain": true,  "first": true },
+    { "perk": "Members-only chat rooms",                "matey": true,  "boatswain": true,  "first": true },
+    { "perk": "Member shout-outs",                      "matey": true,  "boatswain": true,  "first": true },
+    { "perk": "Early access to new videos",             "matey": true,  "boatswain": true,  "first": true },
+    { "perk": "Members-only videos",                    "matey": false, "boatswain": true,  "first": true },
+    { "perk": "Members-only live streams",              "matey": false, "boatswain": true,  "first": true },
+    { "perk": "Skelly's Community Cluster Server (Discord)", "matey": false, "boatswain": false, "first": true }
+  ],
+  "cta_label": "JOIN ON YOUTUBE →"
+}

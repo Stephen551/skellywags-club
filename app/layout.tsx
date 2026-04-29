@@ -3,6 +3,7 @@ import { Bebas_Neue, Nunito, Bangers } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RevealOnScroll from "@/components/RevealOnScroll";
+import { getSocial } from "@/lib/content";
 import "./globals.css";
 
 const bebas = Bebas_Neue({
@@ -49,13 +50,14 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const social = getSocial();
   return (
     <html lang="en" className={`${bebas.variable} ${nunito.variable} ${bangers.variable}`}>
       <body className="min-h-screen bg-bg-primary text-text-primary">
         <RevealOnScroll />
-        <Navbar />
+        <Navbar social={social} />
         <main>{children}</main>
-        <Footer />
+        <Footer social={social} />
       </body>
     </html>
   );

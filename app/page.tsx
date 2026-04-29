@@ -7,8 +7,7 @@ import EmailCapture from "@/components/EmailCapture";
 import StreamScheduleBlock from "@/components/StreamScheduleBlock";
 import MemberTierCard from "@/components/MemberTierCard";
 import VideoCard from "@/components/VideoCard";
-import { SOCIAL_LINKS } from "@/lib/constants";
-import { getSchedule, getTiers } from "@/lib/content";
+import { getSchedule, getSite, getSocial, getTiers } from "@/lib/content";
 import { fetchLatestVideos } from "@/lib/youtube";
 
 export const revalidate = 3600;
@@ -17,6 +16,9 @@ export default async function HomePage() {
   const videos = await fetchLatestVideos(3);
   const schedule = getSchedule();
   const tiers = getTiers();
+  const site = getSite();
+  const social = getSocial();
+  const channelLines = site.channel_name.split(/\s+/);
 
   return (
     <>
@@ -26,23 +28,27 @@ export default async function HomePage() {
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 min-h-[88vh] flex items-center">
           <div className="grid lg:grid-cols-2 gap-12 items-center w-full py-16">
             <div className="reveal">
-              <p className="font-bangers text-electric-pink text-2xl tracking-widest">@OFFICIALLYSKELLY</p>
+              <p className="font-bangers text-electric-pink text-2xl tracking-widest">{site.handle}</p>
               <h1 className="heading text-7xl md:text-8xl xl:text-9xl text-white drop-shadow-[0_0_30px_rgba(155,95,192,0.6)] mt-4">
-                OFFICIALLY<br />SKELLY
+                {channelLines.length > 1 ? (
+                  <>{channelLines[0]}<br />{channelLines.slice(1).join(" ")}</>
+                ) : (
+                  site.channel_name
+                )}
               </h1>
               <p className="font-nunito italic text-xl md:text-2xl text-text-primary/90 mt-6 max-w-md">
-                chaos, bad decisions, and surviving barely.
+                {site.tagline}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mt-8">
-                <GlowButton variant="gold" size="lg" href="/shop">
-                  GET THE DRIP →
+                <GlowButton variant="gold" size="lg" href={site.hero_cta_primary_href}>
+                  {site.hero_cta_primary_label}
                 </GlowButton>
-                <GlowButton variant="purple" size="lg" href="/members">
-                  JOIN THE SKELLYWAGS →
+                <GlowButton variant="purple" size="lg" href={site.hero_cta_secondary_href}>
+                  {site.hero_cta_secondary_label}
                 </GlowButton>
               </div>
               <div className="flex items-center gap-5 mt-10">
-                {SOCIAL_LINKS.map((s) => (
+                {social.map((s) => (
                   <a
                     key={s.key}
                     href={s.url}
@@ -76,26 +82,26 @@ export default async function HomePage() {
 
       {/* DROP BANNER */}
       <section className="relative bg-bg-secondary border-y border-purple-core/30 py-14">
-        <div className="max-w-4xl mx-auto px-6 text-center reveal">
-          <p className="font-bangers text-electric-pink text-3xl md:text-4xl tracking-widest">
-            ⚠ NEW DROP INCOMING ⚠
-          </p>
-          <p className="text-text-primary/85 mt-3 mb-6">
-            drop your email to get notified when the chaos goes live.
-          </p>
-          <div className="max-w-md mx-auto">
-            <EmailCapture cta="NOTIFY ME" />
+        {site.drop_banner_enabled && (
+          <div className="max-w-4xl mx-auto px-6 text-center reveal">
+            <p className="font-bangers text-electric-pink text-3xl md:text-4xl tracking-widest">
+              {site.drop_banner_title}
+            </p>
+            <p className="text-text-primary/85 mt-3 mb-6">{site.drop_banner_subtitle}</p>
+            <div className="max-w-md mx-auto">
+              <EmailCapture cta="NOTIFY ME" />
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* RECENT VIDEOS */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
         <div className="reveal">
           <h2 className="heading text-5xl md:text-6xl text-white">
-            FRESH CONTENT FROM THE VOID
+            {site.fresh_content_heading}
           </h2>
-          <p className="text-text-muted mt-3">latest uploads, freshly recovered from the chaos.</p>
+          <p className="text-text-muted mt-3">{site.fresh_content_subtitle}</p>
         </div>
         <SectionDivider />
         {videos.length === 0 ? (
@@ -121,10 +127,8 @@ export default async function HomePage() {
       <section className="bg-bg-secondary py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center reveal">
-            <h2 className="heading text-5xl md:text-6xl text-white">THINK YOU CAN HANDLE IT?</h2>
-            <p className="text-text-primary/85 max-w-2xl mx-auto mt-4">
-              Join the Skellywags. Get exclusive videos, members-only streams, Discord access, and the eternal bragging rights of surviving Skelly's chaos.
-            </p>
+            <h2 className="heading text-5xl md:text-6xl text-white">{site.club_pitch_heading}</h2>
+            <p className="text-text-primary/85 max-w-2xl mx-auto mt-4">{site.club_pitch_body}</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 mt-12">
             {tiers.map((t) => (
@@ -134,7 +138,7 @@ export default async function HomePage() {
             ))}
           </div>
           <div className="text-center mt-10">
-            <GlowButton variant="gold" size="lg" href="/members">BECOME A SKELLYWAG →</GlowButton>
+            <GlowButton variant="gold" size="lg" href="/members">{site.club_pitch_cta_label}</GlowButton>
           </div>
         </div>
       </section>
@@ -143,9 +147,9 @@ export default async function HomePage() {
       <section className="bg-bg-primary py-16 border-y border-purple-core/25">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 reveal">
-            <h2 className="heading text-4xl md:text-5xl text-white">CATCH SKELLY LIVE</h2>
+            <h2 className="heading text-4xl md:text-5xl text-white">{site.live_strip_heading}</h2>
             <a
-              href="https://twitch.tv/officiallyskelly"
+              href={site.twitch_url}
               target="_blank"
               rel="noreferrer"
               className="font-bebas text-xl tracking-wide text-electric-blue hover:text-electric-pink transition-colors"
@@ -166,14 +170,12 @@ export default async function HomePage() {
       {/* MERCH TRAIN */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <div className="bg-bg-card border border-electric-pink/40 rounded-xl p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6 reveal">
-          <p className="font-bangers text-2xl text-text-primary">
-            🔥 GIFT MERCH TO TWITCH CHAT WHILE SKELLY IS LIVE
-          </p>
+          <p className="font-bangers text-2xl text-text-primary">{site.merch_train_callout}</p>
           <Link
             href="/community#merch-train"
             className="font-bebas text-xl text-electric-pink hover:text-electric-blue transition-colors"
           >
-            HOW IT WORKS →
+            {site.merch_train_link_label}
           </Link>
         </div>
       </section>

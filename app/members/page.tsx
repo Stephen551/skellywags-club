@@ -1,32 +1,23 @@
 import Image from "next/image";
 import MemberTierCard from "@/components/MemberTierCard";
 import GlowButton from "@/components/GlowButton";
-import { YOUTUBE_MEMBERSHIP_URL } from "@/lib/constants";
-import { getTiers } from "@/lib/content";
+import { getPerksTable, getSite, getTiers } from "@/lib/content";
 
 export const metadata = { title: "Skellywags Club" };
 
-const PERK_ROWS = [
-  { perk: "Loyalty badges + custom emoji", matey: true, boatswain: true, first: true },
-  { perk: "Members-only chat rooms", matey: true, boatswain: true, first: true },
-  { perk: "Member shout-outs", matey: true, boatswain: true, first: true },
-  { perk: "Early access to new videos", matey: true, boatswain: true, first: true },
-  { perk: "Members-only videos", matey: false, boatswain: true, first: true },
-  { perk: "Members-only live streams", matey: false, boatswain: true, first: true },
-  { perk: "Skelly's Community Cluster Server (Discord)", matey: false, boatswain: false, first: true },
-];
-
 export default function MembersPage() {
   const tiers = getTiers();
+  const site = getSite();
+  const perks = getPerksTable();
   return (
     <>
       {/* HERO */}
       <section className="relative bg-starfield-dense noise-overlay">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 grid lg:grid-cols-2 gap-10 items-center">
           <div className="reveal">
-            <h1 className="heading text-6xl md:text-7xl text-white">JOIN THE SKELLYWAG CREW</h1>
+            <h1 className="heading text-6xl md:text-7xl text-white">{site.members_hero_heading}</h1>
             <p className="text-xl text-text-primary/85 mt-5 max-w-md">
-              exclusive videos. members-only streams. discord chaos. pick your chaos level.
+              {site.members_hero_subtitle}
             </p>
           </div>
           <div className="flex justify-center lg:justify-end reveal">
@@ -52,20 +43,17 @@ export default function MembersPage() {
       {/* TWITCH CALLOUT */}
       <section className="max-w-5xl mx-auto px-6 lg:px-8 pb-20">
         <div className="bg-bg-card border-2 border-[#9146FF] rounded-2xl p-8 md:p-10 reveal">
-          <p className="font-bangers text-3xl text-[#C8A8FF]">ALREADY A TWITCH SUB? 👀</p>
-          <p className="text-text-primary/90 mt-3">
-            Link your Twitch account at checkout on the merch store for an exclusive sub discount.
-            Skelly rewards loyalty.
-          </p>
+          <p className="font-bangers text-3xl text-[#C8A8FF]">{site.twitch_callout_heading}</p>
+          <p className="text-text-primary/90 mt-3">{site.twitch_callout_body}</p>
           <div className="mt-6">
-            <GlowButton variant="purple" href="/shop">SHOP THE STORE →</GlowButton>
+            <GlowButton variant="purple" href={site.twitch_callout_cta_href}>{site.twitch_callout_cta_label}</GlowButton>
           </div>
         </div>
       </section>
 
       {/* PERKS TABLE */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 pb-24">
-        <h2 className="heading text-4xl text-white">PERKS BY TIER</h2>
+        <h2 className="heading text-4xl text-white">{perks.heading}</h2>
         <div className="overflow-x-auto mt-6">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -77,7 +65,7 @@ export default function MembersPage() {
               </tr>
             </thead>
             <tbody>
-              {PERK_ROWS.map((r) => (
+              {perks.rows.map((r) => (
                 <tr key={r.perk} className="border-t border-purple-core/20">
                   <td className="py-3 pr-4 text-text-primary">{r.perk}</td>
                   <td className="py-3 px-4 text-center">{r.matey ? "💀" : "—"}</td>
@@ -89,8 +77,8 @@ export default function MembersPage() {
           </table>
         </div>
         <div className="text-center mt-10">
-          <GlowButton variant="gold" size="lg" href={YOUTUBE_MEMBERSHIP_URL}>
-            JOIN ON YOUTUBE →
+          <GlowButton variant="gold" size="lg" href={site.youtube_membership_url}>
+            {perks.cta_label}
           </GlowButton>
         </div>
       </section>

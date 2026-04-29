@@ -1,5 +1,5 @@
 import GlowButton from "./GlowButton";
-import { YOUTUBE_MEMBERSHIP_URL } from "@/lib/constants";
+import { getSite } from "@/lib/content";
 
 type Tier = {
   name: string;
@@ -11,6 +11,7 @@ type Tier = {
 };
 
 export default function MemberTierCard({ tier }: { tier: Tier }) {
+  const site = getSite();
   return (
     <div
       className={`relative flex flex-col rounded-2xl bg-bg-card p-7 lift transition-all
@@ -36,7 +37,7 @@ export default function MemberTierCard({ tier }: { tier: Tier }) {
           </li>
         ))}
       </ul>
-      <GlowButton variant={tier.variant} size="md" href={YOUTUBE_MEMBERSHIP_URL} className="mt-7">
+      <GlowButton variant={tier.variant} size="md" href={site.youtube_membership_url} className="mt-7">
         {tier.cta}
       </GlowButton>
     </div>

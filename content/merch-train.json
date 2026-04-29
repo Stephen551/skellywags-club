@@ -1,0 +1,11 @@
+{
+  "heading": "MERCH TRAIN — HOW IT WORKS",
+  "intro": "",
+  "steps": [
+    { "n": "01", "text": "Watch Skelly live on Twitch." },
+    { "n": "02", "text": "Find merch on this site or the gift link in chat." },
+    { "n": "03", "text": "Gift it to a chatter — Fourthwall handles fulfillment." },
+    { "n": "04", "text": "FourthwallHQ bot announces the lucky chaos recipient." }
+  ],
+  "cta_label": "WATCH SKELLY LIVE →"
+}

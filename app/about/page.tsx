@@ -1,9 +1,8 @@
 import Image from "next/image";
-import { SOCIAL_LINKS } from "@/lib/constants";
 import SocialIcon from "@/components/SocialIcon";
 import SectionDivider from "@/components/SectionDivider";
 import { fetchChannelStats, formatCount } from "@/lib/youtube";
-import { getAbout, getStats } from "@/lib/content";
+import { getAbout, getSite, getSocial, getStats } from "@/lib/content";
 
 export const revalidate = 3600;
 export const metadata = { title: "The Lore" };
@@ -12,6 +11,8 @@ export default async function AboutPage() {
   const stats = await fetchChannelStats();
   const about = getAbout();
   const cms = getStats();
+  const site = getSite();
+  const social = getSocial();
 
   return (
     <>
@@ -41,7 +42,7 @@ export default async function AboutPage() {
         <h2 className="heading text-5xl text-white text-center">FIND SKELLY EVERYWHERE</h2>
         <SectionDivider />
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {SOCIAL_LINKS.map((s) => (
+          {social.map((s) => (
             <a
               key={s.key}
               href={s.url}
@@ -64,7 +65,7 @@ export default async function AboutPage() {
 
       <section className="bg-bg-secondary py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <h2 className="heading text-5xl text-white text-center">THE NUMBERS DON'T LIE</h2>
+          <h2 className="heading text-5xl text-white text-center">{site.stats_heading}</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
             <Stat label="SUBSCRIBERS" value={formatCount(stats?.subscriberCount)} />
             <Stat

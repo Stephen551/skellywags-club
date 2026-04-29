@@ -4,7 +4,7 @@ import SectionDivider from "@/components/SectionDivider";
 import FanArtForm from "@/components/FanArtForm";
 import Image from "next/image";
 import DiscordWidget from "@/components/DiscordWidget";
-import { getFanArt, getSchedule } from "@/lib/content";
+import { getFanArt, getMerchTrain, getSchedule, getSite } from "@/lib/content";
 
 export const metadata = { title: "The Skellywag Clubhouse" };
 
@@ -36,16 +36,11 @@ function FanArtTile({ art }: { art: import("@/lib/content").FanArt }) {
   return <div className={className}>{inner}</div>;
 }
 
-const MERCH_STEPS = [
-  { n: "01", text: "Watch Skelly live on Twitch." },
-  { n: "02", text: "Find merch on this site or the gift link in chat." },
-  { n: "03", text: "Gift it to a chatter — Fourthwall handles fulfillment." },
-  { n: "04", text: "FourthwallHQ bot announces the lucky chaos recipient." },
-];
-
 export default function CommunityPage() {
   const schedule = getSchedule();
   const fanart = getFanArt();
+  const site = getSite();
+  const merchTrain = getMerchTrain();
   return (
     <>
       <section className="relative bg-starfield-dense noise-overlay">
@@ -62,7 +57,7 @@ export default function CommunityPage() {
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3">
           <h2 className="heading text-4xl md:text-5xl text-white">STREAM SCHEDULE</h2>
           <a
-            href="https://twitch.tv/officiallyskelly"
+            href={site.twitch_url}
             target="_blank"
             rel="noreferrer"
             className="font-bebas text-xl text-electric-blue hover:text-electric-pink transition-colors"
@@ -133,10 +128,11 @@ export default function CommunityPage() {
       {/* Merch train */}
       <section id="merch-train" className="bg-bg-secondary py-16">
         <div className="max-w-5xl mx-auto px-6 lg:px-8">
-          <h2 className="heading text-4xl md:text-5xl text-white">MERCH TRAIN — HOW IT WORKS</h2>
+          <h2 className="heading text-4xl md:text-5xl text-white">{merchTrain.heading}</h2>
           <SectionDivider />
+          {merchTrain.intro && <p className="text-text-primary/85 mb-6">{merchTrain.intro}</p>}
           <ol className="space-y-4">
-            {MERCH_STEPS.map((s) => (
+            {merchTrain.steps.map((s) => (
               <li key={s.n} className="flex items-start gap-5 bg-bg-card border border-purple-core/30 rounded-xl p-5">
                 <span className="font-bebas text-4xl text-gold leading-none">{s.n}</span>
                 <span className="text-text-primary">{s.text}</span>
@@ -144,8 +140,8 @@ export default function CommunityPage() {
             ))}
           </ol>
           <div className="text-center mt-10">
-            <GlowButton variant="gold" size="lg" href="https://twitch.tv/officiallyskelly" external>
-              WATCH SKELLY LIVE →
+            <GlowButton variant="gold" size="lg" href={site.twitch_url} external>
+              {merchTrain.cta_label}
             </GlowButton>
           </div>
         </div>

@@ -17,7 +17,7 @@ export default function Navbar({ social }: { social: SocialLink[] }) {
       <div className="max-w-7xl mx-auto px-4 lg:px-8 h-20 md:h-24 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group shrink-0">
           <Image
-            src="/skellyword.png"
+            src="/skellyword-v2.png"
             alt="SKELLY"
             width={300}
             height={94}

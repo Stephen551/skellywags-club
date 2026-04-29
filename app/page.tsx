@@ -19,7 +19,7 @@ export default async function HomePage() {
   const site = getSite();
   const social = getSocial();
   const theme = getTheme();
-  const channelLines = site.channel_name.split(/\s+/);
+  const channelLines = splitChannelName(site.channel_name);
 
   return (
     <>
@@ -183,6 +183,19 @@ export default async function HomePage() {
       </section>
     </>
   );
+}
+
+function splitChannelName(name: string): string[] {
+  const trimmed = (name || "").trim();
+  if (!trimmed) return [];
+  if (/\s/.test(trimmed)) return trimmed.split(/\s+/);
+  if (trimmed.length >= 12) {
+    const skelly = trimmed.match(/^(.+?)(SKELLY|skelly|Skelly)$/);
+    if (skelly) return [skelly[1], skelly[2]];
+    const mid = Math.ceil(trimmed.length / 2);
+    return [trimmed.slice(0, mid), trimmed.slice(mid)];
+  }
+  return [trimmed];
 }
 
 function LightningCross() {

@@ -4,7 +4,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://i.ytimg.com https://yt3.ggpht.com https://cdn.discordapp.com",
   "font-src 'self' data:",
-  "frame-src https://discord.com https://www.youtube.com https://www.youtube-nocookie.com",
+  "frame-src https://discord.com https://www.youtube.com https://www.youtube-nocookie.com https://*.fourthwall.com",
   "connect-src 'self' https://www.googleapis.com https://discord.com",
   "media-src 'self'",
   "object-src 'none'",

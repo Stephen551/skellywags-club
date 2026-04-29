@@ -66,3 +66,6 @@ export const TIERS = [
 
 export const YOUTUBE_MEMBERSHIP_URL =
   "https://www.youtube.com/channel/officiallyskelly/join";
+
+export const FOURTHWALL_SHOP_URL =
+  process.env.NEXT_PUBLIC_FOURTHWALL_SHOP_URL || "";

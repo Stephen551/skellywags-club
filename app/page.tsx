@@ -7,7 +7,7 @@ import EmailCapture from "@/components/EmailCapture";
 import StreamScheduleBlock from "@/components/StreamScheduleBlock";
 import MemberTierCard from "@/components/MemberTierCard";
 import VideoCard from "@/components/VideoCard";
-import { SOCIAL_LINKS } from "@/lib/constants";
+import { FOURTHWALL_SHOP_URL, SOCIAL_LINKS } from "@/lib/constants";
 import { getSchedule, getTiers } from "@/lib/content";
 import { fetchLatestVideos } from "@/lib/youtube";
 
@@ -34,7 +34,7 @@ export default async function HomePage() {
                 chaos, bad decisions, and surviving barely.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 mt-8">
-                <GlowButton variant="gold" size="lg" href="/shop">
+                <GlowButton variant="gold" size="lg" href={FOURTHWALL_SHOP_URL || "/shop"} external={!!FOURTHWALL_SHOP_URL}>
                   GET THE DRIP →
                 </GlowButton>
                 <GlowButton variant="purple" size="lg" href="/members">

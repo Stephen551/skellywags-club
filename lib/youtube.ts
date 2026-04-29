@@ -76,47 +76,56 @@ export type CategorizedVideos = {
   lives: VideoData[];
 };
 
-export async function fetchUploadsCategorized(max = 50): Promise<CategorizedVideos> {
+export async function fetchUploadsCategorized(max = 500): Promise<CategorizedVideos> {
   const empty: CategorizedVideos = { videos: [], shorts: [], lives: [] };
   if (!KEY) return empty;
   const stats = await fetchChannelStats();
   if (!stats) return empty;
 
-  const playlistRes = await fetch(
-    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${stats.uploadsPlaylistId}&maxResults=${max}&key=${KEY}`,
-    { next: { revalidate: 3600 } }
-  );
-  if (!playlistRes.ok) return empty;
-  const playlistData = await playlistRes.json();
-  const items: any[] = playlistData.items ?? [];
-  if (items.length === 0) return empty;
+  const allIds: string[] = [];
+  let pageToken: string | undefined = undefined;
+  while (allIds.length < max) {
+    const tokenParam = pageToken ? `&pageToken=${pageToken}` : "";
+    const res: Response = await fetch(
+      `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${stats.uploadsPlaylistId}&maxResults=50${tokenParam}&key=${KEY}`,
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) break;
+    const data = await res.json();
+    const items: any[] = data.items ?? [];
+    for (const it of items) {
+      if (it.contentDetails?.videoId) allIds.push(it.contentDetails.videoId);
+      if (allIds.length >= max) break;
+    }
+    pageToken = data.nextPageToken;
+    if (!pageToken) break;
+  }
 
-  const ids = items.map((it) => it.contentDetails.videoId).join(",");
-  const videosRes = await fetch(
-    `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,liveStreamingDetails&id=${ids}&key=${KEY}`,
-    { next: { revalidate: 3600 } }
-  );
-  if (!videosRes.ok) return empty;
-  const videosData = await videosRes.json();
-  const videoItems: any[] = videosData.items ?? [];
+  if (allIds.length === 0) return empty;
 
   const out: CategorizedVideos = { videos: [], shorts: [], lives: [] };
-  for (const v of videoItems) {
-    const seconds = parseIsoDuration(v.contentDetails?.duration ?? "");
-    const data: VideoData = {
-      id: v.id,
-      title: v.snippet.title,
-      thumbnail: v.snippet.thumbnails?.high?.url || v.snippet.thumbnails?.medium?.url,
-      publishedAt: new Date(v.snippet.publishedAt).toLocaleDateString(),
-      duration: formatDuration(seconds),
-    };
-    const wasLive = !!v.liveStreamingDetails?.actualStartTime;
-    if (wasLive) {
-      out.lives.push(data);
-    } else if (seconds > 0 && seconds <= 60) {
-      out.shorts.push(data);
-    } else {
-      out.videos.push(data);
+  for (let i = 0; i < allIds.length; i += 50) {
+    const batch = allIds.slice(i, i + 50).join(",");
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,liveStreamingDetails&id=${batch}&key=${KEY}`,
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) continue;
+    const data = await res.json();
+    const items: any[] = data.items ?? [];
+    for (const v of items) {
+      const seconds = parseIsoDuration(v.contentDetails?.duration ?? "");
+      const item: VideoData = {
+        id: v.id,
+        title: v.snippet.title,
+        thumbnail: v.snippet.thumbnails?.high?.url || v.snippet.thumbnails?.medium?.url,
+        publishedAt: new Date(v.snippet.publishedAt).toLocaleDateString(),
+        duration: formatDuration(seconds),
+      };
+      const wasLive = !!v.liveStreamingDetails?.actualStartTime;
+      if (wasLive) out.lives.push(item);
+      else if (seconds > 0 && seconds <= 60) out.shorts.push(item);
+      else out.videos.push(item);
     }
   }
   return out;

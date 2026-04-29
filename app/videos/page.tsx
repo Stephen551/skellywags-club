@@ -1,4 +1,4 @@
-import VideoCard from "@/components/VideoCard";
+import VideoSearchGrid from "@/components/VideoSearchGrid";
 import GlowButton from "@/components/GlowButton";
 import { fetchUploadsCategorized } from "@/lib/youtube";
 
@@ -29,7 +29,7 @@ export default async function VideosPage({
     );
   }
 
-  const cats = await fetchUploadsCategorized(50);
+  const cats = await fetchUploadsCategorized(500);
   const totals = { videos: cats.videos.length, shorts: cats.shorts.length, lives: cats.lives.length };
   const list = cats[tab as "videos" | "shorts" | "lives"];
 
@@ -37,16 +37,12 @@ export default async function VideosPage({
     <PageShell tab={tab} totals={totals}>
       {list.length === 0 ? (
         <EmptyState>
-          {tab === "shorts" && "no shorts in the last 50 uploads — skelly's been keeping it long."}
-          {tab === "lives" && "no archived live streams in the last 50 uploads."}
-          {tab === "videos" && "YouTube key not set or no recent uploads."}
+          {tab === "shorts" && "no shorts uploaded yet — skelly's keeping it long-form."}
+          {tab === "lives" && "no archived live streams yet."}
+          {tab === "videos" && "YouTube key not set or no uploads found."}
         </EmptyState>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-          {list.map((v) => (
-            <VideoCard key={v.id} video={v} />
-          ))}
-        </div>
+        <VideoSearchGrid videos={list} />
       )}
     </PageShell>
   );

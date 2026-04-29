@@ -2,7 +2,7 @@ const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://i.ytimg.com https://yt3.ggpht.com https://cdn.discordapp.com",
+  "img-src 'self' data: blob: https://i.ytimg.com https://yt3.ggpht.com https://cdn.discordapp.com https://*.fourthwall.com https://cdn.fourthwall.com https://storage.googleapis.com",
   "font-src 'self' data:",
   "frame-src https://discord.com https://www.youtube.com https://www.youtube-nocookie.com https://*.fourthwall.com",
   "connect-src 'self' https://www.googleapis.com https://discord.com",
@@ -31,6 +31,9 @@ const nextConfig = {
       { protocol: "https", hostname: "i.ytimg.com" },
       { protocol: "https", hostname: "yt3.ggpht.com" },
       { protocol: "https", hostname: "cdn.discordapp.com" },
+      { protocol: "https", hostname: "cdn.fourthwall.com" },
+      { protocol: "https", hostname: "storage.googleapis.com" },
+      { protocol: "https", hostname: "skelly-xkh-shop.fourthwall.com" },
     ],
   },
   async headers() {

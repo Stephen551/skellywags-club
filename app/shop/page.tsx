@@ -3,15 +3,18 @@ import EmailCapture from "@/components/EmailCapture";
 import GlowButton from "@/components/GlowButton";
 import SectionDivider from "@/components/SectionDivider";
 import { FOURTHWALL_SHOP_URL } from "@/lib/constants";
+import { fetchAllProducts, formatMoney, type FwProduct } from "@/lib/fourthwall";
 
+export const revalidate = 600;
 export const metadata = { title: "Shop" };
 
-export default function ShopPage() {
-  if (FOURTHWALL_SHOP_URL) return <LiveShop />;
-  return <ComingSoonShop />;
+export default async function ShopPage() {
+  if (!FOURTHWALL_SHOP_URL) return <ComingSoonShop />;
+  const products = await fetchAllProducts();
+  return <LiveShop products={products} />;
 }
 
-function LiveShop() {
+function LiveShop({ products }: { products: FwProduct[] }) {
   return (
     <>
       <section className="relative bg-starfield-dense noise-overlay">
@@ -32,50 +35,25 @@ function LiveShop() {
         </div>
       </section>
 
-      <section className="max-w-5xl mx-auto px-6 lg:px-8 py-16">
+      <section className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <h2 className="heading text-4xl md:text-5xl text-white text-center">FRESH DRIP</h2>
-        <p className="text-text-muted text-center mt-2">currently live in the store. click to checkout.</p>
+        <p className="text-text-muted text-center mt-2">
+          {products.length > 0
+            ? "live in the store. click any to checkout."
+            : "the vault is loading. check back in a sec."}
+        </p>
         <SectionDivider />
 
-        <div className="grid sm:grid-cols-2 gap-6">
-          <a
-            href={FOURTHWALL_SHOP_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="group bg-bg-card border-2 border-white/10 rounded-xl overflow-hidden lift hover:border-white hover:shadow-glow-purple"
-          >
-            <div className="aspect-square bg-bg-secondary flex items-center justify-center p-12">
-              <Image
-                src="/skellyword.png"
-                alt="OFFICIALLYSKELLY logo sticker"
-                width={400}
-                height={400}
-                className="w-full h-auto drop-shadow-[0_0_24px_rgba(155,95,192,0.6)] group-hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-            <div className="p-5">
-              <h3 className="heading text-2xl text-white">OFFICIALLYSKELLY LOGO STICKER</h3>
-              <p className="font-bebas text-3xl text-gold mt-1">$5.50</p>
-              <p className="font-bangers text-electric-pink text-sm mt-2 tracking-widest">SHOP NOW →</p>
-            </div>
-          </a>
-
-          <a
-            href={FOURTHWALL_SHOP_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="group bg-bg-card border-2 border-purple-core/40 rounded-xl overflow-hidden flex flex-col items-center justify-center p-8 text-center lift hover:border-electric-pink hover:shadow-glow-pink"
-          >
-            <svg viewBox="0 0 64 64" className="w-20 h-20 text-electric-pink opacity-80 mb-4">
-              <path fill="currentColor" d="M32 8c-10 0-18 8-18 18 0 6 3 10 6 12v6a2 2 0 0 0 2 2h4v-4h4v4h4v-4h4v4h4a2 2 0 0 0 2-2v-6c3-2 6-6 6-12 0-10-8-18-18-18Z" />
-            </svg>
-            <p className="heading text-3xl text-white">MORE DROPS COMING</p>
-            <p className="text-text-muted text-sm mt-2 max-w-xs">
-              shirts, hoodies, posters — landing in the vault. browse the full store for everything live.
-            </p>
-            <p className="font-bangers text-electric-pink text-sm mt-4 tracking-widest">SEE THE STORE →</p>
-          </a>
-        </div>
+        {products.length > 0 ? (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {products.map((p) => (
+              <ProductTile key={p.id} product={p} />
+            ))}
+            <ComingDropsTile />
+          </div>
+        ) : (
+          <FallbackGrid />
+        )}
 
         <div className="text-center mt-12">
           <GlowButton variant="ghost" href={FOURTHWALL_SHOP_URL} external>
@@ -97,6 +75,83 @@ function LiveShop() {
         </div>
       </section>
     </>
+  );
+}
+
+function ProductTile({ product }: { product: FwProduct }) {
+  return (
+    <a
+      href={product.productUrl}
+      target="_blank"
+      rel="noreferrer"
+      className="group bg-bg-card border-2 border-white/10 rounded-xl overflow-hidden lift hover:border-white hover:shadow-glow-purple flex flex-col"
+    >
+      <div className="relative aspect-square bg-bg-secondary overflow-hidden">
+        {product.imageUrl ? (
+          <Image
+            src={product.imageUrl}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 50vw, 33vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            unoptimized
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="font-bangers text-electric-pink text-3xl">SKELLYWAGS</span>
+          </div>
+        )}
+      </div>
+      <div className="p-5 flex-1 flex flex-col justify-between">
+        <h3 className="heading text-xl text-white line-clamp-2">{product.name}</h3>
+        <div className="mt-3 flex items-end justify-between">
+          <p className="font-bebas text-3xl text-gold leading-none">
+            {formatMoney(product.price, product.currency)}
+          </p>
+          <span className="font-bangers text-electric-pink text-sm tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+            SHOP →
+          </span>
+        </div>
+      </div>
+    </a>
+  );
+}
+
+function ComingDropsTile() {
+  return (
+    <a
+      href={FOURTHWALL_SHOP_URL}
+      target="_blank"
+      rel="noreferrer"
+      className="group bg-bg-card border-2 border-purple-core/40 rounded-xl overflow-hidden flex flex-col items-center justify-center p-8 text-center lift hover:border-electric-pink hover:shadow-glow-pink"
+    >
+      <svg viewBox="0 0 64 64" className="w-16 h-16 text-electric-pink opacity-80 mb-4">
+        <path
+          fill="currentColor"
+          d="M32 8c-10 0-18 8-18 18 0 6 3 10 6 12v6a2 2 0 0 0 2 2h4v-4h4v4h4v-4h4v4h4a2 2 0 0 0 2-2v-6c3-2 6-6 6-12 0-10-8-18-18-18Z"
+        />
+      </svg>
+      <p className="heading text-2xl text-white">MORE DROPS COMING</p>
+      <p className="text-text-muted text-sm mt-2 max-w-xs">
+        new chaos lands every drop. browse the full store for everything live.
+      </p>
+      <p className="font-bangers text-electric-pink text-sm mt-4 tracking-widest">SEE THE STORE →</p>
+    </a>
+  );
+}
+
+function FallbackGrid() {
+  return (
+    <div className="bg-bg-card border border-purple-core/30 rounded-xl p-12 text-center">
+      <p className="font-bangers text-2xl text-electric-pink">store is warming up.</p>
+      <p className="text-text-muted mt-2">
+        if products don't appear in a minute, hit{" "}
+        <a href={FOURTHWALL_SHOP_URL} target="_blank" rel="noreferrer" className="text-electric-blue hover:text-electric-pink underline">
+          the full store
+        </a>{" "}
+        directly.
+      </p>
+    </div>
   );
 }
 

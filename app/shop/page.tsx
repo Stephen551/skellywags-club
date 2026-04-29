@@ -25,8 +25,8 @@ function LiveShop({ products }: { products: FwProduct[] }) {
             real merch. printed-on-demand by Fourthwall, shipped worldwide. gift to twitch chat while skelly's live.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center reveal">
-            <GlowButton variant="gold" size="lg" href={FOURTHWALL_SHOP_URL} external>
-              OPEN THE STORE →
+            <GlowButton variant="gold" size="lg" href="#fresh-drip">
+              SHOP THE DRIP →
             </GlowButton>
             <GlowButton variant="purple" size="lg" href="/community#merch-train">
               HOW MERCH TRAIN WORKS
@@ -35,7 +35,7 @@ function LiveShop({ products }: { products: FwProduct[] }) {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+      <section id="fresh-drip" className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
         <h2 className="heading text-4xl md:text-5xl text-white text-center">FRESH DRIP</h2>
         <p className="text-text-muted text-center mt-2">
           {products.length > 0
@@ -55,11 +55,9 @@ function LiveShop({ products }: { products: FwProduct[] }) {
           <FallbackGrid />
         )}
 
-        <div className="text-center mt-12">
-          <GlowButton variant="ghost" href={FOURTHWALL_SHOP_URL} external>
-            BROWSE EVERYTHING IN THE STORE →
-          </GlowButton>
-        </div>
+        <p className="text-text-muted text-sm text-center mt-10 max-w-md mx-auto">
+          checkout opens in Fourthwall — they handle payment, printing, and shipping.
+        </p>
       </section>
 
       <section className="bg-bg-secondary py-14">
@@ -119,13 +117,8 @@ function ProductTile({ product }: { product: FwProduct }) {
 
 function ComingDropsTile() {
   return (
-    <a
-      href={FOURTHWALL_SHOP_URL}
-      target="_blank"
-      rel="noreferrer"
-      className="group bg-bg-card border-2 border-purple-core/40 rounded-xl overflow-hidden flex flex-col items-center justify-center p-8 text-center lift hover:border-electric-pink hover:shadow-glow-pink"
-    >
-      <svg viewBox="0 0 64 64" className="w-16 h-16 text-electric-pink opacity-80 mb-4">
+    <div className="bg-bg-card border-2 border-purple-core/40 rounded-xl overflow-hidden flex flex-col items-center justify-center p-8 text-center">
+      <svg viewBox="0 0 64 64" className="w-16 h-16 text-electric-pink opacity-80 mb-4 animate-drift">
         <path
           fill="currentColor"
           d="M32 8c-10 0-18 8-18 18 0 6 3 10 6 12v6a2 2 0 0 0 2 2h4v-4h4v4h4v-4h4v4h4a2 2 0 0 0 2-2v-6c3-2 6-6 6-12 0-10-8-18-18-18Z"
@@ -133,10 +126,9 @@ function ComingDropsTile() {
       </svg>
       <p className="heading text-2xl text-white">MORE DROPS COMING</p>
       <p className="text-text-muted text-sm mt-2 max-w-xs">
-        new chaos lands every drop. browse the full store for everything live.
+        new chaos lands every drop. shirts, hoodies, posters — landing in the vault.
       </p>
-      <p className="font-bangers text-electric-pink text-sm mt-4 tracking-widest">SEE THE STORE →</p>
-    </a>
+    </div>
   );
 }
 

@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function RevealOnScroll() {
+  const pathname = usePathname();
   useEffect(() => {
     const els = document.querySelectorAll<HTMLElement>(".reveal");
     if (!("IntersectionObserver" in window)) {
@@ -37,6 +39,6 @@ export default function RevealOnScroll() {
       io.disconnect();
       window.clearTimeout(fallback);
     };
-  }, []);
+  }, [pathname]);
   return null;
 }

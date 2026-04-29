@@ -88,6 +88,12 @@ export type MerchTrain = {
 export type PerksRow = { perk: string; matey: boolean; boatswain: boolean; first: boolean };
 export type PerksTable = { heading: string; rows: PerksRow[]; cta_label: string };
 
+export type Theme = {
+  cta_color: string;
+  highlight_color: string;
+  avatar_url: string;
+};
+
 export type FanArt = {
   slug: string;
   artist: string;
@@ -222,6 +228,27 @@ export function getPerksTable(): PerksTable {
   } catch {
     return { heading: "PERKS BY TIER", rows: [], cta_label: "JOIN ON YOUTUBE →" };
   }
+}
+
+const THEME_DEFAULTS: Theme = {
+  cta_color: "#00D4FF",
+  highlight_color: "#FF4FCB",
+  avatar_url: "/avatar.png",
+};
+
+export function getTheme(): Theme {
+  try {
+    const raw = JSON.parse(fs.readFileSync(path.join(ROOT, "theme.json"), "utf8"));
+    return { ...THEME_DEFAULTS, ...raw };
+  } catch {
+    return THEME_DEFAULTS;
+  }
+}
+
+export function hexToRgbTriplet(hex: string): string {
+  const m = String(hex).trim().match(/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+  if (!m) return "0 212 255";
+  return `${parseInt(m[1], 16)} ${parseInt(m[2], 16)} ${parseInt(m[3], 16)}`;
 }
 
 export function getFanArt(): FanArt[] {

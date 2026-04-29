@@ -17,6 +17,10 @@
   --gold: #00d4ff;
   --gold-light: #5ee0ff;
   --gold-glow: rgba(0, 212, 255, 0.4);
+  /* CMS-controlled theme tokens (RGB triplets, set per-request from content/theme.json) */
+  --c-cta: 0 212 255;
+  --c-cta-light: 94 224 255;
+  --c-highlight: 255 79 203;
   --text-primary: #f0e8ff;
   --text-muted: #9080aa;
   --text-bright: #ffffff;

@@ -36,6 +36,15 @@ content:
       - { name: title, label: Page Heading (e.g. "WHO IS SKELLY?"), type: string, required: true }
       - { name: body, label: About Copy (origin story etc.), type: rich-text, required: true }
 
+  - name: theme
+    label: Theme (Colors & Avatar)
+    type: file
+    path: content/theme.json
+    fields:
+      - { name: cta_color, label: "Primary CTA color (hex, e.g. #00D4FF). Used on GET THE DRIP, JOIN buttons, featured tier border, stats numbers.", type: string, required: true, pattern: "^#?[0-9a-fA-F]{6}$" }
+      - { name: highlight_color, label: "Highlight / chaos accent color (hex, e.g. #FF4FCB). Used on @handle, drop banner, hover states, stat pulse.", type: string, required: true, pattern: "^#?[0-9a-fA-F]{6}$" }
+      - { name: avatar_url, label: "Avatar image (used on home/about/members hero). Upload a transparent PNG, or leave default to use /avatar.png.", type: image }
+
   - name: site
     label: Site Identity & Copy
     type: file

@@ -2,7 +2,7 @@ import Image from "next/image";
 import SocialIcon from "@/components/SocialIcon";
 import SectionDivider from "@/components/SectionDivider";
 import { fetchChannelStats, formatCount } from "@/lib/youtube";
-import { getAbout, getSite, getSocial, getStats } from "@/lib/content";
+import { getAbout, getSite, getSocial, getStats, getTheme } from "@/lib/content";
 
 export const revalidate = 3600;
 export const metadata = { title: "The Lore" };
@@ -13,6 +13,7 @@ export default async function AboutPage() {
   const cms = getStats();
   const site = getSite();
   const social = getSocial();
+  const theme = getTheme();
 
   return (
     <>
@@ -23,11 +24,12 @@ export default async function AboutPage() {
             <div className="relative">
               <div className="absolute inset-0 bg-purple-core blur-3xl opacity-50 rounded-full" />
               <Image
-                src="/avatar.png"
+                src={theme.avatar_url || "/avatar.png"}
                 alt="Skelly"
                 width={420}
                 height={420}
                 className="relative drop-shadow-[0_0_40px_rgba(155,95,192,0.7)]"
+                unoptimized={theme.avatar_url?.startsWith("/uploads/")}
               />
             </div>
           </div>

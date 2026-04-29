@@ -1,7 +1,7 @@
 import Image from "next/image";
 import MemberTierCard from "@/components/MemberTierCard";
 import GlowButton from "@/components/GlowButton";
-import { getPerksTable, getSite, getTiers } from "@/lib/content";
+import { getPerksTable, getSite, getTheme, getTiers } from "@/lib/content";
 
 export const metadata = { title: "Skellywags Club" };
 
@@ -9,6 +9,7 @@ export default function MembersPage() {
   const tiers = getTiers();
   const site = getSite();
   const perks = getPerksTable();
+  const theme = getTheme();
   return (
     <>
       {/* HERO */}
@@ -23,7 +24,7 @@ export default function MembersPage() {
           <div className="flex justify-center lg:justify-end reveal">
             <div className="relative animate-drift">
               <div className="absolute inset-0 bg-electric-pink/40 blur-3xl rounded-full" />
-              <Image src="/avatar.png" alt="Skelly" width={420} height={420} className="relative drop-shadow-[0_0_40px_rgba(155,95,192,0.7)]" />
+              <Image src={theme.avatar_url || "/avatar.png"} alt="Skelly" width={420} height={420} className="relative drop-shadow-[0_0_40px_rgba(155,95,192,0.7)]" unoptimized={theme.avatar_url?.startsWith("/uploads/")} />
             </div>
           </div>
         </div>

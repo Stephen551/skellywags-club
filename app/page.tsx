@@ -7,7 +7,7 @@ import EmailCapture from "@/components/EmailCapture";
 import StreamScheduleBlock from "@/components/StreamScheduleBlock";
 import MemberTierCard from "@/components/MemberTierCard";
 import VideoCard from "@/components/VideoCard";
-import { getSchedule, getSite, getSocial, getTiers } from "@/lib/content";
+import { getSchedule, getSite, getSocial, getTheme, getTiers } from "@/lib/content";
 import { fetchLatestVideos } from "@/lib/youtube";
 
 export const revalidate = 3600;
@@ -18,6 +18,7 @@ export default async function HomePage() {
   const tiers = getTiers();
   const site = getSite();
   const social = getSocial();
+  const theme = getTheme();
   const channelLines = site.channel_name.split(/\s+/);
 
   return (
@@ -67,12 +68,13 @@ export default async function HomePage() {
               <div className="relative animate-drift">
                 <div className="absolute inset-0 bg-purple-core blur-3xl opacity-50 rounded-full scale-90" />
                 <Image
-                  src="/avatar.png"
+                  src={theme.avatar_url || "/avatar.png"}
                   alt="Skelly"
                   width={620}
                   height={620}
                   priority
                   className="relative drop-shadow-[0_0_50px_rgba(155,95,192,0.8)]"
+                  unoptimized={theme.avatar_url?.startsWith("/uploads/")}
                 />
               </div>
             </div>

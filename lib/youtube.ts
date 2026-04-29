@@ -52,6 +52,76 @@ export async function fetchChannelStats(): Promise<ChannelStats | null> {
   };
 }
 
+function parseIsoDuration(d: string): number {
+  const m = d.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!m) return 0;
+  const h = parseInt(m[1] || "0", 10);
+  const min = parseInt(m[2] || "0", 10);
+  const s = parseInt(m[3] || "0", 10);
+  return h * 3600 + min * 60 + s;
+}
+
+function formatDuration(seconds: number): string {
+  if (!seconds) return "";
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  if (h > 0) return `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+export type CategorizedVideos = {
+  videos: VideoData[];
+  shorts: VideoData[];
+  lives: VideoData[];
+};
+
+export async function fetchUploadsCategorized(max = 50): Promise<CategorizedVideos> {
+  const empty: CategorizedVideos = { videos: [], shorts: [], lives: [] };
+  if (!KEY) return empty;
+  const stats = await fetchChannelStats();
+  if (!stats) return empty;
+
+  const playlistRes = await fetch(
+    `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&playlistId=${stats.uploadsPlaylistId}&maxResults=${max}&key=${KEY}`,
+    { next: { revalidate: 3600 } }
+  );
+  if (!playlistRes.ok) return empty;
+  const playlistData = await playlistRes.json();
+  const items: any[] = playlistData.items ?? [];
+  if (items.length === 0) return empty;
+
+  const ids = items.map((it) => it.contentDetails.videoId).join(",");
+  const videosRes = await fetch(
+    `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,liveStreamingDetails&id=${ids}&key=${KEY}`,
+    { next: { revalidate: 3600 } }
+  );
+  if (!videosRes.ok) return empty;
+  const videosData = await videosRes.json();
+  const videoItems: any[] = videosData.items ?? [];
+
+  const out: CategorizedVideos = { videos: [], shorts: [], lives: [] };
+  for (const v of videoItems) {
+    const seconds = parseIsoDuration(v.contentDetails?.duration ?? "");
+    const data: VideoData = {
+      id: v.id,
+      title: v.snippet.title,
+      thumbnail: v.snippet.thumbnails?.high?.url || v.snippet.thumbnails?.medium?.url,
+      publishedAt: new Date(v.snippet.publishedAt).toLocaleDateString(),
+      duration: formatDuration(seconds),
+    };
+    const wasLive = !!v.liveStreamingDetails?.actualStartTime;
+    if (wasLive) {
+      out.lives.push(data);
+    } else if (seconds > 0 && seconds <= 60) {
+      out.shorts.push(data);
+    } else {
+      out.videos.push(data);
+    }
+  }
+  return out;
+}
+
 export async function fetchLatestVideos(max = 6): Promise<VideoData[]> {
   if (!KEY) return [];
   const stats = await fetchChannelStats();

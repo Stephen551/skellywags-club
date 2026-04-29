@@ -1,47 +1,49 @@
 import VideoCard from "@/components/VideoCard";
 import GlowButton from "@/components/GlowButton";
-import { fetchLatestVideos, fetchPlaylists, fetchPlaylistVideos } from "@/lib/youtube";
+import { fetchUploadsCategorized } from "@/lib/youtube";
 
 export const revalidate = 3600;
 export const metadata = { title: "Videos" };
 
-const TABS = [
-  { key: "all", label: "ALL VIDEOS" },
+type Tab = "videos" | "shorts" | "lives" | "members";
+
+const TABS: { key: Tab; label: string }[] = [
+  { key: "videos", label: "VIDEOS" },
+  { key: "shorts", label: "SHORTS" },
+  { key: "lives", label: "LIVES" },
   { key: "members", label: "💀 SKELLYWAGS ONLY" },
-] as const;
+];
 
 export default async function VideosPage({
   searchParams,
 }: {
-  searchParams?: { tab?: string; playlist?: string };
+  searchParams?: { tab?: string };
 }) {
-  const tab = searchParams?.tab === "members" ? "members" : "all";
-  const playlistFilter = searchParams?.playlist;
+  const tab: Tab = (TABS.find((t) => t.key === searchParams?.tab)?.key as Tab) ?? "videos";
 
   if (tab === "members") {
     return (
-      <PageShell tab={tab}>
+      <PageShell tab={tab} totals={{ videos: 0, shorts: 0, lives: 0 }}>
         <MembersOnlyGrid />
       </PageShell>
     );
   }
 
-  const playlists = await fetchPlaylists();
-  const videos = playlistFilter
-    ? await fetchPlaylistVideos(playlistFilter)
-    : await fetchLatestVideos(12);
+  const cats = await fetchUploadsCategorized(50);
+  const totals = { videos: cats.videos.length, shorts: cats.shorts.length, lives: cats.lives.length };
+  const list = cats[tab as "videos" | "shorts" | "lives"];
 
   return (
-    <PageShell tab={tab} playlists={playlists} activePlaylist={playlistFilter}>
-      {videos.length === 0 ? (
+    <PageShell tab={tab} totals={totals}>
+      {list.length === 0 ? (
         <EmptyState>
-          {playlistFilter
-            ? "no videos in this playlist yet."
-            : "YouTube key not set yet — add YOUTUBE_API_KEY to .env.local."}
+          {tab === "shorts" && "no shorts in the last 50 uploads — skelly's been keeping it long."}
+          {tab === "lives" && "no archived live streams in the last 50 uploads."}
+          {tab === "videos" && "YouTube key not set or no recent uploads."}
         </EmptyState>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-          {videos.map((v) => (
+          {list.map((v) => (
             <VideoCard key={v.id} video={v} />
           ))}
         </div>
@@ -52,13 +54,11 @@ export default async function VideosPage({
 
 function PageShell({
   tab,
-  playlists,
-  activePlaylist,
+  totals,
   children,
 }: {
-  tab: "all" | "members";
-  playlists?: { id: string; title: string }[];
-  activePlaylist?: string;
+  tab: Tab;
+  totals: { videos: number; shorts: number; lives: number };
   children: React.ReactNode;
 }) {
   return (
@@ -67,9 +67,13 @@ function PageShell({
         <h1 className="heading text-6xl md:text-7xl text-white">THE TAPE VAULT</h1>
         <p className="text-text-muted mt-3">every misadventure, archived.</p>
 
-        <div className="mt-8 flex gap-2 border-b border-purple-core/30">
+        <div className="mt-8 flex flex-wrap gap-2 border-b border-purple-core/30">
           {TABS.map((t) => {
             const active = t.key === tab;
+            const count =
+              t.key === "videos" ? totals.videos :
+              t.key === "shorts" ? totals.shorts :
+              t.key === "lives" ? totals.lives : null;
             return (
               <a
                 key={t.key}
@@ -81,53 +85,17 @@ function PageShell({
                 }`}
               >
                 {t.label}
+                {count !== null && count > 0 && (
+                  <span className="ml-2 text-xs text-text-muted">({count})</span>
+                )}
               </a>
             );
           })}
         </div>
 
-        {tab === "all" && playlists && playlists.length > 0 && (
-          <PlaylistFilters playlists={playlists} activeId={activePlaylist} />
-        )}
-
         {children}
       </div>
     </div>
-  );
-}
-
-function PlaylistFilters({
-  playlists,
-  activeId,
-}: {
-  playlists: { id: string; title: string }[];
-  activeId?: string;
-}) {
-  return (
-    <div className="mt-6 flex flex-wrap gap-2">
-      <FilterPill href="/videos?tab=all" label="All" active={!activeId} />
-      {playlists.map((p) => (
-        <FilterPill
-          key={p.id}
-          href={`/videos?tab=all&playlist=${encodeURIComponent(p.id)}`}
-          label={p.title}
-          active={activeId === p.id}
-        />
-      ))}
-    </div>
-  );
-}
-
-function FilterPill({ href, label, active }: { href: string; label: string; active: boolean }) {
-  const base =
-    "px-4 py-2 rounded-full font-bebas tracking-wider text-sm border-2 transition-all";
-  const styles = active
-    ? "bg-gold text-bg-primary border-gold shadow-glow-gold"
-    : "bg-transparent text-text-primary/85 border-purple-core/40 hover:border-electric-blue hover:text-white";
-  return (
-    <a href={href} className={`${base} ${styles}`}>
-      {label}
-    </a>
   );
 }
 

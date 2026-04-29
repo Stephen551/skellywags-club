@@ -2,7 +2,7 @@ const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://i.ytimg.com https://yt3.ggpht.com",
+  "img-src 'self' data: blob: https://i.ytimg.com https://yt3.ggpht.com https://cdn.discordapp.com",
   "font-src 'self' data:",
   "frame-src https://discord.com https://www.youtube.com https://www.youtube-nocookie.com",
   "connect-src 'self' https://www.googleapis.com https://discord.com",
@@ -30,6 +30,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "i.ytimg.com" },
       { protocol: "https", hostname: "yt3.ggpht.com" },
+      { protocol: "https", hostname: "cdn.discordapp.com" },
     ],
   },
   async headers() {

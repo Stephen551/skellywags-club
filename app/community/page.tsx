@@ -57,11 +57,6 @@ export default function CommunityPage() {
           </h2>
           <SectionDivider />
           <DiscordWidget />
-          <div className="text-center mt-6">
-            <GlowButton variant="purple" href="https://discord.gg/zpWv2cXxB9" external>
-              JOIN THE DISCORD →
-            </GlowButton>
-          </div>
         </div>
       </section>
 

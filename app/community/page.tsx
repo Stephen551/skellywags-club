@@ -9,13 +9,8 @@ import { getFanArt, getSchedule } from "@/lib/content";
 export const metadata = { title: "The Skellywag Clubhouse" };
 
 function FanArtTile({ art }: { art: import("@/lib/content").FanArt }) {
-  return (
-    <a
-      href={art.social_url || "#"}
-      target={art.social_url ? "_blank" : undefined}
-      rel="noreferrer"
-      className="group relative aspect-square bg-bg-card border-2 border-purple-core/40 rounded-xl overflow-hidden lift hover:border-electric-pink hover:shadow-glow-pink"
-    >
+  const inner = (
+    <>
       <Image
         src={art.image}
         alt={art.caption || `art by ${art.artist}`}
@@ -27,8 +22,18 @@ function FanArtTile({ art }: { art: import("@/lib/content").FanArt }) {
         <p className="font-bebas text-lg text-white tracking-wide">{art.artist}</p>
         {art.caption && <p className="text-text-muted text-xs line-clamp-1">{art.caption}</p>}
       </div>
-    </a>
+    </>
   );
+  const className =
+    "group relative aspect-square bg-bg-card border-2 border-purple-core/40 rounded-xl overflow-hidden lift hover:border-electric-pink hover:shadow-glow-pink";
+  if (art.social_url) {
+    return (
+      <a href={art.social_url} target="_blank" rel="noreferrer" className={className}>
+        {inner}
+      </a>
+    );
+  }
+  return <div className={className}>{inner}</div>;
 }
 
 const MERCH_STEPS = [

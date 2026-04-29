@@ -13,15 +13,15 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-bg-primary/80 border-b border-purple-core/25">
-      <div className="max-w-7xl mx-auto px-4 lg:px-8 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 h-20 md:h-24 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
           <Image
             src="/skellyword.png"
             alt="SKELLY"
-            width={180}
-            height={72}
+            width={240}
+            height={96}
             priority
-            className="h-14 w-auto drop-shadow-[0_0_14px_rgba(155,95,192,0.7)]"
+            className="h-16 md:h-20 w-auto drop-shadow-[0_0_18px_rgba(155,95,192,0.8)]"
           />
         </Link>
 

@@ -15,14 +15,14 @@ export default function Navbar({ social }: { social: SocialLink[] }) {
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-bg-primary/80 border-b border-purple-core/25">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 h-20 md:h-24 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 group">
+        <Link href="/" className="flex items-center gap-2 group shrink-0">
           <Image
             src="/skellyword.png"
             alt="SKELLY"
-            width={240}
-            height={96}
+            width={300}
+            height={94}
             priority
-            className="h-16 md:h-20 w-auto drop-shadow-[0_0_18px_rgba(155,95,192,0.8)]"
+            className="h-12 sm:h-14 md:h-16 lg:h-[68px] w-auto drop-shadow-[0_0_18px_rgba(155,95,192,0.8)]"
           />
         </Link>
 

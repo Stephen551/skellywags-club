@@ -3,7 +3,7 @@ import GlowButton from "@/components/GlowButton";
 import SectionDivider from "@/components/SectionDivider";
 import FanArtForm from "@/components/FanArtForm";
 import DiscordWidget from "@/components/DiscordWidget";
-import { STREAM_SCHEDULE } from "@/lib/constants";
+import { getSchedule } from "@/lib/content";
 
 export const metadata = { title: "The Skellywag Clubhouse" };
 
@@ -15,6 +15,7 @@ const MERCH_STEPS = [
 ];
 
 export default function CommunityPage() {
+  const schedule = getSchedule();
   return (
     <>
       <section className="relative bg-starfield-dense noise-overlay">
@@ -41,11 +42,11 @@ export default function CommunityPage() {
         </div>
         <SectionDivider />
         <div className="grid md:grid-cols-4 gap-4">
-          {STREAM_SCHEDULE.map((s) => (
-            <StreamScheduleBlock key={s.day} {...s} />
+          {schedule.blocks.map((s) => (
+            <StreamScheduleBlock key={s.day} {...s} tz={schedule.timezone_label} />
           ))}
         </div>
-        <p className="text-text-muted text-sm mt-4">all times shown in EST.</p>
+        <p className="text-text-muted text-sm mt-4">all times shown in {schedule.timezone_label}.</p>
       </section>
 
       {/* Discord */}

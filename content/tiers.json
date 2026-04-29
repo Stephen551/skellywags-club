@@ -1,0 +1,45 @@
+{
+  "tiers": [
+    {
+      "key": "matey",
+      "name": "Skellywag Mateys",
+      "price": "$1.99",
+      "perks": [
+        "Loyalty badges",
+        "Custom emoji",
+        "Member shout-outs",
+        "Members-only chat rooms",
+        "Early access to new videos"
+      ],
+      "variant": "ghost",
+      "cta": "JOIN FOR $1.99",
+      "featured": false
+    },
+    {
+      "key": "boatswain",
+      "name": "Skellywag Boatswain",
+      "price": "$4.99",
+      "perks": [
+        "Members-only videos",
+        "Members-only live streams",
+        "All Mateys perks"
+      ],
+      "variant": "purple",
+      "cta": "JOIN FOR $4.99",
+      "featured": false
+    },
+    {
+      "key": "first-mate",
+      "name": "Skellywag First Mate",
+      "price": "$9.99",
+      "perks": [
+        "Skelly's Community Cluster Server (Discord)",
+        "All Boatswain perks",
+        "All Mateys perks"
+      ],
+      "variant": "gold",
+      "cta": "JOIN FOR $9.99",
+      "featured": true
+    }
+  ]
+}

@@ -7,13 +7,16 @@ import EmailCapture from "@/components/EmailCapture";
 import StreamScheduleBlock from "@/components/StreamScheduleBlock";
 import MemberTierCard from "@/components/MemberTierCard";
 import VideoCard from "@/components/VideoCard";
-import { SOCIAL_LINKS, STREAM_SCHEDULE, TIERS } from "@/lib/constants";
+import { SOCIAL_LINKS } from "@/lib/constants";
+import { getSchedule, getTiers } from "@/lib/content";
 import { fetchLatestVideos } from "@/lib/youtube";
 
 export const revalidate = 3600;
 
 export default async function HomePage() {
   const videos = await fetchLatestVideos(3);
+  const schedule = getSchedule();
+  const tiers = getTiers();
 
   return (
     <>
@@ -124,7 +127,7 @@ export default async function HomePage() {
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 mt-12">
-            {TIERS.map((t) => (
+            {tiers.map((t) => (
               <div key={t.key} className="reveal">
                 <MemberTierCard tier={t} />
               </div>
@@ -151,9 +154,9 @@ export default async function HomePage() {
             </a>
           </div>
           <div className="grid md:grid-cols-4 gap-4 mt-8">
-            {STREAM_SCHEDULE.map((s) => (
+            {schedule.blocks.map((s) => (
               <div key={s.day} className="reveal">
-                <StreamScheduleBlock {...s} />
+                <StreamScheduleBlock {...s} tz={schedule.timezone_label} />
               </div>
             ))}
           </div>

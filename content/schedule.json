@@ -1,0 +1,9 @@
+{
+  "timezone_label": "EST",
+  "blocks": [
+    { "day": "TUESDAY",   "start": "8:00 PM",  "end": "12:00 AM" },
+    { "day": "WEDNESDAY", "start": "4:30 PM",  "end": "10:30 PM" },
+    { "day": "FRIDAY",    "start": "12:00 PM", "end": "3:00 PM"  },
+    { "day": "SUNDAY",    "start": "12:00 PM", "end": "3:00 PM"  }
+  ]
+}

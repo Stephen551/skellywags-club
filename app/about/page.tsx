@@ -3,18 +3,20 @@ import { SOCIAL_LINKS } from "@/lib/constants";
 import SocialIcon from "@/components/SocialIcon";
 import SectionDivider from "@/components/SectionDivider";
 import { fetchChannelStats, formatCount } from "@/lib/youtube";
+import { getAbout } from "@/lib/content";
 
 export const revalidate = 3600;
 export const metadata = { title: "The Lore" };
 
 export default async function AboutPage() {
   const stats = await fetchChannelStats();
+  const about = getAbout();
 
   return (
     <>
       <section className="bg-starfield-dense noise-overlay relative">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 py-20 text-center">
-          <h1 className="heading text-6xl md:text-8xl text-white">WHO IS SKELLY?</h1>
+          <h1 className="heading text-6xl md:text-8xl text-white">{about.title}</h1>
           <div className="mt-10 flex justify-center reveal">
             <div className="relative">
               <div className="absolute inset-0 bg-purple-core blur-3xl opacity-50 rounded-full" />
@@ -27,22 +29,10 @@ export default async function AboutPage() {
               />
             </div>
           </div>
-          <div className="mt-10 text-left text-text-primary/90 text-lg leading-relaxed space-y-4 reveal">
-            <p>
-              A purple skeleton with questionable decision-making skills and somehow a YouTube channel.
-              Nobody's sure how this happened. Skelly least of all.
-            </p>
-            <p>
-              Streams chaos four nights a week, drops videos when the universe permits, and runs the
-              Skellywags — a crew that shows up for the bad calls, the worse calls, and the rare moments
-              of accidental brilliance.
-            </p>
-            <p>
-              <span className="font-bangers text-electric-pink">
-                placeholder copy — drop in the real origin story when you're ready.
-              </span>
-            </p>
-          </div>
+          <div
+            className="mt-10 text-left prose-skelly reveal"
+            dangerouslySetInnerHTML={{ __html: about.html }}
+          />
         </div>
       </section>
 

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import MemberTierCard from "@/components/MemberTierCard";
 import GlowButton from "@/components/GlowButton";
-import { TIERS, YOUTUBE_MEMBERSHIP_URL } from "@/lib/constants";
+import { YOUTUBE_MEMBERSHIP_URL } from "@/lib/constants";
+import { getTiers } from "@/lib/content";
 
 export const metadata = { title: "Skellywags Club" };
 
@@ -16,6 +17,7 @@ const PERK_ROWS = [
 ];
 
 export default function MembersPage() {
+  const tiers = getTiers();
   return (
     <>
       {/* HERO */}
@@ -39,7 +41,7 @@ export default function MembersPage() {
       {/* TIERS */}
       <section className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
         <div className="grid md:grid-cols-3 gap-6">
-          {TIERS.map((t) => (
+          {tiers.map((t) => (
             <div key={t.key} className="reveal">
               <MemberTierCard tier={t} />
             </div>

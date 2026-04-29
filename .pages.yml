@@ -1,0 +1,85 @@
+media:
+  input: public/uploads
+  output: /uploads
+
+content:
+  - name: blog
+    label: Blog Posts
+    type: collection
+    path: content/blog
+    filename: "{primary}.md"
+    view:
+      fields: [title, date, category]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: date, label: Date, type: date, required: true, options: { format: "yyyy-MM-dd" } }
+      - name: category
+        label: Category
+        type: select
+        options:
+          values: [Update, Drop, Event, Just Vibes]
+          default: Update
+        required: true
+      - { name: excerpt, label: Excerpt (1-line teaser shown on the index card), type: text }
+      - { name: body, label: Post body, type: rich-text }
+
+  - name: about
+    label: About Page
+    type: file
+    path: content/about.md
+    fields:
+      - { name: title, label: Page Heading (e.g. "WHO IS SKELLY?"), type: string, required: true }
+      - { name: body, label: About Copy (origin story etc.), type: rich-text, required: true }
+
+  - name: schedule
+    label: Stream Schedule
+    type: file
+    path: content/schedule.json
+    fields:
+      - { name: timezone_label, label: Timezone label (e.g. "EST"), type: string, required: true, default: "EST" }
+      - name: blocks
+        label: Scheduled streams
+        type: object
+        list: true
+        fields:
+          - name: day
+            label: Day
+            type: select
+            options:
+              values: [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY]
+            required: true
+          - { name: start, label: Start time (e.g. "8:00 PM"), type: string, required: true }
+          - { name: end,   label: End time (e.g. "12:00 AM"), type: string, required: true }
+
+  - name: tiers
+    label: Membership Tiers
+    type: file
+    path: content/tiers.json
+    fields:
+      - name: tiers
+        label: Tiers
+        type: object
+        list:
+          min: 1
+          max: 5
+        fields:
+          - { name: key, label: Key (no spaces, used internally), type: string, required: true }
+          - { name: name, label: Tier name (e.g. "Skellywag Mateys"), type: string, required: true }
+          - { name: price, label: Price (e.g. "$1.99"), type: string, required: true }
+          - name: perks
+            label: Perks
+            type: string
+            list: true
+          - name: variant
+            label: Button style
+            type: select
+            options:
+              values: [ghost, purple, gold]
+              default: purple
+          - { name: cta, label: Button text (e.g. "JOIN FOR $1.99"), type: string, required: true }
+          - { name: featured, label: Featured tier (gold border)?, type: boolean, default: false }

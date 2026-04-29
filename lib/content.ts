@@ -1,0 +1,38 @@
+import fs from "node:fs";
+import path from "node:path";
+import matter from "gray-matter";
+import { remark } from "remark";
+import remarkHtml from "remark-html";
+
+const ROOT = path.join(process.cwd(), "content");
+
+export type Tier = {
+  key: string;
+  name: string;
+  price: string;
+  perks: string[];
+  variant: "ghost" | "purple" | "gold";
+  cta: string;
+  featured?: boolean;
+};
+
+export type ScheduleBlock = { day: string; start: string; end: string };
+export type Schedule = { timezone_label: string; blocks: ScheduleBlock[] };
+
+export type AboutContent = { title: string; html: string };
+
+export function getTiers(): Tier[] {
+  const raw = JSON.parse(fs.readFileSync(path.join(ROOT, "tiers.json"), "utf8"));
+  return raw.tiers as Tier[];
+}
+
+export function getSchedule(): Schedule {
+  return JSON.parse(fs.readFileSync(path.join(ROOT, "schedule.json"), "utf8"));
+}
+
+export function getAbout(): AboutContent {
+  const raw = fs.readFileSync(path.join(ROOT, "about.md"), "utf8");
+  const { data, content } = matter(raw);
+  const html = remark().use(remarkHtml).processSync(content).toString();
+  return { title: data.title ?? "WHO IS SKELLY?", html };
+}

@@ -1,0 +1,33 @@
+{
+  "intro": "got questions? skelly's got mostly-useful answers.",
+  "items": [
+    {
+      "question": "When does Skelly stream?",
+      "answer": "Tuesday 8 PM – 12 AM EST · Wednesday 4:30 PM – 10:30 PM EST · Friday 12 PM – 3 PM EST · Sunday 12 PM – 3 PM EST. Catch the live chaos on Twitch."
+    },
+    {
+      "question": "How do I become a Skellywag?",
+      "answer": "Skellywags Club runs through YouTube channel memberships. Three tiers (Mateys $1.99 · Boatswain $4.99 · First Mate $9.99) — pick one, hit join on YouTube, you're in."
+    },
+    {
+      "question": "Where do I buy the merch?",
+      "answer": "Right here on /shop — products pull live from the Fourthwall storefront. Click any item, checkout opens on Fourthwall (they handle payment + shipping)."
+    },
+    {
+      "question": "Can I submit fan art?",
+      "answer": "Yes. Drop it in the #fan-art channel on Discord or tag @itsmeskelly on Twitter. Skelly picks favorites and posts them to the Fan Art Wall on /community."
+    },
+    {
+      "question": "How do I contact Skelly?",
+      "answer": "Easiest way is Discord — discord.gg/zpWv2cXxB9. He's also on YouTube, Twitch, Twitter, Instagram, and TikTok (links in nav and footer)."
+    },
+    {
+      "question": "Is the merch official?",
+      "answer": "Yes. If it's listed on skellywags.club/shop or skelly-xkh-shop.fourthwall.com, it's official. Anything sold elsewhere claiming to be Skelly merch — assume it isn't."
+    },
+    {
+      "question": "When does [thing] launch?",
+      "answer": "Drop your email in any signup form on the site and we'll yell when chaos drops. Otherwise check Discord or follow @itsmeskelly for live announcements."
+    }
+  ]
+}

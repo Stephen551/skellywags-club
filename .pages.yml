@@ -36,6 +36,29 @@ content:
       - { name: title, label: Page Heading (e.g. "WHO IS SKELLY?"), type: string, required: true }
       - { name: body, label: About Copy (origin story etc.), type: rich-text, required: true }
 
+  - name: faq
+    label: FAQ
+    type: file
+    path: content/faq.json
+    fields:
+      - { name: intro, label: "Intro line under FAQ heading (e.g. 'got questions? skelly's got mostly-useful answers.')", type: string }
+      - name: items
+        label: FAQ entries (each is a question + answer)
+        type: object
+        list: true
+        fields:
+          - { name: question, label: Question, type: string, required: true }
+          - { name: answer, label: Answer, type: text, required: true }
+
+  - name: shipping_returns
+    label: Shipping & Returns
+    type: file
+    path: content/shipping-returns.md
+    fields:
+      - { name: title, label: Page heading, type: string, required: true }
+      - { name: last_updated, label: Last updated date, type: date, options: { format: "yyyy-MM-dd" } }
+      - { name: body, label: Shipping & returns body, type: rich-text, required: true }
+
   - name: privacy
     label: Privacy Policy
     type: file

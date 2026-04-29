@@ -23,6 +23,9 @@ export type AboutContent = { title: string; html: string };
 
 export type LegalContent = { title: string; lastUpdated: string; html: string };
 
+export type FaqItem = { question: string; answer: string };
+export type FaqContent = { intro: string; items: FaqItem[] };
+
 export type Stats = {
   skellywags_count: string;
   streams_survived: string;
@@ -74,6 +77,19 @@ export function getPrivacy(): LegalContent {
 
 export function getTerms(): LegalContent {
   return loadLegal("terms.md", "TERMS");
+}
+
+export function getShippingReturns(): LegalContent {
+  return loadLegal("shipping-returns.md", "SHIPPING & RETURNS");
+}
+
+export function getFaq(): FaqContent {
+  try {
+    const raw = JSON.parse(fs.readFileSync(path.join(ROOT, "faq.json"), "utf8"));
+    return { intro: raw.intro ?? "", items: raw.items ?? [] };
+  } catch {
+    return { intro: "", items: [] };
+  }
 }
 
 export function getStats(): Stats {

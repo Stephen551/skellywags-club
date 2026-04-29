@@ -21,6 +21,8 @@ export type Schedule = { timezone_label: string; blocks: ScheduleBlock[] };
 
 export type AboutContent = { title: string; html: string };
 
+export type LegalContent = { title: string; lastUpdated: string; html: string };
+
 export type Stats = {
   skellywags_count: string;
   streams_survived: string;
@@ -49,6 +51,29 @@ export function getAbout(): AboutContent {
   const { data, content } = matter(raw);
   const html = remark().use(remarkHtml).processSync(content).toString();
   return { title: data.title ?? "WHO IS SKELLY?", html };
+}
+
+function loadLegal(filename: string, fallbackTitle: string): LegalContent {
+  const file = path.join(ROOT, filename);
+  if (!fs.existsSync(file)) {
+    return { title: fallbackTitle, lastUpdated: "", html: "" };
+  }
+  const raw = fs.readFileSync(file, "utf8");
+  const { data, content } = matter(raw);
+  const html = remark().use(remarkHtml).processSync(content).toString();
+  return {
+    title: data.title ?? fallbackTitle,
+    lastUpdated: data.last_updated ?? "",
+    html,
+  };
+}
+
+export function getPrivacy(): LegalContent {
+  return loadLegal("privacy.md", "PRIVACY POLICY");
+}
+
+export function getTerms(): LegalContent {
+  return loadLegal("terms.md", "TERMS");
 }
 
 export function getStats(): Stats {

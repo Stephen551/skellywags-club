@@ -36,6 +36,24 @@ content:
       - { name: title, label: Page Heading (e.g. "WHO IS SKELLY?"), type: string, required: true }
       - { name: body, label: About Copy (origin story etc.), type: rich-text, required: true }
 
+  - name: privacy
+    label: Privacy Policy
+    type: file
+    path: content/privacy.md
+    fields:
+      - { name: title, label: Page heading (e.g. "PRIVACY POLICY"), type: string, required: true }
+      - { name: last_updated, label: Last updated date, type: date, options: { format: "yyyy-MM-dd" } }
+      - { name: body, label: Privacy policy body, type: rich-text, required: true }
+
+  - name: terms
+    label: Terms
+    type: file
+    path: content/terms.md
+    fields:
+      - { name: title, label: Page heading (e.g. "TERMS"), type: string, required: true }
+      - { name: last_updated, label: Last updated date, type: date, options: { format: "yyyy-MM-dd" } }
+      - { name: body, label: Terms body, type: rich-text, required: true }
+
   - name: stats
     label: About-page Stats
     type: file

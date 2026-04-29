@@ -123,8 +123,11 @@ export async function fetchUploadsCategorized(max = 500): Promise<CategorizedVid
         duration: formatDuration(seconds),
       };
       const wasLive = !!v.liveStreamingDetails?.actualStartTime;
+      const titleHasShortsTag = /#shorts?\b/i.test(v.snippet?.title ?? "");
+      const isShort = seconds > 0 && (seconds <= 180 || titleHasShortsTag);
+
       if (wasLive) out.lives.push(item);
-      else if (seconds > 0 && seconds <= 60) out.shorts.push(item);
+      else if (isShort) out.shorts.push(item);
       else out.videos.push(item);
     }
   }

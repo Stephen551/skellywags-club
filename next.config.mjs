@@ -1,9 +1,9 @@
 const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-  "style-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "img-src 'self' data: blob: https://i.ytimg.com https://yt3.ggpht.com https://cdn.discordapp.com https://*.fourthwall.com https://cdn.fourthwall.com https://storage.googleapis.com",
-  "font-src 'self' data:",
+  "font-src 'self' data: https://fonts.gstatic.com",
   "frame-src https://discord.com https://www.youtube.com https://www.youtube-nocookie.com https://*.fourthwall.com",
   "connect-src 'self' https://www.googleapis.com https://discord.com",
   "media-src 'self'",

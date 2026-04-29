@@ -92,6 +92,9 @@ export type Theme = {
   cta_color: string;
   highlight_color: string;
   avatar_url: string;
+  heading_font?: string;
+  body_font?: string;
+  accent_font?: string;
 };
 
 export type FanArt = {
@@ -234,6 +237,9 @@ const THEME_DEFAULTS: Theme = {
   cta_color: "#00D4FF",
   highlight_color: "#FF4FCB",
   avatar_url: "/avatar.png",
+  heading_font: "bebas-neue",
+  body_font: "nunito",
+  accent_font: "bangers",
 };
 
 export function getTheme(): Theme {

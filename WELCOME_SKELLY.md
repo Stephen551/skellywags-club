@@ -74,6 +74,7 @@ Just keep doing what you do. The site keeps up.
 | Post a blog | 📝 Blog Posts → + New | |
 | Feature fan art | 🎨 Fan Art Wall → + New | Drag-drop the image, credit the artist |
 | Change site colors | 🎨 Theme → cta_color, highlight_color | Hex codes, picks at coolors.co |
+| Change fonts | 🎨 Theme → heading_font / body_font / accent_font | Pick from dropdown, OR type any Google Font name (e.g. `Lobster`) for custom |
 | Swap avatar | 🎨 Theme → avatar_url upload | Transparent PNG recommended |
 | Edit stream times | 📅 Stream Schedule | Drag to reorder days |
 | Update tier prices | 💀 Membership Tiers + 📋 Perks Table | Both should match |

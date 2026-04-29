@@ -32,9 +32,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        bebas: ["var(--font-bebas)", "sans-serif"],
-        nunito: ["var(--font-nunito)", "sans-serif"],
-        bangers: ["var(--font-bangers)", "cursive"],
+        bebas: ["var(--font-active-heading)", "sans-serif"],
+        nunito: ["var(--font-active-body)", "sans-serif"],
+        bangers: ["var(--font-active-accent)", "cursive"],
       },
       boxShadow: {
         "glow-purple": "0 0 24px rgba(155,95,192,0.45)",

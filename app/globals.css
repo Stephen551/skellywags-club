@@ -34,7 +34,7 @@ html, body {
 }
 
 body {
-  font-family: var(--font-nunito), system-ui, sans-serif;
+  font-family: var(--font-active-body), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -100,13 +100,13 @@ body {
 
 /* Heading defaults */
 .heading {
-  font-family: var(--font-bebas), system-ui, sans-serif;
+  font-family: var(--font-active-heading), system-ui, sans-serif;
   letter-spacing: 0.01em;
   line-height: 0.95;
 }
 
 .chaos {
-  font-family: var(--font-bangers), cursive;
+  font-family: var(--font-active-accent), cursive;
   letter-spacing: 0.03em;
 }
 

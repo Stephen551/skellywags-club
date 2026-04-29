@@ -50,6 +50,23 @@ The big banner on the homepage updates instantly. After the drop is over, flip `
 
 Need a color picker? Use [coolors.co](https://coolors.co) or [color.adobe.com](https://color.adobe.com).
 
+### ...change the fonts
+
+1. Open **🎨 Theme — Colors & Avatar**
+2. Three font fields:
+   - `heading_font` — big titles like OFFICIALLY SKELLY, section headers, all CTA buttons
+   - `body_font` — paragraph copy, descriptions
+   - `accent_font` — @handle, drop banner, chaos callouts
+3. Pick from the dropdown OR **type any Google Font name** as a custom (e.g., `Lobster`, `Press Start 2P`, `Creepster`). Browse <https://fonts.google.com> to find one.
+4. Save
+
+**Curated picks (pre-loaded, instant):**
+- Heading: `bebas-neue` · `anton` · `black-ops-one` · `bowlby-one` · `russo-one`
+- Body: `nunito` · `inter` · `poppins` · `quicksand` · `karla`
+- Accent: `bangers` · `permanent-marker` · `rampart-one`
+
+**Custom Google Fonts:** type the exact name from Google Fonts, case-sensitive. The site fetches it from Google Fonts on first load — adds ~1 second to initial page load while the font downloads, then cached. If you typo the name, the font will silently fall back to the previous one.
+
 ### ...swap the avatar
 
 1. Open **🎨 Theme — Colors & Avatar**
@@ -115,7 +132,6 @@ Just upload to YouTube / add products in Fourthwall — the website catches up a
 These need a developer:
 
 - Site layout (which sections appear in what order)
-- Typography (fonts)
 - Animations
 - Adding new pages
 - Brand purple + dark background colors

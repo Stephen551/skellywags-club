@@ -32,7 +32,7 @@ export default function MembersPage() {
           <div className="flex justify-center lg:justify-end reveal">
             <div className="relative animate-drift">
               <div className="absolute inset-0 bg-electric-pink/40 blur-3xl rounded-full" />
-              <Image src="/avatar.jpg" alt="Skelly" width={420} height={420} className="relative rounded-2xl border-2 border-white shadow-glow-purple-lg" />
+              <Image src="/avatar.png" alt="Skelly" width={420} height={420} className="relative drop-shadow-[0_0_40px_rgba(155,95,192,0.7)]" />
             </div>
           </div>
         </div>

@@ -22,11 +22,11 @@ export default async function AboutPage() {
             <div className="relative">
               <div className="absolute inset-0 bg-purple-core blur-3xl opacity-50 rounded-full" />
               <Image
-                src="/avatar.jpg"
+                src="/avatar.png"
                 alt="Skelly"
                 width={420}
                 height={420}
-                className="relative rounded-2xl border-2 border-white shadow-glow-purple-lg"
+                className="relative drop-shadow-[0_0_40px_rgba(155,95,192,0.7)]"
               />
             </div>
           </div>

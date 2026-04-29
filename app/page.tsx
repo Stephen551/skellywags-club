@@ -61,12 +61,12 @@ export default async function HomePage() {
               <div className="relative animate-drift">
                 <div className="absolute inset-0 bg-purple-core blur-3xl opacity-50 rounded-full scale-90" />
                 <Image
-                  src="/avatar.jpg"
+                  src="/avatar.png"
                   alt="Skelly"
                   width={520}
                   height={520}
                   priority
-                  className="relative rounded-2xl border-2 border-white shadow-glow-purple-lg"
+                  className="relative drop-shadow-[0_0_40px_rgba(155,95,192,0.7)]"
                 />
               </div>
             </div>

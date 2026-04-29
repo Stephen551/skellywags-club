@@ -67,24 +67,9 @@ content:
       - { name: cta_color, label: "Primary CTA color (hex). Drives every gold/cyan button, featured tier border, glow pulse.", type: string, required: true, pattern: "^#?[0-9a-fA-F]{6}$" }
       - { name: highlight_color, label: "Highlight / chaos accent (hex). Drives @handle text, drop banner, hover states, stat pulse.", type: string, required: true, pattern: "^#?[0-9a-fA-F]{6}$" }
       - { name: avatar_url, label: "Avatar PNG (transparent bg recommended). Upload here or leave default.", type: image }
-      - name: heading_font
-        label: "Heading font (drives big titles like OFFICIALLY SKELLY, section headers). Pick from list — or type any Google Font name as a custom (see below)."
-        type: select
-        options:
-          values: [bebas-neue, anton, black-ops-one, bowlby-one, russo-one]
-          default: bebas-neue
-      - name: body_font
-        label: "Body font (drives paragraph text, subtitles)."
-        type: select
-        options:
-          values: [nunito, inter, poppins, quicksand, karla]
-          default: nunito
-      - name: accent_font
-        label: "Chaos accent font (drives @handle, drop banner, bangers callouts)."
-        type: select
-        options:
-          values: [bangers, permanent-marker, rampart-one]
-          default: bangers
+      - { name: heading_font, label: "Heading font (drives OFFICIALLY SKELLY title, section headers, CTA buttons). Curated picks: bebas-neue · anton · black-ops-one · bowlby-one · russo-one. Or type any Google Font name (e.g. Lobster). Or 'Comico' for the pre-installed Comico font.", type: string, default: "bebas-neue" }
+      - { name: body_font, label: "Body font (drives paragraph copy). Curated picks: nunito · inter · poppins · quicksand · karla. Or type any Google Font name. Or 'Comico'.", type: string, default: "nunito" }
+      - { name: accent_font, label: "Chaos accent font (drives @handle, drop banner, callouts). Curated picks: bangers · permanent-marker · rampart-one. Or type any Google Font name. Or 'Comico'.", type: string, default: "bangers" }
       - name: custom_font_css
         label: "Custom font CSS (advanced — paste @import URL or @font-face rules to load any web font, then reference its family name in the font fields above as a custom override)."
         type: text

@@ -67,6 +67,38 @@ Need a color picker? Use [coolors.co](https://coolors.co) or [color.adobe.com](h
 
 **Custom Google Fonts:** type the exact name from Google Fonts, case-sensitive. The site fetches it from Google Fonts on first load — adds ~1 second to initial page load while the font downloads, then cached. If you typo the name, the font will silently fall back to the previous one.
 
+### ...use a font that ISN'T on Google Fonts
+
+If your font is from FontShare, Adobe Fonts, fontspring, or anywhere else, paste its CSS into the **`custom_font_css`** field in **🎨 Theme**:
+
+**FontShare example** (free fonts at <https://fontshare.com>):
+```css
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap');
+```
+Then in `heading_font`, type `Satoshi`.
+
+**Adobe Fonts (Typekit)** — copy the embed URL from your Typekit project:
+```css
+@import url("https://use.typekit.net/abc1234.css");
+```
+Then in `heading_font`, type the family name (e.g. `proxima-nova`).
+
+**Self-hosted font file** — if you have a .woff2 file for "Comico" or any other font:
+1. Send the file to Stephen — he'll drop it in `public/fonts/`
+2. Then paste this into `custom_font_css`:
+```css
+@font-face {
+  font-family: 'Comico';
+  src: url('/fonts/comico.woff2') format('woff2');
+  font-display: swap;
+}
+```
+3. Type `Comico` in `heading_font` (or wherever you want it).
+
+**Already have a font you bought?** Most paid fonts come with a `.css` file showing the @font-face rules. Just paste those rules verbatim into `custom_font_css`. The font files need to be hosted somewhere reachable (your own server, Stephen drops them in /public, or a CDN you have access to).
+
+**The CSP allows these font hosts by default**: Google Fonts, FontShare, Adobe Fonts (Typekit), and your own server. If a font from a different host doesn't load, ping Stephen — it's a 1-line CSP change to add the new host.
+
 ### ...swap the avatar
 
 1. Open **🎨 Theme — Colors & Avatar**

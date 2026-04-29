@@ -125,6 +125,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   --font-active-accent: ${accentFamily};
 }`.trim();
 
+  const customFontCss = (theme.custom_font_css || "").trim();
+
   return (
     <html lang="en" className={ALL_FONT_VARIABLES}>
       <head>
@@ -134,6 +136,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {customFonts.map((name) => (
           <link key={name} rel="stylesheet" href={customFontHref(name)} />
         ))}
+        {customFontCss && (
+          <style dangerouslySetInnerHTML={{ __html: customFontCss }} />
+        )}
         <style dangerouslySetInnerHTML={{ __html: themeCss }} />
       </head>
       <body className="min-h-screen bg-bg-primary text-text-primary">

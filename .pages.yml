@@ -85,6 +85,10 @@ content:
         options:
           values: [bangers, permanent-marker, rampart-one]
           default: bangers
+      - name: custom_font_css
+        label: "Custom font CSS (advanced — paste @import URL or @font-face rules to load any web font, then reference its family name in the font fields above as a custom override)."
+        type: text
+        description: "Examples below. Once added, type the font's family name (e.g. 'Comico') in heading_font / body_font / accent_font."
 
   - name: site
     label: "🛠 Site Identity & Hero Copy"

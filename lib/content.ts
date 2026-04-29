@@ -95,6 +95,7 @@ export type Theme = {
   heading_font?: string;
   body_font?: string;
   accent_font?: string;
+  custom_font_css?: string;
 };
 
 export type FanArt = {
@@ -240,6 +241,7 @@ const THEME_DEFAULTS: Theme = {
   heading_font: "bebas-neue",
   body_font: "nunito",
   accent_font: "bangers",
+  custom_font_css: "",
 };
 
 export function getTheme(): Theme {

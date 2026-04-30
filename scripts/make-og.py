@@ -120,7 +120,7 @@ def main():
     handle_font = find_font(["bahnschrift.ttf", "impact.ttf", "ariblk.ttf", "arial.ttf"], 26)
     draw_centered("@OFFICIALLYSKELLY", 60, handle_font, ELECTRIC_PINK)
 
-    # Wordmark — horizontally centered in the right column for balance
+    # Wordmark — horizontally centered in the right column AND vertically centered in the canvas
     word_path = os.path.join(PUBLIC, "skellyword.png")
     if os.path.exists(word_path):
         word = Image.open(word_path).convert("RGBA")
@@ -130,7 +130,7 @@ def main():
         right_col_left = text_x
         right_col_right = W - 40
         word_x = right_col_left + (right_col_right - right_col_left - target_w) // 2
-        wy = 110
+        wy = (H - word.height) // 2  # vertically centered
         canvas.alpha_composite(word, (word_x, wy))
 
     # Tagline (centered below wordmark)

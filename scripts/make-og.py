@@ -89,10 +89,10 @@ def main():
     avatar_path = os.path.join(PUBLIC, "avatar.png")
     if os.path.exists(avatar_path):
         avatar = Image.open(avatar_path).convert("RGBA")
-        target_h = 520
+        target_h = 600
         ratio = target_h / avatar.height
         avatar = avatar.resize((int(avatar.width * ratio), target_h), Image.LANCZOS)
-        ax = 30
+        ax = 20
         ay = (H - avatar.height) // 2
 
         # Glow underlay
@@ -107,33 +107,45 @@ def main():
 
     draw = ImageDraw.Draw(canvas)
     text_x = 600
+    right_col_left = text_x
+    right_col_right = W - 40
+    right_col_center = (right_col_left + right_col_right) // 2
 
-    # Channel handle (top)
+    def draw_centered(text: str, y: int, font, fill):
+        bbox = draw.textbbox((0, 0), text, font=font)
+        tw = bbox[2] - bbox[0]
+        draw.text((right_col_center - tw // 2, y), text, font=font, fill=fill)
+
+    # Channel handle (top, centered)
     handle_font = find_font(["bahnschrift.ttf", "impact.ttf", "ariblk.ttf", "arial.ttf"], 26)
-    draw.text((text_x + 4, 70), "@OFFICIALLYSKELLY", font=handle_font, fill=ELECTRIC_PINK)
+    draw_centered("@OFFICIALLYSKELLY", 60, handle_font, ELECTRIC_PINK)
 
-    # Wordmark on right (sized to NOT overlap tagline)
+    # Wordmark — horizontally centered in the right column for balance
     word_path = os.path.join(PUBLIC, "skellyword.png")
     if os.path.exists(word_path):
         word = Image.open(word_path).convert("RGBA")
-        target_w = 380
+        target_w = 420
         ratio = target_w / word.width
         word = word.resize((target_w, int(word.height * ratio)), Image.LANCZOS)
-        wy = 120
-        canvas.alpha_composite(word, (text_x, wy))
+        right_col_left = text_x
+        right_col_right = W - 40
+        word_x = right_col_left + (right_col_right - right_col_left - target_w) // 2
+        wy = 110
+        canvas.alpha_composite(word, (word_x, wy))
 
-    # Tagline (positioned BELOW wordmark, never overlaps)
+    # Tagline (centered below wordmark)
     tagline_font = find_font(["seguisbi.ttf", "georgiai.ttf", "ariali.ttf", "arial.ttf"], 32)
-    draw.text((text_x + 4, 430), "chaos, bad decisions,", font=tagline_font, fill=TEXT_PRIMARY)
-    draw.text((text_x + 4, 470), "and surviving barely.", font=tagline_font, fill=TEXT_PRIMARY)
+    draw_centered("chaos, bad decisions,", 430, tagline_font, TEXT_PRIMARY)
+    draw_centered("and surviving barely.", 470, tagline_font, TEXT_PRIMARY)
 
-    # URL pill (gold, bottom)
+    # URL pill (gold, centered)
     url_font = find_font(["bahnschrift.ttf", "impact.ttf", "arialbd.ttf", "arial.ttf"], 28)
     url_text = "SKELLYWAGS.CLUB"
     bbox = draw.textbbox((0, 0), url_text, font=url_font)
     tw = bbox[2] - bbox[0]
     th = bbox[3] - bbox[1]
-    pill_x, pill_y = text_x + 4, 552
+    pill_x = right_col_center - tw // 2
+    pill_y = 552
     pad_x, pad_y = 20, 12
     draw.rounded_rectangle(
         (pill_x - pad_x, pill_y - pad_y, pill_x + tw + pad_x, pill_y + th + pad_y),

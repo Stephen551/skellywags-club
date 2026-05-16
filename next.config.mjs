@@ -45,16 +45,11 @@ const nextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
-  async redirects() {
-    return [
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.skellywags.club" }],
-        destination: "https://skellywags.club/:path*",
-        permanent: true,
-      },
-    ];
-  },
+  // Domain canonicalization lives in Vercel project Domains settings.
+  // A code-level redirect here conflicted with Vercel's edge redirect
+  // (apex -> www) and created an infinite loop. To make apex canonical,
+  // change the primary domain in Vercel dashboard rather than adding a
+  // redirect rule here.
 };
 
 export default nextConfig;

@@ -74,7 +74,11 @@ export default async function HomePage() {
                   height={620}
                   priority
                   fetchPriority="high"
-                  sizes="(min-width: 1024px) 620px, 80vw"
+                  // Tighter sizes: at <640px mobile request the ~384w variant,
+                  // at tablet ~768px ask for ~620w, only at desktop ask for full
+                  // 620px @ 1x density. The previous "80vw" was prompting Next's
+                  // image optimizer to serve up to the 1920w deviceSize on mobile.
+                  sizes="(min-width: 1024px) 620px, (min-width: 640px) 60vw, 70vw"
                   className="relative drop-shadow-[0_0_50px_rgba(155,95,192,0.8)]"
                 />
               </div>

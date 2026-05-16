@@ -13,12 +13,16 @@ function lighten(hex: string): string {
 }
 import "./globals.css";
 
-// Default-preset fonts (self-hosted via next/font, preloaded). The original
-// locked design system. Any other Google Font name typed into theme.json
-// flows through the custom-font path (loaded via fonts.googleapis.com stylesheet).
-const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400", variable: "--font-bebas-neue", display: "swap" });
-const nunito    = Nunito({    subsets: ["latin"], weight: ["400", "700"], variable: "--font-nunito", display: "swap" });
-const bangers   = Bangers({   subsets: ["latin"], weight: "400", variable: "--font-bangers", display: "swap" });
+// Default-preset fonts (self-hosted via next/font). The original locked
+// design system, kept as fallbacks for theme switching. preload: false
+// because the active theme almost always overrides these with a single
+// custom font (Comico, currently), and eager-preloading the latin slices
+// of three families was shipping ~13 woff2 files (~313 KiB) of unused
+// fonts on every page load. They still get fetched on demand if a theme
+// actually references them.
+const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400", variable: "--font-bebas-neue", display: "swap", preload: false });
+const nunito    = Nunito({    subsets: ["latin"], weight: ["400", "700"], variable: "--font-nunito", display: "swap", preload: false });
+const bangers   = Bangers({   subsets: ["latin"], weight: "400", variable: "--font-bangers", display: "swap", preload: false });
 
 const HEADING_FONTS: Record<string, string> = {
   "bebas-neue": "var(--font-bebas-neue)",
@@ -96,9 +100,28 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   const customFontCss = (theme.custom_font_css || "").trim();
 
+  // Pull any /fonts/*.woff2 URLs out of the inline @font-face block so we
+  // can preload them. Without this preload the font isn't discovered until
+  // the CSSOM parses the inline <style> tag, which costs ~500ms of LCP on
+  // mobile. With the preload the font is fetched in parallel with the HTML.
+  const preloadedFontUrls = Array.from(
+    customFontCss.matchAll(/url\((['"]?)([^'")]+\.woff2)\1\)/g),
+    (m) => m[2]
+  );
+
   return (
     <html lang="en" className={ALL_FONT_VARIABLES}>
       <head>
+        {preloadedFontUrls.map((url) => (
+          <link
+            key={url}
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            href={url}
+            crossOrigin="anonymous"
+          />
+        ))}
         {customFonts.length > 0 && (
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         )}

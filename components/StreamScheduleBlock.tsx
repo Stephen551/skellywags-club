@@ -14,7 +14,7 @@ export default function StreamScheduleBlock({
   return (
     <div className="bg-bg-card border border-purple-core/30 rounded-xl p-5 lift hover:border-electric-blue hover:shadow-glow-blue">
       <div className="flex items-center justify-between">
-        <h4 className="heading text-2xl text-white">{day}</h4>
+        <h3 className="heading text-2xl text-white">{day}</h3>
         <SocialIcon k="twitch" className="w-5 h-5 text-purple-light" />
       </div>
       <p className="text-text-primary mt-2 font-mono">

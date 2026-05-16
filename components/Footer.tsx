@@ -9,7 +9,7 @@ export default function Footer({ social }: { social: SocialLink[] }) {
     <footer className="mt-24 border-t border-purple-core/25 bg-bg-secondary">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14 grid gap-12 md:grid-cols-3">
         <div>
-          <h4 className="heading text-2xl text-white mb-4">QUICK LINKS</h4>
+          <h3 className="heading text-2xl text-white mb-4">QUICK LINKS</h3>
           <ul className="space-y-2 text-text-primary/85">
             {[...NAV_LINKS, { href: "/blog", label: "Blog" }].map((l) => (
               <li key={l.href}>
@@ -22,7 +22,7 @@ export default function Footer({ social }: { social: SocialLink[] }) {
         </div>
 
         <div>
-          <h4 className="heading text-2xl text-white mb-4">SUPPORT</h4>
+          <h3 className="heading text-2xl text-white mb-4">SUPPORT</h3>
           <ul className="space-y-2 text-text-primary/85">
             <li><Link href="/faq" className="hover:text-electric-blue transition-colors">FAQ</Link></li>
             <li><Link href="/shipping-returns" className="hover:text-electric-blue transition-colors">Shipping &amp; Returns</Link></li>
@@ -33,7 +33,7 @@ export default function Footer({ social }: { social: SocialLink[] }) {
         </div>
 
         <div>
-          <h4 className="heading text-2xl text-white mb-3">GET NOTIFIED WHEN CHAOS DROPS</h4>
+          <h3 className="heading text-2xl text-white mb-3">GET NOTIFIED WHEN CHAOS DROPS</h3>
           <p className="text-text-muted text-sm mb-4">drop your email. we'll yell when something happens.</p>
           <EmailCapture />
         </div>

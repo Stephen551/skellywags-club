@@ -27,7 +27,7 @@ const config: Config = {
         },
         text: {
           primary: "#F0E8FF",
-          muted: "#9080AA",
+          muted: "#A899BF",
           bright: "#FFFFFF",
         },
       },

@@ -33,7 +33,7 @@ export default function Navbar({ social }: { social: SocialLink[] }) {
               <Link
                 key={l.href}
                 href={l.href}
-                className={`heading text-xl uppercase tracking-wider transition-colors ${
+                className={`heading text-xl uppercase tracking-wider transition-colors inline-flex items-center min-h-11 px-1 ${
                   active ? "text-white" : "text-text-primary/85 hover:text-white"
                 }`}
               >
@@ -48,7 +48,7 @@ export default function Navbar({ social }: { social: SocialLink[] }) {
           })}
         </nav>
 
-        <div className="hidden md:flex items-center gap-3 text-text-primary/85">
+        <div className="hidden md:flex items-center gap-1 text-text-primary/85">
           {social.map((s) => (
             <a
               key={s.key}
@@ -56,7 +56,7 @@ export default function Navbar({ social }: { social: SocialLink[] }) {
               target="_blank"
               rel="noreferrer"
               aria-label={s.label}
-              className="hover:text-electric-blue transition-colors"
+              className="hover:text-electric-blue transition-colors inline-flex items-center justify-center min-w-11 min-h-11"
             >
               <SocialIcon k={s.key as any} className="w-5 h-5" />
             </a>

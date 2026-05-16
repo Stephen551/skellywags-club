@@ -41,9 +41,9 @@ export default function Footer({ social }: { social: SocialLink[] }) {
 
       <div className="border-t border-purple-core/20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-sm text-text-muted">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1">
             {social.map((s) => (
-              <a key={s.key} href={s.url} target="_blank" rel="noreferrer" aria-label={s.label} className="hover:text-electric-blue transition-colors">
+              <a key={s.key} href={s.url} target="_blank" rel="noreferrer" aria-label={s.label} className="hover:text-electric-blue transition-colors inline-flex items-center justify-center min-w-11 min-h-11">
                 <SocialIcon k={s.key as any} className="w-5 h-5" />
               </a>
             ))}

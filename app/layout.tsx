@@ -1,10 +1,5 @@
 import type { Metadata } from "next";
-import {
-  Bebas_Neue, Nunito, Bangers,
-  Anton, Black_Ops_One, Bowlby_One, Russo_One,
-  Inter, Poppins, Quicksand, Karla,
-  Permanent_Marker, Rampart_One,
-} from "next/font/google";
+import { Bebas_Neue, Nunito, Bangers } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RevealOnScroll from "@/components/RevealOnScroll";
@@ -18,50 +13,24 @@ function lighten(hex: string): string {
 }
 import "./globals.css";
 
-// HEADING font candidates (chunky / bold / hype)
-const bebasNeue   = Bebas_Neue({ subsets: ["latin"], weight: "400", variable: "--font-bebas-neue", display: "swap" });
-const anton       = Anton({ subsets: ["latin"], weight: "400", variable: "--font-anton", display: "swap" });
-const blackOpsOne = Black_Ops_One({ subsets: ["latin"], weight: "400", variable: "--font-black-ops-one", display: "swap" });
-const bowlbyOne   = Bowlby_One({ subsets: ["latin"], weight: "400", variable: "--font-bowlby-one", display: "swap" });
-const russoOne    = Russo_One({ subsets: ["latin"], weight: "400", variable: "--font-russo-one", display: "swap" });
-
-// BODY font candidates (readable / warm / modern)
-const nunito    = Nunito({ subsets: ["latin"], variable: "--font-nunito", display: "swap" });
-const inter     = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-const poppins   = Poppins({ subsets: ["latin"], weight: ["400", "600"], variable: "--font-poppins", display: "swap" });
-const quicksand = Quicksand({ subsets: ["latin"], variable: "--font-quicksand", display: "swap" });
-const karla     = Karla({ subsets: ["latin"], variable: "--font-karla", display: "swap" });
-
-// ACCENT font candidates (chaos / handwritten / pop)
-const bangers         = Bangers({ subsets: ["latin"], weight: "400", variable: "--font-bangers", display: "swap" });
-const permanentMarker = Permanent_Marker({ subsets: ["latin"], weight: "400", variable: "--font-permanent-marker", display: "swap" });
-const rampartOne      = Rampart_One({ subsets: ["latin"], weight: "400", variable: "--font-rampart-one", display: "swap" });
+// Default-preset fonts (self-hosted via next/font, preloaded). The original
+// locked design system. Any other Google Font name typed into theme.json
+// flows through the custom-font path (loaded via fonts.googleapis.com stylesheet).
+const bebasNeue = Bebas_Neue({ subsets: ["latin"], weight: "400", variable: "--font-bebas-neue", display: "swap" });
+const nunito    = Nunito({    subsets: ["latin"], weight: ["400", "700"], variable: "--font-nunito", display: "swap" });
+const bangers   = Bangers({   subsets: ["latin"], weight: "400", variable: "--font-bangers", display: "swap" });
 
 const HEADING_FONTS: Record<string, string> = {
   "bebas-neue": "var(--font-bebas-neue)",
-  "anton": "var(--font-anton)",
-  "black-ops-one": "var(--font-black-ops-one)",
-  "bowlby-one": "var(--font-bowlby-one)",
-  "russo-one": "var(--font-russo-one)",
 };
 const BODY_FONTS: Record<string, string> = {
   "nunito": "var(--font-nunito)",
-  "inter": "var(--font-inter)",
-  "poppins": "var(--font-poppins)",
-  "quicksand": "var(--font-quicksand)",
-  "karla": "var(--font-karla)",
 };
 const ACCENT_FONTS: Record<string, string> = {
   "bangers": "var(--font-bangers)",
-  "permanent-marker": "var(--font-permanent-marker)",
-  "rampart-one": "var(--font-rampart-one)",
 };
 
-const ALL_FONT_VARIABLES = [
-  bebasNeue.variable, anton.variable, blackOpsOne.variable, bowlbyOne.variable, russoOne.variable,
-  nunito.variable, inter.variable, poppins.variable, quicksand.variable, karla.variable,
-  bangers.variable, permanentMarker.variable, rampartOne.variable,
-].join(" ");
+const ALL_FONT_VARIABLES = [bebasNeue.variable, nunito.variable, bangers.variable].join(" ");
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://skellywags.club"),
@@ -96,7 +65,7 @@ function customFontHref(name: string): string {
 function fontFamilyFor(value: string | undefined, fallback: string, registry: Record<string, string>): string {
   if (!value) return fallback;
   if (registry[value]) return registry[value];
-  // Treat as a custom Google Font name (e.g., "Lobster"). We loaded a stylesheet for it; reference by its quoted name.
+  // Treat as a custom Google Font name (e.g., "Lobster") loaded via the stylesheet link below.
   return `'${value}'`;
 }
 

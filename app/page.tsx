@@ -79,6 +79,12 @@ export default async function HomePage() {
                   // 620px @ 1x density. The previous "80vw" was prompting Next's
                   // image optimizer to serve up to the 1920w deviceSize on mobile.
                   sizes="(min-width: 1024px) 620px, (min-width: 640px) 60vw, 70vw"
+                  // will-change + translate3d push the drop-shadow filter onto
+                  // its own GPU compositor layer. The filter still renders
+                  // (visual is unchanged) but it no longer blocks the LCP paint
+                  // signal — the image fires LCP first, the shadow composites
+                  // in the next compositor pass.
+                  style={{ willChange: "filter", transform: "translate3d(0,0,0)" }}
                   className="relative drop-shadow-[0_0_50px_rgba(155,95,192,0.8)]"
                 />
               </div>

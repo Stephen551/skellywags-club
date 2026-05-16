@@ -23,8 +23,8 @@ export default function NotFound() {
               alt="Skelly"
               width={260}
               height={260}
+              sizes="260px"
               className="relative drop-shadow-[0_0_30px_rgba(155,95,192,0.7)]"
-              unoptimized={theme.avatar_url?.startsWith("/uploads/")}
             />
           </div>
         </div>

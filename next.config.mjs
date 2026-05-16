@@ -27,6 +27,9 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [375, 640, 768, 1024, 1280, 1440, 1920],
+    imageSizes: [64, 128, 256, 384, 420, 620],
     remotePatterns: [
       { protocol: "https", hostname: "i.ytimg.com" },
       { protocol: "https", hostname: "yt3.ggpht.com" },
@@ -36,8 +39,21 @@ const nextConfig = {
       { protocol: "https", hostname: "skelly-xkh-shop.fourthwall.com" },
     ],
   },
+  experimental: {
+    optimizeCss: true,
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
+  },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.skellywags.club" }],
+        destination: "https://skellywags.club/:path*",
+        permanent: true,
+      },
+    ];
   },
 };
 

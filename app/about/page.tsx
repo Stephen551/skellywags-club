@@ -28,8 +28,10 @@ export default async function AboutPage() {
                 alt="Skelly"
                 width={420}
                 height={420}
+                priority
+                fetchPriority="high"
+                sizes="(min-width: 768px) 420px, 70vw"
                 className="relative drop-shadow-[0_0_40px_rgba(155,95,192,0.7)]"
-                unoptimized={theme.avatar_url?.startsWith("/uploads/")}
               />
             </div>
           </div>

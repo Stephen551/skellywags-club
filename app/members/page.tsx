@@ -24,7 +24,7 @@ export default function MembersPage() {
           <div className="flex justify-center lg:justify-end reveal">
             <div className="relative animate-drift">
               <div className="absolute inset-0 bg-electric-pink/40 blur-3xl rounded-full" />
-              <Image src={theme.avatar_url || "/avatar.png"} alt="Skelly" width={420} height={420} className="relative drop-shadow-[0_0_40px_rgba(155,95,192,0.7)]" unoptimized={theme.avatar_url?.startsWith("/uploads/")} />
+              <Image src={theme.avatar_url || "/avatar.png"} alt="Skelly" width={420} height={420} priority fetchPriority="high" sizes="(min-width: 1024px) 420px, 70vw" className="relative drop-shadow-[0_0_40px_rgba(155,95,192,0.7)]" />
             </div>
           </div>
         </div>

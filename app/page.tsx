@@ -73,8 +73,9 @@ export default async function HomePage() {
                   width={620}
                   height={620}
                   priority
+                  fetchPriority="high"
+                  sizes="(min-width: 1024px) 620px, 80vw"
                   className="relative drop-shadow-[0_0_50px_rgba(155,95,192,0.8)]"
-                  unoptimized={theme.avatar_url?.startsWith("/uploads/")}
                 />
               </div>
             </div>

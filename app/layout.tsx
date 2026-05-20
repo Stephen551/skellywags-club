@@ -3,7 +3,7 @@ import { Bebas_Neue, Nunito, Bangers } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RevealOnScroll from "@/components/RevealOnScroll";
-import { getSocial, getTheme, hexToRgbTriplet } from "@/lib/content";
+import { getSocial, getTheme, getSite, hexToRgbTriplet } from "@/lib/content";
 
 function lighten(hex: string): string {
   const m = String(hex).trim().match(/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
@@ -76,6 +76,10 @@ function fontFamilyFor(value: string | undefined, fallback: string, registry: Re
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const social = getSocial();
   const theme = getTheme();
+  const site = getSite();
+  const subscribeLink = site.nav_subscribe_enabled
+    ? { href: "/subscribe", label: site.nav_subscribe_label }
+    : null;
 
   const headingFamily = fontFamilyFor(theme.heading_font, HEADING_FONTS["bebas-neue"], HEADING_FONTS);
   const bodyFamily    = fontFamilyFor(theme.body_font,    BODY_FONTS["nunito"],         BODY_FONTS);
@@ -135,7 +139,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen bg-bg-primary text-text-primary">
         <RevealOnScroll />
-        <Navbar social={social} />
+        <Navbar social={social} subscribeLink={subscribeLink} />
         <main>{children}</main>
         <Footer social={social} />
       </body>

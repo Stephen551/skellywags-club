@@ -8,9 +8,21 @@ import { NAV_LINKS } from "@/lib/constants";
 import type { SocialLink } from "@/lib/content";
 import SocialIcon from "./SocialIcon";
 
-export default function Navbar({ social }: { social: SocialLink[] }) {
+type SubscribeLink = { href: string; label: string } | null;
+
+export default function Navbar({
+  social,
+  subscribeLink,
+}: {
+  social: SocialLink[];
+  subscribeLink?: SubscribeLink;
+}) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  const links = subscribeLink
+    ? [...NAV_LINKS, { href: subscribeLink.href, label: subscribeLink.label }]
+    : NAV_LINKS;
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-bg-primary/80 border-b border-purple-core/25">
@@ -27,7 +39,7 @@ export default function Navbar({ social }: { social: SocialLink[] }) {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((l) => {
+          {links.map((l) => {
             const active = pathname === l.href || pathname?.startsWith(l.href + "/");
             return (
               <Link
@@ -83,7 +95,7 @@ export default function Navbar({ social }: { social: SocialLink[] }) {
       {open && (
         <div className="md:hidden bg-bg-secondary/95 backdrop-blur-lg border-t border-purple-core/30 px-6 py-8">
           <nav className="flex flex-col gap-5">
-            {NAV_LINKS.map((l) => (
+            {links.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}

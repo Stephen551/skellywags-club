@@ -2,13 +2,21 @@
 
 import { useState } from "react";
 
+const ERROR_MESSAGES: Record<string, string> = {
+  invalid_email: "that email looks broken. try again?",
+  invalid_body: "something broke on our end. try again?",
+  list_failed: "the void rejected your email. give it another shot.",
+};
+
 export default function EmailCapture({ cta = "DROP IT" }: { cta?: string }) {
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "loading" | "ok" | "err">("idle");
+  const [errMessage, setErrMessage] = useState<string>("welp. that broke. try again?");
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!/.+@.+\..+/.test(email)) {
+      setErrMessage(ERROR_MESSAGES.invalid_email);
       setState("err");
       return;
     }
@@ -19,13 +27,17 @@ export default function EmailCapture({ cta = "DROP IT" }: { cta?: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.ok) {
+        const code = typeof data?.error === "string" ? data.error : "";
+        setErrMessage(ERROR_MESSAGES[code] ?? "welp. that broke. try again?");
         setState("err");
         return;
       }
       setState("ok");
       setEmail("");
     } catch {
+      setErrMessage("welp. that broke. try again?");
       setState("err");
     }
   }
@@ -52,13 +64,13 @@ export default function EmailCapture({ cta = "DROP IT" }: { cta?: string }) {
       </button>
       <div aria-live="polite" className="sr-only">
         {state === "ok" && "Email captured."}
-        {state === "err" && "Submission failed."}
+        {state === "err" && errMessage}
       </div>
       {state === "ok" && (
         <p className="sm:basis-full text-electric-blue text-sm font-bangers">welcome to the void.</p>
       )}
       {state === "err" && (
-        <p className="sm:basis-full text-electric-pink text-sm font-bangers">welp. that broke. try again?</p>
+        <p className="sm:basis-full text-electric-pink text-sm font-bangers">{errMessage}</p>
       )}
     </form>
   );

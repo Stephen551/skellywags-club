@@ -108,6 +108,30 @@ content:
       - { name: youtube_membership_url, label: "YouTube channel-membership join URL", type: string }
       - { name: twitch_url, label: "Twitch channel URL", type: string }
       - { name: discord_invite_url, label: "Discord invite URL", type: string }
+      - { name: nav_subscribe_enabled, label: "Show 'Subscribe' link in the navbar?", type: boolean, default: true }
+      - { name: nav_subscribe_label, label: "Navbar subscribe link label (e.g. 'EMAIL DROPS')", type: string, default: "EMAIL DROPS" }
+      - { name: subscribe_page_heading, label: "/subscribe page heading", type: string, default: "GET CHAOS IN YOUR INBOX" }
+      - { name: subscribe_page_subheading, label: "/subscribe page subheading (pitch under the headline)", type: text, default: "drop your email. we'll yell when something dumb happens." }
+      - name: subscribe_page_bullets
+        label: "/subscribe page bullets (what subscribers get — drag to reorder)"
+        type: string
+        list: true
+      - { name: subscribe_page_cta_label, label: "/subscribe page email form CTA label", type: string, default: "I'M IN" }
+      - { name: subscribe_page_finepoint, label: "/subscribe page fine-print line under the form", type: string, default: "no spam. unsubscribe with one click." }
+      - { name: blog_subscribe_heading, label: "Bottom-of-blog-post subscribe block heading", type: string, default: "want more chaos in your inbox?" }
+      - { name: blog_subscribe_subheading, label: "Bottom-of-blog-post subscribe block subheading", type: text, default: "drop your email. we'll yell when something happens." }
+
+  - name: welcome_email
+    label: "📧 Welcome Email (sent to new subscribers)"
+    type: file
+    path: content/welcome-email.md
+    fields:
+      - { name: enabled, label: "Send welcome emails to new subscribers? (off = collect only, no welcome sent)", type: boolean, default: true }
+      - { name: from_name, label: "From name (shown in inbox, e.g. skelly)", type: string, required: true, default: "skelly" }
+      - { name: from_address, label: "From address (must be on a verified Resend domain, e.g. hello@skellywags.club)", type: string, required: true, default: "hello@skellywags.club" }
+      - { name: subject, label: "Subject line", type: string, required: true }
+      - { name: preheader, label: "Preheader (preview text in inbox)", type: string }
+      - { name: body, label: "Email body — markdown. Tokens auto-replaced: {youtube} {discord} {shop} {handle}.", type: rich-text, required: true }
 
   # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   #   MONTHLY EDITS  (numbers + schedule + tier tweaks)

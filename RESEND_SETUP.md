@@ -2,7 +2,7 @@
 
 Hey Skelly. This walks you through turning on the email list. You'll do this once, then it just works. Total time: about 30 minutes, plus waiting on DNS (which can be up to a few hours but is usually faster).
 
-Until you finish this, the subscribe form on the site still works — it just pings the Discord webhook and writes to the server log. No signups are lost.
+Until you finish this, the subscribe form on the site still works — it pings the Discord webhook AND writes every email to the subscribers store (if Stephen has wired Upstash, see the "Subscribers store + admin portal" section below). No signups are lost. When Resend is ready, you can backfill anyone who signed up early via CSV import.
 
 ## What you need before starting
 
@@ -108,3 +108,36 @@ That means the site is still in fallback mode — the env vars aren't picked up 
 
 **Anything else weird.**
 Ping Stephen. Take a screenshot.
+
+---
+
+# Subscribers store + admin portal (Stephen)
+
+This section is for Stephen, not Skelly. It documents the Upstash Redis store that captures every signup AND the basic-auth admin portal at `/admin/subscribers`. The store works independently of Resend, so signups are persisted from the moment Upstash env vars are live — useful for backfilling Resend later, and as a defense-in-depth backup forever.
+
+## One-time Vercel setup
+
+1. Vercel project → **Storage** → **Marketplace** → **Upstash** → **Redis** → Create.
+2. Link to the `skellywags-club` project. Pick the closest region (probably iad1 / us-east).
+3. Vercel auto-injects `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` into the project's env vars. No further config needed.
+4. Add a third env var manually: `ADMIN_PASSWORD`. Pick any string — this is the password for the admin portal. Username doesn't matter when logging in.
+5. Redeploy (or push to main).
+
+## Using the admin portal
+
+Once live, visit `https://skellywags.club/admin/subscribers`. Browser prompts for credentials — use any username and the `ADMIN_PASSWORD` you set.
+
+The page shows:
+- Total subscriber count
+- How many captured pre-Resend (`mode=fallback`) vs post-Resend (`mode=resend`)
+- A table of every email with capture timestamp + mode
+- A "Download CSV" button that pulls every subscriber as a `.csv` file you can paste into Resend's "Import contacts" flow once Skelly's Resend audience is live.
+
+When `ADMIN_PASSWORD` is unset, the admin route returns 404 — it's not even discoverable. So it's safe to leave that env var unset until you actively want the portal.
+
+## Storage model
+
+- One Redis hash, key `subscribers`, field = email, value = JSON `{ email, ts, mode }`.
+- First write wins per email, so re-subscribes don't overwrite the original capture timestamp.
+- Free Upstash tier (10K commands/day) is way more than enough for any realistic scale.
+- If Upstash env vars aren't set, the store silently no-ops — signups still go to Discord + log.

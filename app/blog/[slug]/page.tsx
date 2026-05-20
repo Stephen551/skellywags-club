@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { listPosts, readPost } from "@/lib/blog";
+import { getSite } from "@/lib/content";
+import EmailCapture from "@/components/EmailCapture";
 
 export function generateStaticParams() {
   return listPosts().map((p) => ({ slug: p.slug }));
@@ -21,6 +23,7 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
 export default function BlogPost({ params }: { params: { slug: string } }) {
   const post = readPost(params.slug);
   if (!post) notFound();
+  const site = getSite();
 
   return (
     <article className="max-w-3xl mx-auto px-6 lg:px-8 py-20">
@@ -35,6 +38,16 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         className="prose-skelly mt-10"
         dangerouslySetInnerHTML={{ __html: post.html }}
       />
+
+      <aside className="mt-16 pt-10 border-t border-purple-core/30">
+        <h2 className="heading text-3xl text-white">
+          {site.blog_subscribe_heading}
+        </h2>
+        <p className="text-text-muted text-sm mt-2 mb-5">
+          {site.blog_subscribe_subheading}
+        </p>
+        <EmailCapture cta="DROP IT" />
+      </aside>
     </article>
   );
 }

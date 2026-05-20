@@ -98,6 +98,15 @@ export type Theme = {
   custom_font_css?: string;
 };
 
+export type WelcomeEmail = {
+  enabled: boolean;
+  from_name: string;
+  from_address: string;
+  subject: string;
+  preheader: string;
+  body: string;
+};
+
 export type FanArt = {
   slug: string;
   artist: string;
@@ -250,6 +259,34 @@ export function getTheme(): Theme {
     return { ...THEME_DEFAULTS, ...raw };
   } catch {
     return THEME_DEFAULTS;
+  }
+}
+
+const WELCOME_EMAIL_DEFAULTS: WelcomeEmail = {
+  enabled: true,
+  from_name: "skelly",
+  from_address: "hello@skellywags.club",
+  subject: "welcome to the void, skellywag",
+  preheader: "you signed up. that was a mistake (in the best way).",
+  body: "",
+};
+
+export function getWelcomeEmail(): WelcomeEmail {
+  const file = path.join(ROOT, "welcome-email.md");
+  if (!fs.existsSync(file)) return WELCOME_EMAIL_DEFAULTS;
+  try {
+    const raw = fs.readFileSync(file, "utf8");
+    const { data, content } = matter(raw);
+    return {
+      enabled: data.enabled !== false,
+      from_name: typeof data.from_name === "string" ? data.from_name : WELCOME_EMAIL_DEFAULTS.from_name,
+      from_address: typeof data.from_address === "string" ? data.from_address : WELCOME_EMAIL_DEFAULTS.from_address,
+      subject: typeof data.subject === "string" ? data.subject : WELCOME_EMAIL_DEFAULTS.subject,
+      preheader: typeof data.preheader === "string" ? data.preheader : WELCOME_EMAIL_DEFAULTS.preheader,
+      body: content,
+    };
+  } catch {
+    return WELCOME_EMAIL_DEFAULTS;
   }
 }
 

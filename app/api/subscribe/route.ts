@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getResend, getAudienceId, isResendConfigured } from "@/lib/resend";
 import { sendWelcomeEmail } from "@/lib/emails/welcome";
+import { addSubscriber } from "@/lib/subscribers-store";
 
 export const runtime = "nodejs";
 
@@ -41,6 +42,13 @@ export async function POST(request: Request) {
 
   if (!email || !EMAIL_RE.test(email) || email.length > 254) {
     return NextResponse.json({ ok: false, error: "invalid_email" }, { status: 400 });
+  }
+
+  const captureMode = isResendConfigured() ? "resend" : "fallback";
+  try {
+    await addSubscriber(email, captureMode);
+  } catch (err) {
+    console.error("[subscribe] subscribers store threw", err);
   }
 
   if (!isResendConfigured()) {

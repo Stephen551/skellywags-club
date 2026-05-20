@@ -72,7 +72,8 @@ The post auto-appears at `/blog/<slug>`.
 ## Open TODO before launch
 
 - [ ] Real `YOUTUBE_API_KEY` + `YOUTUBE_CHANNEL_ID` in `.env.local`
-- [ ] Real Fourthwall storefront URL + email-list integration in `EmailCapture`
+- [ ] Real Fourthwall storefront URL (`NEXT_PUBLIC_FOURTHWALL_SHOP_URL` env var)
+- [ ] Resend setup — see `RESEND_SETUP.md`. Until done, email capture runs in fallback mode (Discord webhook + server log).
 - [ ] Background-removed transparent PNG of avatar (current is JPG with starfield bg)
 - [ ] Real About copy from creator
 - [ ] OG image (`public/skellybanner.jpg` is currently used)

@@ -68,6 +68,15 @@ export type SiteSettings = {
   youtube_membership_url: string;
   twitch_url: string;
   discord_invite_url: string;
+  nav_subscribe_enabled: boolean;
+  nav_subscribe_label: string;
+  subscribe_page_heading: string;
+  subscribe_page_subheading: string;
+  subscribe_page_bullets: string[];
+  subscribe_page_cta_label: string;
+  subscribe_page_finepoint: string;
+  blog_subscribe_heading: string;
+  blog_subscribe_subheading: string;
 };
 
 export type SocialLink = {
@@ -207,6 +216,20 @@ const SITE_DEFAULTS: SiteSettings = {
   youtube_membership_url: "https://www.youtube.com/@officiallyskelly/join",
   twitch_url: "https://twitch.tv/officiallyskelly",
   discord_invite_url: "https://discord.gg/zpWv2cXxB9",
+  nav_subscribe_enabled: true,
+  nav_subscribe_label: "EMAIL DROPS",
+  subscribe_page_heading: "GET CHAOS IN YOUR INBOX",
+  subscribe_page_subheading: "drop your email. we'll yell when something dumb happens.",
+  subscribe_page_bullets: [
+    "first dibs on merch drops",
+    "stream announcements before they hit anywhere else",
+    "the occasional cursed update from the void",
+    "no spam. unsubscribe whenever.",
+  ],
+  subscribe_page_cta_label: "I'M IN",
+  subscribe_page_finepoint: "no spam. unsubscribe with one click.",
+  blog_subscribe_heading: "want more chaos in your inbox?",
+  blog_subscribe_subheading: "drop your email. we'll yell when something happens.",
 };
 
 export function getSite(): SiteSettings {

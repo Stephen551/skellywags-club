@@ -4,6 +4,7 @@ import GlowButton from "@/components/GlowButton";
 import SocialIcon from "@/components/SocialIcon";
 import SectionDivider from "@/components/SectionDivider";
 import EmailCapture from "@/components/EmailCapture";
+import CursorStarfield from "@/components/CursorStarfield";
 import StreamScheduleBlock from "@/components/StreamScheduleBlock";
 import MemberTierCard from "@/components/MemberTierCard";
 import VideoCard from "@/components/VideoCard";
@@ -25,6 +26,7 @@ export default async function HomePage() {
     <>
       {/* HERO */}
       <section className="relative bg-starfield-dense noise-overlay overflow-hidden">
+        <CursorStarfield />
         <LightningCross />
         <div className="relative max-w-7xl mx-auto px-6 lg:px-8 min-h-[88vh] flex items-center">
           <div className="grid lg:grid-cols-2 gap-12 items-center w-full py-16">

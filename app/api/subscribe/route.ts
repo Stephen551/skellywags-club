@@ -1,11 +1,127 @@
 import { NextResponse } from "next/server";
-import { getResend, getAudienceId, isResendConfigured } from "@/lib/resend";
-import { sendWelcomeEmail } from "@/lib/emails/welcome";
+import {
+  getAudienceId,
+  getResend,
+  getResendApiKey,
+  getSegmentId,
+  isResendConfigured,
+} from "@/lib/resend";
+import { sendSubscriberNotificationEmail, sendWelcomeEmail } from "@/lib/emails/welcome";
 import { addSubscriber } from "@/lib/subscribers-store";
 
 export const runtime = "nodejs";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const RESEND_API_BASE = "https://api.resend.com";
+
+type ContactCaptureResult =
+  | { ok: true; isNewContact: boolean; mode: "resend_contacts" | "resend_audience" }
+  | { ok: false; error: unknown; mode: "resend_contacts" | "resend_audience" };
+
+function isAlreadyExistsError(error: unknown): boolean {
+  const raw =
+    typeof error === "string"
+      ? error
+      : error &&
+          typeof error === "object" &&
+          "message" in error &&
+          typeof error.message === "string"
+        ? error.message
+        : JSON.stringify(error ?? "");
+  const msg = raw.toLowerCase();
+  return msg.includes("already") || msg.includes("exists") || msg.includes("duplicate");
+}
+
+async function resendFetch(path: string, init: RequestInit = {}) {
+  const key = getResendApiKey();
+  if (!key) throw new Error("missing_resend_api_key");
+  return fetch(`${RESEND_API_BASE}${path}`, {
+    ...init,
+    headers: {
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+      ...(init.headers ?? {}),
+    },
+  });
+}
+
+async function parseResendResponse(res: Response): Promise<unknown> {
+  return res.json().catch(() => ({ message: `Resend returned ${res.status}` }));
+}
+
+async function addGlobalContactToSegment(email: string, segmentId: string): Promise<void> {
+  const res = await resendFetch(
+    `/contacts/${encodeURIComponent(email)}/segments/${encodeURIComponent(segmentId)}`,
+    { method: "POST" }
+  );
+  if (res.ok) return;
+  const body = await parseResendResponse(res);
+  if (isAlreadyExistsError(body)) return;
+  throw body;
+}
+
+async function createGlobalContact(email: string): Promise<ContactCaptureResult> {
+  const segmentId = getSegmentId();
+  const body: Record<string, unknown> = {
+    email,
+    unsubscribed: false,
+  };
+  if (segmentId) {
+    body.segments = [{ id: segmentId }];
+  }
+
+  const res = await resendFetch("/contacts", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
+  const data = await parseResendResponse(res);
+
+  if (res.ok && !(data && typeof data === "object" && "error" in data && data.error)) {
+    return { ok: true, isNewContact: true, mode: "resend_contacts" };
+  }
+
+  if (isAlreadyExistsError(data)) {
+    if (segmentId) {
+      try {
+        await addGlobalContactToSegment(email, segmentId);
+      } catch (err) {
+        console.error("[subscribe] resend segment add failed for existing contact", err);
+      }
+    }
+    return { ok: true, isNewContact: false, mode: "resend_contacts" };
+  }
+
+  return { ok: false, error: data, mode: "resend_contacts" };
+}
+
+async function createLegacyAudienceContact(email: string): Promise<ContactCaptureResult> {
+  const resend = getResend()!;
+  const audienceId = getAudienceId()!;
+
+  try {
+    const created = await resend.contacts.create({
+      email,
+      audienceId,
+      unsubscribed: false,
+    });
+    if (created.error) {
+      if (isAlreadyExistsError(created.error)) {
+        return { ok: true, isNewContact: false, mode: "resend_audience" };
+      }
+      return { ok: false, error: created.error, mode: "resend_audience" };
+    }
+    return { ok: true, isNewContact: true, mode: "resend_audience" };
+  } catch (err) {
+    return { ok: false, error: err, mode: "resend_audience" };
+  }
+}
+
+async function createResendContact(email: string): Promise<ContactCaptureResult> {
+  if (getAudienceId()) {
+    return createLegacyAudienceContact(email);
+  }
+  return createGlobalContact(email);
+}
 
 async function pingDiscord(email: string, mode: string) {
   const webhook = process.env.DISCORD_NOTIFY_WEBHOOK;
@@ -57,43 +173,27 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const resend = getResend()!;
-  const audienceId = getAudienceId()!;
-
-  let isNewContact = false;
-  try {
-    const created = await resend.contacts.create({
-      email,
-      audienceId,
-      unsubscribed: false,
-    });
-    if (created.error) {
-      const msg = created.error.message?.toLowerCase() ?? "";
-      if (msg.includes("already") || msg.includes("exists")) {
-        isNewContact = false;
-      } else {
-        console.error("[subscribe] resend contacts.create error", created.error);
-        await pingDiscord(email, "resend_error");
-        return NextResponse.json({ ok: false, error: "list_failed" }, { status: 500 });
-      }
-    } else {
-      isNewContact = true;
-    }
-  } catch (err) {
-    console.error("[subscribe] resend contacts.create threw", err);
+  const contactResult = await createResendContact(email);
+  if (!contactResult.ok) {
+    console.error(`[subscribe] ${contactResult.mode} create error`, contactResult.error);
     await pingDiscord(email, "resend_error");
     return NextResponse.json({ ok: false, error: "list_failed" }, { status: 500 });
   }
 
-  if (isNewContact) {
+  if (contactResult.isNewContact) {
     const sendResult = await sendWelcomeEmail(email);
     if (!sendResult.ok) {
       console.error("[subscribe] welcome email failed but contact is stored", sendResult.error);
     }
+
+    const notifyResult = await sendSubscriberNotificationEmail(email);
+    if (!notifyResult.ok) {
+      console.error("[subscribe] subscriber notification failed but contact is stored", notifyResult.error);
+    }
   }
 
-  console.log(`[subscribe] mode=resend new=${isNewContact} email=`, email);
-  await pingDiscord(email, isNewContact ? "resend_new" : "resend_repeat");
+  console.log(`[subscribe] mode=${contactResult.mode} new=${contactResult.isNewContact} email=`, email);
+  await pingDiscord(email, contactResult.isNewContact ? "resend_new" : "resend_repeat");
 
   return NextResponse.json({ ok: true });
 }

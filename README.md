@@ -29,6 +29,15 @@ Open <http://localhost:3000>.
 | `NEXT_PUBLIC_FOURTHWALL_SHOP_URL` | Fourthwall storefront URL (placeholder until merch launches) |
 | `NEXT_PUBLIC_DISCORD_WIDGET_GUILD_ID` | Numeric Discord guild ID (enable widget in server settings first) |
 | `NEXT_PUBLIC_SITE_URL` | `https://skellywags.club` |
+| `RESEND_API_KEY` | Enables Resend contact capture and welcome emails |
+| `RESEND_SEGMENT_ID` | Optional Resend Segment ID for grouping newsletter signups |
+| `RESEND_AUDIENCE_ID` | Optional legacy Resend Audience ID; only use if the account still has Audiences |
+| `SUBSCRIBER_NOTIFY_EMAIL` | Optional email for owner notifications; defaults to `skellysofficialemail@gmail.com` |
+| `INBOUND_FORWARD_EMAIL` | Optional destination for Resend Inbound forwards; defaults to `SUBSCRIBER_NOTIFY_EMAIL` |
+| `RESEND_INBOUND_WEBHOOK_TOKEN` | Optional shared token for `/api/resend/inbound?token=...` |
+| `DISCORD_NOTIFY_WEBHOOK` | Optional Discord ping for new signups |
+| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Optional backup subscriber store |
+| `ADMIN_PASSWORD` | Enables `/admin/subscribers` basic auth |
 
 Without `YOUTUBE_API_KEY`, video grids gracefully render an empty state.
 

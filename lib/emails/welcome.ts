@@ -1,6 +1,6 @@
 import { remark } from "remark";
 import remarkHtml from "remark-html";
-import { getResend } from "@/lib/resend";
+import { getResend, getSubscriberNotifyEmail } from "@/lib/resend";
 import { getWelcomeEmail, getSite, getSocial } from "@/lib/content";
 
 function buildTokenMap() {
@@ -73,5 +73,39 @@ export async function sendWelcomeEmail(toEmail: string): Promise<SendWelcomeResu
   } catch (err) {
     console.error("[welcome] resend send threw", err);
     return { ok: false, error: "send_threw" };
+  }
+}
+
+export async function sendSubscriberNotificationEmail(subscriberEmail: string): Promise<SendWelcomeResult> {
+  const resend = getResend();
+  if (!resend) return { ok: true, skipped: "no_resend" };
+
+  const config = getWelcomeEmail();
+  const notifyEmail = getSubscriberNotifyEmail();
+  const subject = "new skellywags.club subscriber";
+  const text = `New skellywags.club subscriber:\n\n${subscriberEmail}\n\nCaptured at ${new Date().toISOString()}`;
+  const html = `
+    <p>New skellywags.club subscriber:</p>
+    <p><strong>${subscriberEmail}</strong></p>
+    <p>Captured at ${new Date().toISOString()}</p>
+  `;
+
+  try {
+    const res = await resend.emails.send({
+      from: `${config.from_name} <${config.from_address}>`,
+      to: notifyEmail,
+      replyTo: subscriberEmail,
+      subject,
+      html,
+      text,
+    });
+    if (res.error) {
+      console.error("[notify] resend send error", res.error);
+      return { ok: false, error: res.error.message || "notify_failed" };
+    }
+    return { ok: true };
+  } catch (err) {
+    console.error("[notify] resend send threw", err);
+    return { ok: false, error: "notify_threw" };
   }
 }

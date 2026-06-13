@@ -1,0 +1,39 @@
+{
+  "enabled": true,
+  "name": "SKELLYTHON",
+  "subtitle": "SUBATHON EVENT",
+  "tagline": "can you handle the chaos",
+  "start_date": "2026-06-22",
+  "end_date": "2026-06-28",
+  "start_display": "JUNE 22 · 4:30PM CST",
+  "twitch_channel": "officiallyskelly",
+  "spicy_cadence": "spicy challenge every 50 subs",
+  "stretch_teaser": "Stretch goals too chaotic to reveal yet.",
+  "baseline": 2300,
+  "timer_rules": [
+    { "amount": "+1 min", "per": "per YouTube sub" },
+    { "amount": "+1 min", "per": "per Twitch follow" },
+    { "amount": "+2 min", "per": "per dollar spent" },
+    { "amount": "+5 min", "per": "per membership / sub" }
+  ],
+  "goals": [
+    { "target": 2325, "dare": "Rewatch oldest YT video and react", "clip_url": "", "reached_override": false },
+    { "target": 2350, "dare": "Sourest candy challenge", "clip_url": "", "reached_override": false },
+    { "target": 2375, "dare": "Chat makes me tweet", "clip_url": "", "reached_override": false },
+    { "target": 2400, "dare": "Horror game at 3AM", "clip_url": "", "reached_override": false },
+    { "target": 2425, "dare": "Underarm waxed", "clip_url": "", "reached_override": false },
+    { "target": 2450, "dare": "Shock collar / Ask Me Anything (1HR)", "clip_url": "", "reached_override": false },
+    { "target": 2475, "dare": "RIP Pokémon booster box", "clip_url": "", "reached_override": false },
+    { "target": 2500, "dare": "Chat designs NEW model outfit", "clip_url": "", "reached_override": false },
+    { "target": 2550, "dare": "Chat makes Skelly's pizza order", "clip_url": "", "reached_override": false },
+    { "target": 2600, "dare": "Plan Discord movie night", "clip_url": "", "reached_override": false },
+    { "target": 2650, "dare": "VR game (no VRChat)", "clip_url": "", "reached_override": false },
+    { "target": 2700, "dare": "Skelly shaves beard", "clip_url": "", "reached_override": false },
+    { "target": 2750, "dare": "MERCH DROP!!!!", "clip_url": "", "reached_override": false },
+    { "target": 2800, "dare": "Skelly opens PO box for fan mail", "clip_url": "", "reached_override": false },
+    { "target": 2850, "dare": "Chat picks game / play with chat", "clip_url": "", "reached_override": false },
+    { "target": 2900, "dare": "Chat picks my Comic-Con cosplay", "clip_url": "", "reached_override": false },
+    { "target": 2950, "dare": "Mods take over stream", "clip_url": "", "reached_override": false },
+    { "target": 3000, "dare": "SKELLY TATTOO", "clip_url": "", "reached_override": false }
+  ]
+}

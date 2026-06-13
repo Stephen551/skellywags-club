@@ -125,6 +125,31 @@ export type FanArt = {
   caption?: string;
 };
 
+export type SkellythonGoal = {
+  target: number;
+  dare: string;
+  clip_url?: string;
+  reached_override?: boolean;
+};
+
+export type SkellythonTimerRule = { amount: string; per: string };
+
+export type Skellython = {
+  enabled: boolean;
+  name: string;
+  subtitle: string;
+  tagline: string;
+  start_date: string; // "YYYY-MM-DD"
+  end_date: string;   // "YYYY-MM-DD"
+  start_display: string;
+  twitch_channel: string;
+  spicy_cadence: string;
+  stretch_teaser: string;
+  baseline?: number;
+  timer_rules: SkellythonTimerRule[];
+  goals: SkellythonGoal[];
+};
+
 export function getTiers(): Tier[] {
   const raw = JSON.parse(fs.readFileSync(path.join(ROOT, "tiers.json"), "utf8"));
   return raw.tiers as Tier[];
@@ -339,4 +364,28 @@ export function getFanArt(): FanArt[] {
     })
     .filter((x): x is FanArt => x !== null);
   return items.sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
+const SKELLYTHON_DEFAULTS: Skellython = {
+  enabled: false,
+  name: "SKELLYTHON",
+  subtitle: "SUBATHON EVENT",
+  tagline: "can you handle the chaos",
+  start_date: "",
+  end_date: "",
+  start_display: "",
+  twitch_channel: "officiallyskelly",
+  spicy_cadence: "",
+  stretch_teaser: "",
+  timer_rules: [],
+  goals: [],
+};
+
+export function getSkellython(): Skellython {
+  try {
+    const raw = JSON.parse(fs.readFileSync(path.join(ROOT, "skellython.json"), "utf8"));
+    return { ...SKELLYTHON_DEFAULTS, ...raw };
+  } catch {
+    return SKELLYTHON_DEFAULTS;
+  }
 }

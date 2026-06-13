@@ -4,7 +4,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.fontshare.com https://cdn.fontshare.com https://use.typekit.net",
   "img-src 'self' data: blob: https://i.ytimg.com https://yt3.ggpht.com https://cdn.discordapp.com https://*.fourthwall.com https://cdn.fourthwall.com https://storage.googleapis.com",
   "font-src 'self' data: https://fonts.gstatic.com https://cdn.fontshare.com https://use.typekit.net https://p.typekit.net",
-  "frame-src https://discord.com https://www.youtube.com https://www.youtube-nocookie.com https://*.fourthwall.com",
+  "frame-src https://discord.com https://www.youtube.com https://www.youtube-nocookie.com https://*.fourthwall.com https://player.twitch.tv https://clips.twitch.tv",
   "connect-src 'self' https://www.googleapis.com https://discord.com",
   "media-src 'self'",
   "object-src 'none'",

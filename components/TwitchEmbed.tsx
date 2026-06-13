@@ -62,6 +62,7 @@ export default function TwitchEmbed({
         src={src}
         title={title}
         loading="lazy"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"
         allow="autoplay; fullscreen; picture-in-picture"
         allowFullScreen
         scrolling="no"

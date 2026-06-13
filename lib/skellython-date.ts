@@ -33,3 +33,9 @@ export function isBeforeEvent(start: string, now: Date = new Date()): boolean {
   if (!start) return false;
   return cstToday(now) < start;
 }
+
+/** True after the event closes (CST today > end). */
+export function isAfterEvent(end: string, now: Date = new Date()): boolean {
+  if (!end) return false;
+  return cstToday(now) > end;
+}

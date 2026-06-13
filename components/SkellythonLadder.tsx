@@ -28,28 +28,39 @@ export default function SkellythonLadder({
         const frame = reached
           ? "bg-bg-card border-electric-blue/60 shadow-glow-blue"
           : isNext
-          ? "bg-bg-card/70 border-gold/60 shadow-glow-gold"
+          ? "bg-bg-card border-gold ring-1 ring-gold/50 shadow-glow-gold scale-[1.015]"
           : "bg-bg-card/40 border-purple-core/25";
 
         return (
           <li
             key={`${goal.target}-${i}`}
             className={`rounded-xl border p-4 md:p-5 transition-colors ${frame} ${
-              big ? "ring-1 ring-electric-pink/40" : ""
+              big && !isNext ? "ring-1 ring-electric-pink/40" : ""
             }`}
           >
             <div className="flex items-center gap-4">
               <span
                 className={`shrink-0 grid place-items-center rounded-lg font-bebas text-2xl md:text-3xl w-16 h-14 md:w-20 md:h-16 ${
-                  reached ? "bg-electric-blue/20 text-electric-blue" : "bg-bg-primary text-text-muted"
+                  reached
+                    ? "bg-electric-blue/20 text-electric-blue"
+                    : isNext
+                    ? "bg-gold/20 text-gold"
+                    : "bg-bg-primary text-text-muted"
                 }`}
               >
                 {goal.target.toLocaleString("en-US")}
               </span>
               <div className="min-w-0 flex-1">
-                <p className={`heading text-xl md:text-2xl ${big ? "text-electric-pink" : "text-white"}`}>
-                  {goal.dare}
-                </p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className={`heading text-xl md:text-2xl ${big ? "text-electric-pink" : "text-white"}`}>
+                    {goal.dare}
+                  </p>
+                  {isNext && (
+                    <span className="shrink-0 rounded-full bg-gold text-bg-primary font-bebas tracking-widest text-xs uppercase px-2.5 py-0.5 shadow-glow-gold">
+                      next
+                    </span>
+                  )}
+                </div>
                 <p className="mt-1 text-xs font-bebas tracking-widest uppercase">
                   {reached ? (
                     <span className="text-electric-blue">

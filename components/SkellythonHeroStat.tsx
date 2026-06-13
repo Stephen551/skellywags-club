@@ -5,14 +5,12 @@ export default function SkellythonHeroStat({
   progress,
   before,
   ended,
-  startDisplay,
   finalTarget,
 }: {
   liveSubs: number | null;
   progress: SkellythonProgress;
   before: boolean;
   ended: boolean;
-  startDisplay: string;
   finalTarget: number | null;
 }) {
   // ENDED: recap the final count, no live race framing.
@@ -24,27 +22,24 @@ export default function SkellythonHeroStat({
           {liveSubs != null ? liveSubs.toLocaleString("en-US") : "—"}
         </p>
         <p className="text-text-primary/90 text-sm mt-3">
-          every dare that fell is below, clips and all.
+          every challenge that fell is below, clips and all.
         </p>
       </div>
     );
   }
 
-  // BEFORE: the starting line, not a live race.
+  // BEFORE: the starting line, not a live race. (The date lives in the hero
+  // eyebrow above, so it isn't repeated here.)
   if (before) {
     return (
       <div className="mt-6 border-t border-purple-core/30 pt-5">
-        <p className="text-text-muted font-bebas tracking-widest text-xs">GOES LIVE</p>
-        <p className="font-bebas tracking-widest text-gold text-2xl mt-1">{startDisplay}</p>
-        <div className="mt-4 border-t border-purple-core/20 pt-4">
-          <p className="text-text-muted font-bebas tracking-widest text-xs">STARTING AT</p>
-          <p className="heading text-4xl md:text-5xl text-white mt-1">
-            {liveSubs != null ? liveSubs.toLocaleString("en-US") : "—"}
-          </p>
-          {liveSubs == null && (
-            <p className="text-text-muted text-xs mt-1">sub count syncs when we go live</p>
-          )}
-        </div>
+        <p className="text-text-muted font-bebas tracking-widest text-xs">STARTING AT</p>
+        <p className="heading text-5xl md:text-6xl text-white mt-1">
+          {liveSubs != null ? liveSubs.toLocaleString("en-US") : "—"}
+        </p>
+        {liveSubs == null && (
+          <p className="text-text-muted text-xs mt-1">sub count syncs when we go live</p>
+        )}
         <StartingBar progress={progress} finalTarget={finalTarget} />
       </div>
     );
@@ -96,7 +91,7 @@ function StartingBar({
       <p className="text-text-primary/90 text-sm mt-2">
         {nextGoal && finalTarget ? (
           <>
-            first dare unlocks at {nextGoal.target.toLocaleString("en-US")}. help push it to{" "}
+            first challenge unlocks at {nextGoal.target.toLocaleString("en-US")}. help push it to{" "}
             <span className="text-electric-blue">{finalTarget.toLocaleString("en-US")}</span> when we go
             live.
           </>

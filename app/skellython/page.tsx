@@ -12,7 +12,7 @@ import SectionDivider from "@/components/SectionDivider";
 export const revalidate = 3600;
 
 const META_DESCRIPTION =
-  "SKELLYTHON: a week-long subathon where every YouTube sub unlocks the next dare, from a sour-candy challenge to a live tattoo at 3,000. june 22 to 28.";
+  "SKELLYTHON: a week-long subathon where every YouTube sub unlocks the next challenge, from sour candy to a live tattoo at 3,000. june 22 to 28.";
 
 export const metadata: Metadata = {
   title: "Skellython",
@@ -106,7 +106,7 @@ export default async function SkellythonPage() {
               </div>
               <div>
                 <p className="font-bangers text-electric-pink text-2xl">{ev.subtitle}</p>
-                <h1 className="heading text-5xl sm:text-6xl md:text-7xl text-white mt-1">{ev.name}</h1>
+                <h1 className="heading text-5xl sm:text-6xl text-white mt-1 leading-none break-words">{ev.name}</h1>
                 {ev.tagline && <p className="text-text-primary/90 text-lg mt-2">{ev.tagline}</p>}
                 {ev.start_display && (
                   <p className="font-bebas tracking-widest text-gold text-xl mt-3">{ev.start_display}</p>
@@ -116,7 +116,6 @@ export default async function SkellythonPage() {
                   progress={progress}
                   before={before}
                   ended={ended}
-                  startDisplay={ev.start_display}
                   finalTarget={finalGoal?.target ?? null}
                 />
               </div>
@@ -174,16 +173,16 @@ export default async function SkellythonPage() {
                 redacted
               </span>
             </div>
+            <p className="px-5 pt-4 font-bebas tracking-widest uppercase text-text-muted text-xs">
+              beyond 3,000 &middot; thresholds undisclosed
+            </p>
             <ul className="divide-y divide-purple-core/20">
-              {["2,900", "2,950", "3,000+"].map((tier) => (
-                <li key={tier} className="flex items-center gap-4 px-5 py-4">
+              {[0, 1, 2].map((row) => (
+                <li key={row} aria-hidden="true" className="flex items-center gap-4 px-5 py-4">
                   <span className="shrink-0 grid place-items-center rounded-lg bg-bg-primary font-bebas text-xl md:text-2xl text-text-muted w-20 h-12">
-                    {tier}
+                    ?,???
                   </span>
-                  <span
-                    aria-hidden="true"
-                    className="h-6 flex-1 rounded bg-bg-primary blur-[3px] [background-image:repeating-linear-gradient(90deg,#0D0814_0,#0D0814_22px,#221540_22px,#221540_30px)]"
-                  />
+                  <span className="h-6 flex-1 rounded bg-bg-primary blur-[3px] [background-image:repeating-linear-gradient(90deg,#0D0814_0,#0D0814_22px,#221540_22px,#221540_30px)]" />
                 </li>
               ))}
             </ul>
@@ -200,8 +199,8 @@ export default async function SkellythonPage() {
           <h2 className="heading text-4xl text-white">{ended ? "WATCH THE CLIPS" : "PUSH THE COUNTER"}</h2>
           <p className="text-text-muted mt-2">
             {ended
-              ? "every dare that fell is up above, clips and all. the void keeps the receipts."
-              : "every sub adds time and pushes the next dare closer."}
+              ? "every challenge that fell is up above, clips and all. the void keeps the receipts."
+              : "every sub adds time and pushes the next challenge closer."}
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
             {ended ? (

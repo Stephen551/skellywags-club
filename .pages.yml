@@ -59,6 +59,39 @@ content:
       - { name: date, label: "Date added", type: date, required: true, options: { format: "yyyy-MM-dd" } }
       - { name: caption, label: "Caption (optional)", type: string }
 
+  - name: skellython
+    label: "🎉 Skellython Event"
+    type: file
+    path: content/skellython.json
+    fields:
+      - { name: enabled, label: "Show the event page + banner?", type: boolean, default: true }
+      - { name: name, label: "Event name (e.g. SKELLYTHON)", type: string, required: true, default: "SKELLYTHON" }
+      - { name: subtitle, label: "Subtitle (e.g. SUBATHON EVENT)", type: string, default: "SUBATHON EVENT" }
+      - { name: tagline, label: "Tagline (e.g. can you handle the chaos)", type: string }
+      - { name: start_date, label: "Start date (event goes live / live embed appears)", type: date, required: true }
+      - { name: end_date, label: "End date (last day the banner + page run)", type: date, required: true }
+      - { name: start_display, label: "Start text in hero (e.g. JUNE 22 · 4:30PM CST)", type: string }
+      - { name: twitch_channel, label: "Twitch channel (handle only, e.g. officiallyskelly)", type: string, required: true }
+      - { name: spicy_cadence, label: "Spicy challenge note (e.g. spicy challenge every 50 subs)", type: string }
+      - { name: stretch_teaser, label: "Stretch-goals teaser text", type: string }
+      - { name: baseline, label: "Bar floor for the first goal (advanced; e.g. 2300)", type: number }
+      - name: timer_rules
+        label: "Timer rules (the +X min lines)"
+        type: object
+        list: true
+        fields:
+          - { name: amount, label: "Amount (e.g. +1 min)", type: string, required: true }
+          - { name: per, label: "Per what (e.g. per YouTube sub)", type: string, required: true }
+      - name: goals
+        label: "Goals & challenges (drag to reorder; lowest sub count first)"
+        type: object
+        list: true
+        fields:
+          - { name: target, label: "Sub goal number (e.g. 2325)", type: number, required: true }
+          - { name: dare, label: "Challenge / dare", type: string, required: true }
+          - { name: clip_url, label: "Twitch clip URL (paste after it happens; blank until then)", type: string }
+          - { name: reached_override, label: "Force this goal to show as REACHED?", type: boolean, default: false }
+
   - name: theme
     label: "🎨 Theme — Colors & Avatar"
     type: file

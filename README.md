@@ -51,6 +51,7 @@ Without `YOUTUBE_API_KEY`, video grids gracefully render an empty state.
 - `/community` — schedule, Discord, fan art wall, merch train
 - `/blog` — markdown posts in `content/blog/`
 - `/privacy`, `/terms` — placeholder copy
+- `/skellython` — live subathon goal ladder + Twitch clips (auto-banner shows now → end of event)
 
 ## Adding a blog post
 

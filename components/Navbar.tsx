@@ -8,21 +8,25 @@ import { NAV_LINKS } from "@/lib/constants";
 import type { SocialLink } from "@/lib/content";
 import SocialIcon from "./SocialIcon";
 
-type SubscribeLink = { href: string; label: string } | null;
+type NavExtraLink = { href: string; label: string } | null;
 
 export default function Navbar({
   social,
   subscribeLink,
+  eventLink,
 }: {
   social: SocialLink[];
-  subscribeLink?: SubscribeLink;
+  subscribeLink?: NavExtraLink;
+  eventLink?: NavExtraLink;
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
-  const links = subscribeLink
-    ? [...NAV_LINKS, { href: subscribeLink.href, label: subscribeLink.label }]
-    : NAV_LINKS;
+  const links: { href: string; label: string }[] = [
+    ...(eventLink ? [eventLink] : []),
+    ...NAV_LINKS,
+    ...(subscribeLink ? [{ href: subscribeLink.href, label: subscribeLink.label }] : []),
+  ];
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-bg-primary/80 border-b border-purple-core/25">

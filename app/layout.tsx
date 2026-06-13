@@ -3,7 +3,9 @@ import { Bebas_Neue, Nunito, Bangers } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RevealOnScroll from "@/components/RevealOnScroll";
-import { getSocial, getTheme, getSite, hexToRgbTriplet } from "@/lib/content";
+import EventTicker from "@/components/EventTicker";
+import { getSocial, getTheme, getSite, getSkellython, hexToRgbTriplet } from "@/lib/content";
+import { isEventActive } from "@/lib/skellython-date";
 
 function lighten(hex: string): string {
   const m = String(hex).trim().match(/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
@@ -77,6 +79,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const social = getSocial();
   const theme = getTheme();
   const site = getSite();
+  const ev = getSkellython();
+  const eventLink =
+    ev.enabled && isEventActive(ev.start_date, ev.end_date)
+      ? { href: "/skellython", label: ev.name }
+      : null;
   const subscribeLink = site.nav_subscribe_enabled
     ? { href: "/subscribe", label: site.nav_subscribe_label }
     : null;
@@ -138,8 +145,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <style dangerouslySetInnerHTML={{ __html: themeCss }} />
       </head>
       <body className="min-h-screen bg-bg-primary text-text-primary">
+        <EventTicker />
         <RevealOnScroll />
-        <Navbar social={social} subscribeLink={subscribeLink} />
+        <Navbar social={social} subscribeLink={subscribeLink} eventLink={eventLink} />
         <main>{children}</main>
         <Footer social={social} />
       </body>

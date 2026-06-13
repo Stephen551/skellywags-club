@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { listPosts } from "@/lib/blog";
+import { getSkellython } from "@/lib/content";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://skellywags.club";
@@ -18,6 +19,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/privacy",
     "/terms",
   ];
+
+  const ev = getSkellython();
+  if (ev.enabled) staticRoutes.push("/skellython");
 
   const blogPosts = listPosts().map((p) => ({
     url: `${base}/blog/${p.slug}`,

@@ -59,11 +59,16 @@ const config: Config = {
           "50%": { transform: "translateY(-8px)" },
           "100%": { transform: "translateY(0px)" },
         },
+        "marquee": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.7s ease-out forwards",
         "glow-pulse": "glow-pulse 2.4s ease-in-out infinite",
         "drift": "drift 6s ease-in-out infinite",
+        "marquee": "marquee 24s linear infinite",
       },
     },
   },

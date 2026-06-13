@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import TwitchEmbed from "./TwitchEmbed";
 import { isGoalReached } from "@/lib/skellython";
 import type { SkellythonGoal } from "@/lib/content";
@@ -25,13 +26,22 @@ export default function SkellythonLadder({
         // `featured` flag to SkellythonGoal rather than extending this regex.
         const big = i === sorted.length - 1 || /merch drop|tattoo/i.test(goal.dare);
 
+        // Tempo breaks: a thin labeled divider announces the two marquee zones
+        // so the 18-row climb reads as a build, not one flat list.
+        const isFinale = i === sorted.length - 1;
+        const tierLabel = /merch drop/i.test(goal.dare)
+          ? "MERCH DROP ZONE"
+          : isFinale
+          ? "THE FINALE"
+          : null;
+
         const frame = reached
           ? "bg-bg-card border-electric-blue/60 shadow-glow-blue"
           : isNext
           ? "bg-bg-card border-gold ring-1 ring-gold/50 shadow-glow-gold scale-[1.015]"
           : "bg-bg-card/40 border-purple-core/25";
 
-        return (
+        const row = (
           <li
             key={`${goal.target}-${i}`}
             className={`rounded-xl border p-4 md:p-5 transition-colors ${frame} ${
@@ -83,6 +93,21 @@ export default function SkellythonLadder({
               </div>
             ) : null}
           </li>
+        );
+
+        if (!tierLabel) return row;
+
+        return (
+          <Fragment key={`tier-${goal.target}-${i}`}>
+            <li aria-hidden="true" className="!mt-8 flex items-center gap-3">
+              <span className="h-px flex-1 bg-electric-pink/30" />
+              <span className="font-bebas tracking-[0.3em] uppercase text-xs text-electric-pink">
+                {tierLabel}
+              </span>
+              <span className="h-px flex-1 bg-electric-pink/30" />
+            </li>
+            {row}
+          </Fragment>
         );
       })}
     </ol>

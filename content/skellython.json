@@ -8,7 +8,7 @@
   "start_display": "JUNE 22 · 4:30PM CST",
   "twitch_channel": "officiallyskelly",
   "spicy_cadence": "spicy challenge every 50 subs",
-  "stretch_teaser": "Stretch goals too chaotic to reveal yet.",
+  "stretch_teaser": "stretch goals too chaotic to reveal",
   "baseline": 2300,
   "timer_rules": [
     { "amount": "+1 min", "per": "per YouTube sub" },

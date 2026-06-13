@@ -7,7 +7,7 @@ export default function EventTicker() {
   if (!ev.enabled || !isTickerVisible(ev.end_date)) return null;
 
   const before = isBeforeEvent(ev.start_date);
-  const cta = before ? "COMING SOON" : "WATCH THE CHAOS";
+  const cta = before ? "CHAOS INCOMING" : "WATCH THE CHAOS";
   const piece = [ev.name, ev.start_display, cta]
     .filter(Boolean)
     .join(" · ")
@@ -21,7 +21,7 @@ export default function EventTicker() {
     <Link
       href="/skellython"
       aria-label={`${ev.name}. ${ev.start_display}. ${cta}.`}
-      className="block bg-gradient-to-r from-purple-deep via-electric-pink to-electric-blue text-bg-primary overflow-hidden group"
+      className="block bg-purple-deep text-lightning border-y border-electric-pink/40 overflow-hidden group"
     >
       <div className="flex whitespace-nowrap py-1.5 font-bebas tracking-widest uppercase text-sm md:text-base animate-marquee motion-reduce:animate-none group-hover:[animation-play-state:paused]">
         {[...track, ...track].map((t, i) => (

@@ -2,9 +2,10 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { fetchChannelStats } from "@/lib/youtube";
 import { getSkellython } from "@/lib/content";
-import { computeProgress, type SkellythonProgress } from "@/lib/skellython";
+import { computeProgress } from "@/lib/skellython";
 import { isEventActive, isBeforeEvent, isAfterEvent } from "@/lib/skellython-date";
 import SkellythonLadder from "@/components/SkellythonLadder";
+import SkellythonHeroStat from "@/components/SkellythonHeroStat";
 import TwitchEmbed from "@/components/TwitchEmbed";
 import SectionDivider from "@/components/SectionDivider";
 
@@ -17,12 +18,16 @@ export const metadata: Metadata = {
   title: "Skellython",
   description: META_DESCRIPTION,
   openGraph: {
+    type: "website",
+    siteName: "skellywags.club",
     title: "SKELLYTHON · subathon event",
     description: META_DESCRIPTION,
     images: [{ url: "/og-v4.jpg", width: 1200, height: 630, alt: "SKELLYTHON · subathon event" }],
   },
   twitter: {
     card: "summary_large_image",
+    site: "@itsmeskelly",
+    creator: "@itsmeskelly",
     title: "SKELLYTHON · subathon event",
     description: META_DESCRIPTION,
     images: ["/og-v4.jpg"],
@@ -65,7 +70,7 @@ export default async function SkellythonPage() {
       "@type": "VirtualLocation",
       url: `https://twitch.tv/${ev.twitch_channel}`,
     },
-    image: [`${SITE}/skellython-hero.webp`],
+    image: [`${SITE}/og-v4.jpg`, `${SITE}/skellython-hero.webp`],
     organizer: {
       "@type": "Person",
       name: "OfficiallySkelly",
@@ -101,12 +106,12 @@ export default async function SkellythonPage() {
               </div>
               <div>
                 <p className="font-bangers text-electric-pink text-2xl">{ev.subtitle}</p>
-                <h1 className="heading text-6xl md:text-7xl text-white mt-1">{ev.name}</h1>
+                <h1 className="heading text-5xl sm:text-6xl md:text-7xl text-white mt-1">{ev.name}</h1>
                 {ev.tagline && <p className="text-text-primary/90 text-lg mt-2">{ev.tagline}</p>}
                 {ev.start_display && (
                   <p className="font-bebas tracking-widest text-gold text-xl mt-3">{ev.start_display}</p>
                 )}
-                <HeroStat
+                <SkellythonHeroStat
                   liveSubs={liveSubs}
                   progress={progress}
                   before={before}
@@ -137,8 +142,8 @@ export default async function SkellythonPage() {
           <h2 className="heading text-4xl text-white text-center">THE TIMER KEEPS GOING</h2>
           <SectionDivider />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {ev.timer_rules.map((r, i) => (
-              <div key={i} className="bg-bg-card border border-purple-core/30 rounded-xl p-5 text-center">
+            {ev.timer_rules.map((r) => (
+              <div key={r.per} className="bg-bg-card border border-purple-core/30 rounded-xl p-5 text-center">
                 <p className="heading text-3xl text-gold">{r.amount}</p>
                 <p className="text-text-muted text-sm mt-1">{r.per}</p>
               </div>
@@ -205,7 +210,7 @@ export default async function SkellythonPage() {
                   href={`https://twitch.tv/${ev.twitch_channel}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="font-bebas tracking-wide uppercase bg-gold text-bg-primary border-2 border-gold rounded-md px-6 py-3 hover:bg-gold-light hover:shadow-glow-gold focus-visible:shadow-glow-gold focus-visible:outline-none transition-all"
+                  className="font-bebas tracking-wide uppercase bg-gold text-bg-primary border-2 border-gold rounded-md px-6 py-3 hover:bg-gold-light hover:shadow-glow-gold focus-visible:shadow-glow-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold transition-all"
                 >
                   WATCH THE VODS →
                 </a>
@@ -213,7 +218,7 @@ export default async function SkellythonPage() {
                   href="https://www.youtube.com/@officiallyskelly?sub_confirmation=1"
                   target="_blank"
                   rel="noreferrer"
-                  className="font-bebas tracking-wide uppercase border-2 border-purple-core text-white rounded-md px-6 py-3 hover:bg-purple-core/20 hover:shadow-glow-purple focus-visible:shadow-glow-purple focus-visible:outline-none transition-all"
+                  className="font-bebas tracking-wide uppercase border-2 border-purple-core text-white rounded-md px-6 py-3 hover:bg-purple-core/20 hover:shadow-glow-purple focus-visible:shadow-glow-purple focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-core transition-all"
                 >
                   SUB FOR THE NEXT ONE →
                 </a>
@@ -224,7 +229,7 @@ export default async function SkellythonPage() {
                   href="https://www.youtube.com/@officiallyskelly?sub_confirmation=1"
                   target="_blank"
                   rel="noreferrer"
-                  className="font-bebas tracking-wide uppercase bg-gold text-bg-primary border-2 border-gold rounded-md px-6 py-3 hover:bg-gold-light hover:shadow-glow-gold focus-visible:shadow-glow-gold focus-visible:outline-none transition-all"
+                  className="font-bebas tracking-wide uppercase bg-gold text-bg-primary border-2 border-gold rounded-md px-6 py-3 hover:bg-gold-light hover:shadow-glow-gold focus-visible:shadow-glow-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold transition-all"
                 >
                   SUBSCRIBE ON YOUTUBE →
                 </a>
@@ -232,7 +237,7 @@ export default async function SkellythonPage() {
                   href={`https://twitch.tv/${ev.twitch_channel}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="font-bebas tracking-wide uppercase border-2 border-purple-core text-white rounded-md px-6 py-3 hover:bg-purple-core/20 hover:shadow-glow-purple focus-visible:shadow-glow-purple focus-visible:outline-none transition-all"
+                  className="font-bebas tracking-wide uppercase border-2 border-purple-core text-white rounded-md px-6 py-3 hover:bg-purple-core/20 hover:shadow-glow-purple focus-visible:shadow-glow-purple focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-core transition-all"
                 >
                   WATCH ON TWITCH →
                 </a>
@@ -242,157 +247,5 @@ export default async function SkellythonPage() {
         </div>
       </section>
     </>
-  );
-}
-
-function HeroStat({
-  liveSubs,
-  progress,
-  before,
-  ended,
-  startDisplay,
-  finalTarget,
-}: {
-  liveSubs: number | null;
-  progress: SkellythonProgress;
-  before: boolean;
-  ended: boolean;
-  startDisplay: string;
-  finalTarget: number | null;
-}) {
-  // ENDED: recap the final count, no live race framing.
-  if (ended) {
-    return (
-      <div className="mt-6 bg-bg-card/70 border border-purple-core/40 rounded-xl p-5 shadow-glow-purple">
-        <p className="text-text-muted font-bebas tracking-widest text-xs">THAT WAS SKELLYTHON</p>
-        <p className="heading text-5xl md:text-6xl text-white mt-1">
-          {liveSubs != null ? liveSubs.toLocaleString("en-US") : "—"}
-        </p>
-        <p className="text-text-primary/90 text-sm mt-3">
-          every dare that fell is below, clips and all.
-        </p>
-      </div>
-    );
-  }
-
-  // BEFORE: the starting line, not a live race.
-  if (before) {
-    return (
-      <div className="mt-6 bg-bg-card/70 border border-purple-core/40 rounded-xl p-5 shadow-glow-purple">
-        <p className="text-text-muted font-bebas tracking-widest text-xs">GOES LIVE</p>
-        <p className="font-bebas tracking-widest text-gold text-2xl mt-1">{startDisplay}</p>
-        <div className="mt-4 border-t border-purple-core/20 pt-4">
-          <p className="text-text-muted font-bebas tracking-widest text-xs">STARTING AT</p>
-          <p className="heading text-4xl md:text-5xl text-white mt-1">
-            {liveSubs != null ? liveSubs.toLocaleString("en-US") : "—"}
-          </p>
-          {liveSubs == null && (
-            <p className="text-text-muted text-xs mt-1">sub count syncs when we go live</p>
-          )}
-        </div>
-        <StartingBar progress={progress} finalTarget={finalTarget} />
-      </div>
-    );
-  }
-
-  // ACTIVE: live counter + race framing.
-  return (
-    <div className="mt-6 bg-bg-card/70 border border-purple-core/40 rounded-xl p-5 shadow-glow-purple">
-      <p className="text-text-muted font-bebas tracking-widest text-xs">LIVE YOUTUBE SUBS</p>
-      <p className="heading text-5xl md:text-6xl text-white mt-1">
-        {liveSubs != null ? liveSubs.toLocaleString("en-US") : "—"}
-      </p>
-      {liveSubs == null && (
-        <p className="text-text-muted text-xs mt-1">sub count syncs when we go live</p>
-      )}
-      <ProgressBar progress={progress} />
-    </div>
-  );
-}
-
-/** Pre-event bar: frames the climb toward the full run, not a live "subs to go" race. */
-function StartingBar({
-  progress,
-  finalTarget,
-}: {
-  progress: SkellythonProgress;
-  finalTarget: number | null;
-}) {
-  const { nextGoal, pct } = progress;
-  return (
-    <div className="mt-3">
-      <div
-        role="progressbar"
-        aria-valuenow={Math.round(pct)}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={
-          finalTarget
-            ? `Starting line, climbing toward ${finalTarget} subscribers`
-            : "Starting line"
-        }
-        className="h-3 bg-bg-primary rounded-full overflow-hidden border border-purple-core/30"
-      >
-        <div
-          className="h-full bg-gradient-to-r from-electric-pink via-purple-light to-electric-blue transition-[width] duration-700"
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-      <p className="text-text-primary/90 text-sm mt-2">
-        {nextGoal && finalTarget ? (
-          <>
-            first dare unlocks at {nextGoal.target.toLocaleString("en-US")}. help push it to{" "}
-            <span className="text-electric-blue">{finalTarget.toLocaleString("en-US")}</span> when we go
-            live.
-          </>
-        ) : (
-          "the climb starts june 22."
-        )}
-      </p>
-    </div>
-  );
-}
-
-function ProgressBar({ progress }: { progress: SkellythonProgress }) {
-  const { nextGoal, pct, remaining, allReached } = progress;
-  return (
-    <div className="mt-3">
-      <div
-        role="progressbar"
-        aria-valuenow={Math.round(pct)}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label={
-          allReached
-            ? "All goals reached"
-            : nextGoal
-            ? `${Math.round(pct)} percent toward ${nextGoal.target} subscribers`
-            : "Progress"
-        }
-        className="h-3 bg-bg-primary rounded-full overflow-hidden border border-purple-core/30"
-      >
-        <div
-          className="h-full bg-gradient-to-r from-electric-pink via-purple-light to-electric-blue transition-[width] duration-700"
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-      <p className="text-text-primary/90 text-sm mt-2">
-        {allReached ? (
-          "every goal smashed. absolute chaos."
-        ) : nextGoal && remaining != null ? (
-          <>
-            {remaining.toLocaleString("en-US")} subs to go until{" "}
-            <span className="text-electric-blue">{nextGoal.dare}</span>
-          </>
-        ) : nextGoal ? (
-          <>
-            next up at {nextGoal.target.toLocaleString("en-US")}:{" "}
-            <span className="text-electric-blue">{nextGoal.dare}</span>
-          </>
-        ) : (
-          "—"
-        )}
-      </p>
-    </div>
   );
 }

@@ -13,7 +13,7 @@ export const revalidate = 3600;
 export const metadata: Metadata = {
   title: "Skellython",
   description:
-    "SKELLYTHON subathon — live sub goals, chaos challenges, and a tattoo on the line.",
+    "SKELLYTHON subathon: live sub goals, chaos challenges, and a tattoo on the line.",
   openGraph: {
     title: "SKELLYTHON · subathon event",
     description: "live sub goals, chaos challenges, and a tattoo on the line.",

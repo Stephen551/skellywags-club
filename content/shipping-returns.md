@@ -23,7 +23,7 @@ Fourthwall has a **satisfaction guarantee** — if your item arrives damaged, de
 
 For all returns, exchanges, and customer-service questions, contact Fourthwall directly:
 
-- **Full Fourthwall returns + shipping policy**: see your Fourthwall order confirmation email for direct links, or visit the [storefront](https://skelly-xkh-shop.fourthwall.com).
+- **Full Fourthwall returns + shipping policy**: see your Fourthwall order confirmation email for direct links, or visit the [storefront](https://shop.skellywags.club).
 - **Lost package?** Reach out via the order email — Fourthwall's support is responsive.
 
 ## Questions Skelly handles directly

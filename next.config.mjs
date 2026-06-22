@@ -36,7 +36,7 @@ const nextConfig = {
       { protocol: "https", hostname: "cdn.discordapp.com" },
       { protocol: "https", hostname: "cdn.fourthwall.com" },
       { protocol: "https", hostname: "storage.googleapis.com" },
-      { protocol: "https", hostname: "skelly-xkh-shop.fourthwall.com" },
+      { protocol: "https", hostname: "shop.skellywags.club" },
     ],
   },
   experimental: {

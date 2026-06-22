@@ -1,14 +1,23 @@
 function parentHosts(): string[] {
   const hosts = new Set<string>(["localhost"]);
+  // Twitch requires `parent` to EXACTLY match the embedding page's hostname.
+  // The site canonicalizes to www, so register BOTH the apex and the www
+  // variant of every known host (skellywags.club AND www.skellywags.club).
+  const add = (h: string) => {
+    if (!h) return;
+    hosts.add(h);
+    if (h.startsWith("www.")) hosts.add(h.slice(4));
+    else hosts.add(`www.${h}`);
+  };
   const site = process.env.NEXT_PUBLIC_SITE_URL;
   if (site) {
     try {
-      hosts.add(new URL(site).hostname);
+      add(new URL(site).hostname);
     } catch {
       /* ignore malformed env */
     }
   }
-  hosts.add("skellywags.club");
+  add("skellywags.club");
   return Array.from(hosts);
 }
 
@@ -62,7 +71,6 @@ export default function TwitchEmbed({
         src={src}
         title={title}
         loading="lazy"
-        sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"
         allow="autoplay; fullscreen; picture-in-picture"
         allowFullScreen
         scrolling="no"

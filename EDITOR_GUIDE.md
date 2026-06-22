@@ -25,6 +25,22 @@ Every save commits to GitHub. The site rebuilds automatically and the change goe
 
 The big banner on the homepage updates instantly. After the drop is over, flip `drop_banner_enabled` off (or change it back to "NEW DROP INCOMING" for the next launch).
 
+### ...add a Skellython clip during the stream
+
+When a challenge happens on stream, pin its Twitch clip onto the event page:
+
+1. On Twitch, hit **Clip** (or open a clip you already made) and copy its link — any Twitch clip link works (`clips.twitch.tv/...` or `twitch.tv/officiallyskelly/clip/...`)
+2. Open **🎉 Skellython Event** → scroll to that challenge in the Goals list
+3. Paste the link into its **Twitch clip URL** field
+4. Flip that challenge's **"Force this goal to show as REACHED?"** toggle **on**
+5. Save
+
+The clip embeds right under that challenge within about 60 seconds.
+
+Why the toggle: the live sub count on the page only refreshes about once an hour, so flipping "reached" makes the challenge light up and the clip show **right away** instead of waiting for the count to catch up. If the real sub count has already passed that number, the toggle isn't strictly needed, but turning it on never hurts.
+
+Leave the toggles on after the event so the recap page keeps showing every challenge with its clip.
+
 ### ...post a blog update
 
 1. Open **📝 Blog Posts** → **+ New**

@@ -1,166 +1,118 @@
-# Hero 3D Model — Design Spec
+# Hero 3D Model — Design Spec (as built)
 
 **Date:** 2026-07-12
 **Branch:** `feat/hero-3d-model`
-**Status:** Approved for planning
+**Status:** Implemented
+
+> This doc was updated to match what shipped. The original plan assumed a raw
+> single-mesh generator export needing heavy decimation and a fullbright/unlit
+> render. Midway, a **native Rodin rebuild at 200k triangles with a proper PBR
+> material set** arrived, which changed the asset pipeline (no decimation) and
+> the render (true PBR + image-based lighting). The interaction also grew from a
+> single clamped nudge into two device-appropriate modes.
 
 ## Goal
 
 Replace the static avatar PNG in the homepage hero with a live, interactive 3D
-model of Skelly that the visitor gently rotates with their pointer — without
-regressing the site's sub-second mobile LCP gate or WCAG 2.2 AA compliance.
+model of Skelly, without regressing the sub-second mobile LCP gate or WCAG 2.2 AA.
 
-## Context
+## Source asset
 
-- The hero currently renders `theme.avatar_url` (`/avatar.png`) via a `priority`
-  `next/image`, tuned to be the LCP element ([app/page.tsx:69-92](../../../app/page.tsx#L69-L92)).
-- The project has **no 3D dependencies** today (no `three`, no R3F). This design
-  adds them.
-- Content is CMS-driven via `content/theme.json` (`avatar_url` lives there). The
-  PNG stays in play as the poster (see Architecture §3).
+Rodin export (`364f02d2…zip`). We use **`base_basic_pbr.glb`**:
 
-### The source asset (ground truth)
+- Native **200,000 triangles** — clean topology, smooth face, no decimation needed.
+- Proper PBR maps at HD (~2K): diffuse (albedo), normal, metallic-roughness.
+- Emissive is **not** wired into the PBR GLB, so we add it from the separate
+  `texture_emissive.png` (the near-black selective glow map — the eyes).
 
-Supplied as a zip containing:
+The alternate `base_basic_shaded.glb` (color baked into emissive, fullbright) was
+rejected in favour of the PBR variant, which carries a normal map and responds
+correctly to lighting.
 
-| File | Size | Notes |
-|------|------|-------|
-| `base_basic_shaded.glb` | **90.6 MB** | glTF 2.0, **~2,000,000 triangles**, 1.17M verts, one embedded **14 MB PNG** texture, **no** geometry compression |
-| `texture_emissive.png` | 79 KB | Separate emissive map (Skelly's glowing eyes) — not yet wired into the material |
+## Behavior — two device-appropriate modes
 
-The naming and topology are the signature of a raw AI 3D generator (Meshy /
-Rodin / Hunyuan class). **It cannot ship as-is** — it would download ~90 MB
-before first paint and likely exhaust low-end mobile GPU memory on the texture
-upload. Optimization (Architecture §1) is the bulk of the work; rendering is
-straightforward once the asset is web-weight.
-
-## Behavior spec
-
-One unified model: **the pointer gently turns Skelly within a clamped front
-cone.** The clamp is both the interaction and the guardrail — the viewer never
-sees the imperfect back/sides of the generated mesh.
-
-- **Desktop (mouse):** cursor position maps to a rotation target, damped-lerped
-  each frame, hard-clamped to ≈ **±18° yaw / ±8° pitch**. Eases back toward
-  center when the cursor leaves the hero.
-- **Mobile (touch):** finger-drag accumulates into the same clamped rotation
-  target; a slow swipe nudges him left/right. Springs back toward center on
-  release.
+- **Desktop (mouse):** cursor-follow. Pointer position maps to a rotation target,
+  damped each frame, clamped to **±45° yaw / ±14° pitch**. He "watches" the
+  cursor; face + glowing eyes stay the focal point. The native mesh is clean all
+  around, so the clamp is for focus, not to hide anything.
+- **Mobile (touch):** free-spin turntable. Drag rotates a full 360°, a flick
+  keeps spinning with inertia (capped + friction-decayed), and he holds wherever
+  you leave him. `touch-action: pan-y` keeps vertical page-scroll intact.
 - **Both, idle:** a subtle sinusoidal "breathing" drift so he's never dead-still.
-- **`prefers-reduced-motion`:** all rotation and drift disabled; model frozen to
-  a static front pose. (WCAG 2.2 AA — non-negotiable.)
+- **`prefers-reduced-motion`:** all rotation/drift/momentum disabled; model frozen
+  to a static front pose.
 
 ## Architecture
 
-### 1. Asset optimization pipeline (offline, one-time)
+### 1. Asset optimization (`scratchpad/optimize-pbr.mjs`, run once)
 
-Rebuild the 90 MB source into a web asset with **`gltf-transform`** (npm/npx,
-uses meshoptimizer wasm for simplify + sharp for textures — no native binaries
-required for the WebP path):
+`gltf-transform` pipeline on `base_basic_pbr.glb`:
 
-1. `weld` — merge duplicate vertices.
-2. `simplify` — decimate **2M → ~40–70k triangles**. Tune the ratio visually so
-   the **front** stays clean; back-face degradation is acceptable (never shown).
-3. `resize` + `webp` — shrink the 14 MB texture to ~2K WebP (~300–600 KB).
-   *(KTX2/Basis GPU compression is a later option if mobile GPU memory demands
-   it; it needs the KTX-Software CLI installed, so not the default.)*
-4. Wire `texture_emissive.png` in as the material's `emissiveTexture` so the eyes
-   glow. Verify the base material's emissive factor is set.
-5. `meshopt` — compress geometry.
+1. Wire `texture_emissive.png` in as the material's emissive map (+ factor).
+2. Texture-compress per slot: color/emissive → WebP q82; **normal q94 and
+   metallic-roughness q92** (data textures — higher quality avoids shading
+   artifacts). Resize ≤ 2048.
+3. `prune` + `dedup`, then **meshopt** geometry compression.
 
-- **Target: ~1.5–3 MB total GLB.**
-- **Output:** `public/models/skelly.glb` (+ any decoder assets under
-  `public/`). Source zip contents are **not** committed.
-- The pipeline commands get captured in a short `scripts/optimize-model.md` (or a
-  runnable script) so the step is reproducible when the model is regenerated.
+- **Output:** `public/models/skelly.glb`, **2.16 MB** (200k tris; textures
+  83 KB diffuse / 162 KB normal / 136 KB metal-rough / 11 KB emissive).
+- Source zip is **not** committed.
 
-### 2. `components/HeroModel.tsx`
+### 2. `components/HeroModel.tsx` (client)
 
-- Client component (`"use client"`), imported into the hero via `next/dynamic`
-  with `ssr: false` — WebGL can't SSR, and this keeps the renderer + model
-  **code-split out of the initial bundle** (loads after first paint).
-- **React Three Fiber + drei** (`useGLTF`). Recommended for the cleanest control
-  over the clamped-rotation + idle-drift + reduced-motion logic. *Vanilla
-  three.js is the fallback if the R3F/drei bundle causes us to miss the perf
-  gate.*
-- **Loaders:** register `MeshoptDecoder` (and DRACO decoder path if we end up on
-  draco) so `useGLTF` can read the compressed geometry.
-- **Lighting:** manual lights only (no HDR download) — ambient + a directional
-  key + two on-brand colored rim/point lights (purple `#9B5FC0`, pink `#FF4FCB`)
-  echoing the hero glow. Emissive eyes carry their own glow. Shadows **off**
-  (cost). Postprocessing/bloom **out of scope v1** (bundle + GPU); the existing
-  `bg-purple-core blur-3xl` glow div stays behind the canvas.
-- **Rotation:** single target `{yaw, pitch}` updated from mouse (viewport-
-  normalized) or touch-drag delta, clamped to the cone, damped toward the model
-  each frame, plus the idle sine offset. Reduced-motion short-circuits to a
-  static pose.
+- React Three Fiber + drei `useGLTF(url, /*draco*/ false, /*meshopt*/ true)`.
+- **Lighting:** proper PBR needs IBL, so a **procedural `<Environment>`** built
+  from a few tinted `<Lightformer>` panels (no HDR download, baked once via
+  `frames={1}`) gives the metallic/roughness surfaces something to reflect and
+  lifts the figure on-brand; plus a directional key for form/specular. Emissive
+  intensity bumped so the eyes glow.
+- **Rotation:** a single control ref drives either the clamped cursor-follow
+  (mouse) or the free-spin accumulator + momentum (touch); see Behavior.
+- **Framing:** drei `<Bounds fit observe>` + `<Center>` auto-frame at any size.
+- **Perf guards:** `dpr` clamped `[1, 1.5]`; render loop paused via
+  IntersectionObserver when the hero scrolls out of view; no shadows.
 
-### 3. Hero integration ([app/page.tsx](../../../app/page.tsx))
+### 3. `components/HeroAvatar.tsx` (client) — poster-first cross-fade
 
-Replace the single `<Image>` in the hero-right column with a **poster + canvas
-stack**:
+- Renders the avatar **PNG poster** (server-rendered, `priority`) — this stays
+  the **LCP element**, so first paint is unchanged.
+- Lazy-loads `HeroModel` via `next/dynamic({ ssr: false })` after idle
+  (`requestIdleCallback`), so the ~200 KB three.js bundle is code-split out of
+  the initial load and never competes with LCP.
+- Cross-fades the canvas over the poster once the model's first frame renders.
+- An error boundary keeps the poster if WebGL init / model load throws.
 
-- The current avatar PNG **stays** as the `priority` / `fetchPriority="high"`
-  poster → remains the LCP element, so **first paint is unchanged**.
-- `<HeroModel>` (dynamic, `ssr:false`) mounts on top, starts at `opacity:0`, and
-  **cross-fades in** once its first frame renders.
-- Existing purple glow div stays behind the stack.
-- Remove the CSS `animate-drift` from the container (idle drift now lives in the
-  3D) to avoid double motion; the poster can keep it until the canvas fades in.
+### 4. Hero integration (`app/page.tsx`)
 
-### 4. Fallbacks / graceful degradation
+The avatar block now renders `<HeroAvatar>` inside the existing hero-right column.
 
-- **No WebGL / context-loss:** canvas never fades in (or reverts) → poster PNG
-  remains. No broken state.
-- **Reduced-motion:** the model still loads but is frozen to a static front
-  pose (per behavior spec) — no rotation, no drift.
+### 5. CSP (`next.config.mjs`)
 
-### 5. Performance guardrails (defending the LCP gate)
+three.js extracts the GLB's embedded WebP textures into same-origin `blob:` URLs
+and fetches them via the Fetch API, so `connect-src` needed **`blob:`** added.
+(`img-src` already allowed it.)
 
-- Poster-first → LCP element unchanged.
-- Renderer + model code-split via dynamic import; load after LCP (idle / on
-  mount post-paint).
-- Clamp `dpr` to `[1, 1.5]` so mobile doesn't render at 3×.
-- **Pause the render loop when the hero scrolls out of view** (IntersectionObserver
-  → `frameloop` off) for battery.
-- Antialias tuned for mobile; no shadows.
+## Results (verified)
 
-## Dependencies & honest cost
-
-- Adds `three`, `@react-three/fiber`, `@react-three/drei` — roughly
-  **180–250 KB gzipped of JS**, code-split and loaded *after* LCP.
-- Model asset ~1.5–3 MB, fetched after first paint.
-- **Mobile is the real risk** of "3D everywhere": GPU variance, battery, possible
-  jank on low-end phones. Mitigations above are how we hold the green. If a
-  target genuinely can't clear the perf bar, that gets flagged — not quietly
-  shipped as a regression.
+- Production build clean; home route **First Load JS 103 kB** (~+3 kB vs
+  siblings) — the three.js bundle is fully deferred, poster remains LCP.
+- Desktop cursor-follow and mobile drag-spin both verified; the back of the model
+  is clean when spun around.
 
 ## Accessibility
 
-- `prefers-reduced-motion`: no motion, static pose.
-- The model is decorative; the poster `<img>` retains the meaningful `alt`. The
-  canvas is `aria-hidden`.
-- No keyboard trap — the hero remains fully navigable; rotation is pointer-only
-  enhancement, not required for any content.
+- `prefers-reduced-motion`: static front pose, no motion.
+- Poster `<img>` keeps the meaningful `alt`; the canvas is decorative.
+- Rotation is a pointer-only enhancement — no keyboard trap, no content gated on it.
 
-## Verification (before "done")
+## Open items
 
-- `next build` clean.
-- Visual QA at desktop + mobile viewports (browse/Playwright): clamp holds, back
-  never shows, eyes glow, cross-fade is smooth, reduced-motion freezes.
-- **Core Web Vitals check** confirming LCP has not regressed vs. the PNG hero.
+- Flick **momentum/friction** were tuned by logic, not by feel; may want a nudge
+  after real-device testing.
+- Optional future: KTX2/Basis textures if mobile GPU memory ever demands it.
 
-## Out of scope (v1 / YAGNI)
+## Out of scope
 
-- Bloom / postprocessing.
-- KTX2 texture path (revisit only if mobile GPU memory forces it).
-- 3D models anywhere other than the homepage hero.
-- Any CMS control over the model (it's a fixed asset for now).
-
-## Open risks
-
-- Final triangle/texture targets are tuned empirically in the optimization pass;
-  the ~1.5–3 MB figure is a target, not a guarantee, and depends on how much the
-  front tolerates decimation.
-- R3F/drei bundle size is the main lever if we miss the perf gate → vanilla
-  three.js fallback.
+- Bloom/postprocessing.
+- 3D anywhere but the homepage hero.
+- CMS control over the model (fixed asset).

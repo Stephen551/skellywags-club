@@ -32,7 +32,7 @@ export default async function HomePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center w-full py-16">
             <div className="reveal">
               <p className="font-bangers text-electric-pink text-2xl tracking-widest">{site.handle}</p>
-              <h1 className="heading text-7xl md:text-8xl xl:text-9xl text-white drop-shadow-[0_0_30px_rgba(155,95,192,0.6)] mt-4">
+              <h1 className="heading text-[clamp(2.25rem,10vw,4.5rem)] md:text-8xl xl:text-9xl text-white drop-shadow-[0_0_30px_rgba(155,95,192,0.6)] mt-4">
                 {channelLines.length > 1 ? (
                   <>{channelLines[0]}<br />{channelLines.slice(1).join(" ")}</>
                 ) : (

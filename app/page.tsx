@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import HeroAvatar from "@/components/HeroAvatar";
 import GlowButton from "@/components/GlowButton";
 import SocialIcon from "@/components/SocialIcon";
 import SectionDivider from "@/components/SectionDivider";
@@ -67,29 +67,7 @@ export default async function HomePage() {
             </div>
 
             <div className="relative reveal flex justify-center lg:justify-end">
-              <div className="relative animate-drift">
-                <div className="absolute inset-0 bg-purple-core blur-3xl opacity-50 rounded-full scale-90" />
-                <Image
-                  src={theme.avatar_url || "/avatar.png"}
-                  alt="Skelly"
-                  width={620}
-                  height={620}
-                  priority
-                  fetchPriority="high"
-                  // Tighter sizes: at <640px mobile request the ~384w variant,
-                  // at tablet ~768px ask for ~620w, only at desktop ask for full
-                  // 620px @ 1x density. The previous "80vw" was prompting Next's
-                  // image optimizer to serve up to the 1920w deviceSize on mobile.
-                  sizes="(min-width: 1024px) 620px, (min-width: 640px) 60vw, 70vw"
-                  // will-change + translate3d push the drop-shadow filter onto
-                  // its own GPU compositor layer. The filter still renders
-                  // (visual is unchanged) but it no longer blocks the LCP paint
-                  // signal — the image fires LCP first, the shadow composites
-                  // in the next compositor pass.
-                  style={{ willChange: "filter", transform: "translate3d(0,0,0)" }}
-                  className="relative drop-shadow-[0_0_50px_rgba(155,95,192,0.8)]"
-                />
-              </div>
+              <HeroAvatar src={theme.avatar_url || "/avatar.png"} alt="Skelly" />
             </div>
           </div>
         </div>
